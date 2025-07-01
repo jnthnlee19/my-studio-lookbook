@@ -3,8 +3,9 @@ const path = require('path');
 
 exports.handler = async () => {
   try {
-    const dir = path.join(__dirname, '..', '..', 'images');
-    const files = fs.readdirSync(dir).filter(name => name.toLowerCase().endsWith('.jpg'));
+    // __dirname = /netlify/functions
+    const base = path.join(__dirname, '..', '..', 'images');
+    const files = fs.readdirSync(base).filter(name => name.toLowerCase().endsWith('.jpg'));
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
