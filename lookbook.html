@@ -153,6 +153,16 @@
 <h1>KB Home Lookbook</h1>
 </div>
 <div id="lookbook-container">Loading...</div>
+
+<script>
+window.__imageList__ = [];
+fetch('/.netlify/functions/list-images')
+  .then(res => res.json())
+  .then(data => {
+    window.__imageList__ = data;
+  });
+</script>
+
 <script>
   function formatPrice(value) {
     const num = parseFloat(value);
@@ -305,61 +315,33 @@ imageWrapper.style.display = 'flex';
 imageWrapper.style.flexWrap = 'wrap';
 imageWrapper.style.gap = '0.5rem';
 
-const optionNum = opt.optionNumber;
-const suffixes = ['', '-a', '-b', '-c', '-d', '-e'];
-const colorNames = ['White', 'Gray', 'Black', 'Espresso', 'Ivory', 'Charcoal', 'Siberian'];
-
-const allVariants = [
-  ...suffixes.map(suffix => `images/${opt.optionNumber}${suffix}.jpg`),
-  ...colorNames.map(color => `images/${opt.optionNumber}-${color}.jpg`)
-];
-
-let attempted = 0;
-let imageAdded = false;
-
-allVariants.forEach(url => {
-  const testImg = new Image();
-  testImg.src = url;
-  testImg.onload = function () {
-    const colorMatch = url.match(/-(\w+)\.jpg$/);
-    const labelText = colorMatch ? colorMatch[1] : '';
-
+const matches = window.__imageList__.filter(name => name.startsWith(opt.optionNumber));
+if (matches.length === 0) {
+  const placeholder = document.createElement('div');
+  placeholder.textContent = 'No image available';
+  placeholder.style.fontSize = '0.75rem';
+  placeholder.style.color = '#888';
+  placeholder.style.padding = '1rem';
+  imageWrapper.appendChild(placeholder);
+} else {
+  matches.forEach(filename => {
     const img = document.createElement('img');
-    img.src = url;
-    img.alt = optionNum + (labelText ? ' - ' + labelText : '');
+    img.src = `images/${filename}`;
+    img.alt = filename;
     img.style.width = '100px';
     img.style.height = '100px';
     img.style.objectFit = 'cover';
     img.style.borderRadius = '6px';
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => openImageModal(img.src));
 
     const box = document.createElement('div');
     box.style.textAlign = 'center';
     box.style.width = '100px';
     box.appendChild(img);
-
-    if (labelText) {
-      const label = document.createElement('div');
-      label.textContent = labelText;
-      label.style.fontSize = '0.75rem';
-      label.style.textAlign = 'center';
-      box.appendChild(label);
-    }
-
     imageWrapper.appendChild(box);
-    imageAdded = true;
-  };
-
-  testImg.onerror = function () {
-    attempted++;
-    if (attempted === allVariants.length && !imageAdded) {
-      const placeholder = document.createElement('div');
-      placeholder.textContent = 'No image available';
-      placeholder.style.fontSize = '0.75rem';
-      placeholder.style.color = '#888';
-      placeholder.style.padding = '1rem';
-      imageWrapper.appendChild(placeholder);
-    }
-  };
+  });
+}
 });
 
 
