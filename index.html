@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KB Home Option Lookbook</title>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      max-width: 150px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #222;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="file"] {
+      margin-bottom: 2rem;
+    }
+
+    #generateBtn {
+      background-color: #00274D;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #generateBtn:hover {
+      background-color: #004080;
+    }
+
+    #output {
+      text-align: left;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="kb logo.png" alt="KB Home Logo" class="logo" />
+    <h1>KB Home Virtual Lookbook</h1>
+
+    <label for="upload">Upload Excel File (.xlsx):</label>
+    <input type="file" id="upload" accept=".xlsx" />
+
+    <button id="generateBtn">Generate Lookbook</button>
+
+    <div id="output"></div>
+  </div>
+
+  <script>
+    document.getElementById('upload').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64 = e.target.result.split(',')[1];
+        localStorage.setItem('workbook', base64);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('generateBtn').addEventListener('click', function() {
+      const saved = localStorage.getItem('workbook');
+      if (!saved) {
+        alert("Please upload an Excel file first.");
+        return;
+      }
+      window.location.href = 'lookbook.html';
+    });
+  </script>
+</body>
+</html>
