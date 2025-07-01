@@ -331,6 +331,7 @@ allVariants.forEach(url => {
     img.style.height = '100px';
     img.style.objectFit = 'cover';
     img.style.borderRadius = '6px';
+    img.addEventListener('click', () => openImageModal(img.src));
 
     const box = document.createElement('div');
     box.style.textAlign = 'center';
