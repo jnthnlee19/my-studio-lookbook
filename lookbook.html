@@ -145,12 +145,17 @@
 <div class="top-buttons">
 <button onclick="expandAll()">Expand All</button>
 <button onclick="collapseAll()">Collapse All</button>
-<button onclick="printFull()">Print Full Lookbook</button>
 <button onclick="printSelected()">Print Selections Only</button>
 </div>
 </div>
 </div>
 <h1>KB Home Lookbook</h1>
+<div style="text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">
+  <label style="font-size: 0.95rem;">
+    <input type="checkbox" id="toggle-all" style="transform: scale(1.2); margin-right: 0.4rem;" onchange="toggleAllSelections(this)">
+    Select / Deselect All
+  </label>
+</div>
 </div>
 <div id="lookbook-container">Loading...</div>
 <script>
@@ -172,6 +177,14 @@
     });
     document.getElementById('total-bar').textContent = `Your Total: $${total.toLocaleString()}`;
   }
+   function toggleAllSelections(masterCheckbox) {
+  const allBoxes = document.querySelectorAll('.option input[type="checkbox"]');
+  allBoxes.forEach(box => {
+    box.checked = masterCheckbox.checked;
+  });
+  updateTotal();
+}
+
 
   function expandAll() {
     document.querySelectorAll("details").forEach(el => el.open = true);
