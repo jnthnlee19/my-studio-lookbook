@@ -1,12 +1,12 @@
+<!-- START OF HTML -->
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>KB Home Lookbook</title>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KB Home Lookbook</title>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+  <style>
     * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -50,11 +50,6 @@
       color: #222;
       white-space: nowrap;
     }
-    .top-buttons {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
     .top-buttons button {
       background: linear-gradient(to bottom, #FFC527, #e5b021);
       border: none;
@@ -74,13 +69,8 @@
       margin: 1rem 0 1.5rem;
       color: #222;
     }
-    #lookbook-container {
-      padding: 1rem 2rem;
-    }
-    details {
-      text-align: left;
-      margin-bottom: 0.5rem;
-    }
+    #lookbook-container { padding: 1rem 2rem; }
+    details { text-align: left; margin-bottom: 0.5rem; }
     summary {
       background: linear-gradient(to bottom, #FFC527, #e5b021);
       padding: 0.75rem 1rem;
@@ -105,9 +95,9 @@
     .option img {
       width: 100px;
       height: 100px;
-      background: #ccc;
       object-fit: cover;
       border-radius: 6px;
+      cursor: pointer;
     }
     .option-details {
       flex: 1;
@@ -136,308 +126,183 @@
   </style>
 </head>
 <body>
-<div class="sticky-header">
-<div class="top-row">
-<img alt="KB Home Logo" class="logo" src="kb logo.png"/>
-<div class="house-info" id="house-info"></div>
-<div class="right-panel">
-<div class="total-bar" id="total-bar">Your Total: $0</div>
-<div class="top-buttons">
-<button onclick="expandAll()">Expand All</button>
-<button onclick="collapseAll()">Collapse All</button>
-<button onclick="printFull()">Print Full Lookbook</button>
-<button onclick="printSelected()">Print Selections Only</button>
-</div>
-</div>
-</div>
-<h1>KB Home Lookbook</h1>
-</div>
-<div id="lookbook-container">Loading...</div>
-<script>
-  function formatPrice(value) {
-    const num = parseFloat(value);
-    return isNaN(num) ? null : '$' + num.toLocaleString();
-  }
+  <div class="sticky-header">
+    <div class="top-row">
+      <img class="logo" src="kb logo.png" alt="KB Home Logo"/>
+      <div class="house-info" id="house-info"></div>
+      <div class="right-panel">
+        <div class="total-bar" id="total-bar">Your Total: $0</div>
+        <div class="top-buttons">
+          <button onclick="expandAll()">Expand All</button>
+          <button onclick="collapseAll()">Collapse All</button>
+          <button onclick="printFull()">Print Full Lookbook</button>
+          <button onclick="printSelected()">Print Selections Only</button>
+        </div>
+      </div>
+    </div>
+    <h1>KB Home Lookbook</h1>
+  </div>
 
-  function parsePrice(value) {
-    const num = parseFloat(value);
-    return isNaN(num) ? 0 : num;
-  }
+  <div id="lookbook-container">Loading...</div>
 
-  function updateTotal() {
-    let total = 0;
-    document.querySelectorAll('.option input[type="checkbox"]:checked').forEach(box => {
-      const price = parseFloat(box.getAttribute('data-price'));
-      if (!isNaN(price)) total += price;
-    });
-    document.getElementById('total-bar').textContent = `Your Total: $${total.toLocaleString()}`;
-  }
+  <div class="modal" id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+    <span onclick="closeImageModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
+    <img id="modal-image" style="max-width:90%; max-height:90%;"/>
+  </div>
 
-  function expandAll() {
-    document.querySelectorAll("details").forEach(el => el.open = true);
-  }
+  <script>
+    function openImageModal(src) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-image');
+      modalImg.src = src;
+      modal.style.display = 'flex';
+    }
 
-  function collapseAll() {
-    document.querySelectorAll("details").forEach(el => el.open = false);
-  }
+    function closeImageModal() {
+      document.getElementById('image-modal').style.display = 'none';
+    }
 
-function printFull() {
-  const win = window.open('', '_blank');
-  win.document.write('<html><head><title>Full Lookbook</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
-  win.document.write('<img src="kb logo.png" style="max-width:120px;"><br><br>');
-  win.document.write('<h2>KB Home Lookbook</h2>');
-  win.document.write(document.getElementById("house-info").innerHTML);
+    function formatPrice(value) {
+      const num = parseFloat(value);
+      return isNaN(num) ? null : '$' + num.toLocaleString();
+    }
 
-  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+    function parsePrice(value) {
+      const num = parseFloat(value);
+      return isNaN(num) ? 0 : num;
+    }
 
-  allCategories.forEach(cat => {
-    const catTitle = cat.querySelector("summary").textContent;
-    win.document.write(`<h3>${catTitle}</h3>`);
+    function updateTotal() {
+      let total = 0;
+      document.querySelectorAll('.option input[type="checkbox"]:checked').forEach(box => {
+        const price = parseFloat(box.getAttribute('data-price'));
+        if (!isNaN(price)) total += price;
+      });
+      document.getElementById('total-bar').textContent = `Your Total: $${total.toLocaleString()}`;
+    }
 
-    const options = cat.querySelectorAll(".option");
+    function expandAll() {
+      document.querySelectorAll("details").forEach(el => el.open = true);
+    }
 
-    options.forEach(opt => {
-      const img = opt.querySelector("img").outerHTML;
-      const details = opt.querySelector(".option-details").innerHTML;
-      win.document.write(`<div class="option">${img}<div>${details}</div></div>`);
-    });
+    function collapseAll() {
+      document.querySelectorAll("details").forEach(el => el.open = false);
+    }
 
-    win.document.write("<hr/>");
-  });
+    const base64 = localStorage.getItem('workbook');
+    if (!base64) {
+      document.getElementById('lookbook-container').innerHTML = '<p>No workbook found. Please upload from the home page.</p>';
+    } else {
+      const workbook = XLSX.read(base64, { type: 'base64' });
+      const sheet = XLSX.utils.sheet_to_json(workbook.Sheets['Sheet2'], { header: 1 });
+      const houseInfoText = sheet[11]?.[0] || '';
+      const infoParts = houseInfoText.split("  ").map(s => s.trim());
+      document.getElementById('house-info').innerHTML = infoParts.map(line => `<div>${line}</div>`).join('');
 
-  win.document.write('</body></html>');
-  win.document.close();
-}
-
-function printSelected() {
-  const win = window.open('', '_blank');
-  let total = 0;
-
-  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
-  win.document.write('<img src="kb logo.png" style="max-width:120px;"><br><br>');
-  win.document.write('<h2>KB Home Selected Options</h2>');
-  win.document.write(document.getElementById("house-info").innerHTML);
-
-  const allCategories = document.querySelectorAll("details:not(.subcategory)");
-
-  allCategories.forEach(cat => {
-    const catTitle = cat.querySelector("summary").textContent;
-    let catHasSelections = false;
-    let catContent = `<h3>${catTitle}</h3>`;
-
-    const options = cat.querySelectorAll(".option");
-    options.forEach(opt => {
-      const checkbox = opt.querySelector("input[type='checkbox']");
-      if (checkbox && checkbox.checked) {
-        const img = opt.querySelector("img").outerHTML;
-        const details = opt.querySelector(".option-details").innerHTML;
-        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
-        total += price;
-        catContent += `<div class="option">${img}<div>${details}</div></div>`;
-        catHasSelections = true;
+      let grouped = {}, currentCategory = '', currentSubcategory = '';
+      for (let i = 14; i < sheet.length; i++) {
+        const row = sheet[i];
+        const cellA = row[0];
+        const cellC = row[2];
+        if (!cellA) continue;
+        if (!cellC) {
+          const parts = cellA.split(' > ');
+          currentCategory = parts[0]?.trim();
+          currentSubcategory = parts[1]?.trim() || 'General';
+          if (!grouped[currentCategory]) grouped[currentCategory] = {};
+          if (!grouped[currentCategory][currentSubcategory]) grouped[currentCategory][currentSubcategory] = [];
+        } else {
+          grouped[currentCategory][currentSubcategory].push({
+            optionNumber: cellA,
+            description: cellC,
+            salesDesc: row[9],
+            amount: row[13]
+          });
+        }
       }
-    });
 
-    if (catHasSelections) {
-      win.document.write(catContent + "<hr/>");
-    }
-  });
+      const container = document.getElementById('lookbook-container');
+      container.innerHTML = '';
 
-  win.document.write(`<h3>Total: $${total.toLocaleString()}</h3>`);
-  win.document.write('</body></html>');
-  win.document.close();
-}
+      Object.keys(grouped).forEach(category => {
+        const catDetails = document.createElement('details');
+        const catSummary = document.createElement('summary');
+        catSummary.textContent = category;
+        catDetails.appendChild(catSummary);
 
-  const base64 = localStorage.getItem('workbook');
-  if (!base64) {
-    document.getElementById('lookbook-container').innerHTML = '<p>No workbook found. Please upload from the home page.</p>';
-  } else {
-    const workbook = XLSX.read(base64, { type: 'base64' });
-    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets['Sheet2'], { header: 1 });
-    const houseInfoText = sheet[11]?.[0] || '';
-    const infoParts = houseInfoText.split("  ").map(s => s.trim());
-    document.getElementById('house-info').innerHTML = infoParts.map(line => `<div>${line}</div>`).join('');
+        Object.keys(grouped[category]).forEach(sub => {
+          const subDetails = document.createElement('details');
+          subDetails.className = 'subcategory';
+          const subSummary = document.createElement('summary');
+          subSummary.textContent = sub;
+          subDetails.appendChild(subSummary);
 
-    let currentCategory = '', currentSubcategory = '', grouped = {};
-    for (let i = 14; i < sheet.length; i++) {
-      const row = sheet[i];
-      const cellA = row[0];
-      const cellC = row[2];
-      if (!cellA) continue;
+          grouped[category][sub].forEach(opt => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option';
 
-      if (!cellC) {
-        const parts = cellA.split(' > ');
-        currentCategory = parts[0]?.trim();
-        currentSubcategory = parts[1]?.trim() || 'General';
-        if (!grouped[currentCategory]) grouped[currentCategory] = {};
-        if (!grouped[currentCategory][currentSubcategory]) grouped[currentCategory][currentSubcategory] = [];
-      } else {
-        const optionNumber = cellA;
-        const description = cellC;
-        const salesDesc = row[9];
-        const amount = row[13];
-        grouped[currentCategory][currentSubcategory].push({ optionNumber, description, salesDesc, amount });
-      }
-    }
+            const imageWrapper = document.createElement('div');
+            imageWrapper.style.display = 'flex';
+            imageWrapper.style.flexWrap = 'wrap';
+            imageWrapper.style.gap = '0.5rem';
 
-    const container = document.getElementById('lookbook-container');
-    container.innerHTML = '';
-    Object.keys(grouped).forEach(category => {
-      const catDetails = document.createElement('details');
-      const catSummary = document.createElement('summary');
-      catSummary.textContent = category;
-      catDetails.appendChild(catSummary);
-      const subcats = grouped[category];
-      Object.keys(subcats).forEach(sub => {
-        const subDetails = document.createElement('details');
-        subDetails.className = 'subcategory';
-        const subSummary = document.createElement('summary');
-        subSummary.textContent = sub;
-        subDetails.appendChild(subSummary);
+            fetch('/.netlify/functions/list-images')
+              .then(res => res.json())
+              .then(imageFiles => {
+                const matches = imageFiles.filter(name => name.startsWith(opt.optionNumber));
+                if (matches.length === 0) {
+                  const placeholder = document.createElement('div');
+                  placeholder.textContent = 'No image available';
+                  placeholder.style.fontSize = '0.75rem';
+                  placeholder.style.color = '#888';
+                  placeholder.style.padding = '1rem';
+                  imageWrapper.appendChild(placeholder);
+                } else {
+                  matches.forEach(filename => {
+                    const img = document.createElement('img');
+                    img.src = `images/${filename}`;
+                    img.alt = filename;
+                    img.addEventListener('click', () => openImageModal(img.src));
 
-        subcats[sub].forEach(opt => {
-          const optionDiv = document.createElement('div');
-          optionDiv.className = 'option';
+                    const box = document.createElement('div');
+                    box.style.textAlign = 'center';
+                    box.style.width = '100px';
+                    box.appendChild(img);
+                    imageWrapper.appendChild(box);
+                  });
+                }
+              });
 
-          
-const imageWrapper = document.createElement('div');
-imageWrapper.style.display = 'flex';
-imageWrapper.style.flexWrap = 'wrap';
-imageWrapper.style.gap = '0.5rem';
+            const details = document.createElement('div');
+            details.className = 'option-details';
 
-const optionNum = opt.optionNumber;
-const suffixes = ['', '-a', '-b', '-c', '-d', '-e'];
-const colorNames = ['White', 'Gray', 'Black', 'Espresso', 'Ivory', 'Charcoal', 'Siberian'];
+            const formattedPrice = formatPrice(opt.amount);
+            const rawPrice = parsePrice(opt.amount);
 
-const allVariants = [
-  ...suffixes.map(suffix => `images/${opt.optionNumber}${suffix}.jpg`),
-  ...colorNames.map(color => `images/${opt.optionNumber}-${color}.jpg`)
-];
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.setAttribute('data-price', rawPrice);
+            checkbox.addEventListener('change', updateTotal);
 
-let attempted = 0;
-let imageAdded = false;
+            details.innerHTML = `
+              <strong>${opt.optionNumber} — ${opt.description}</strong>
+              <em>${opt.salesDesc || ''}</em>
+              <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
+            `;
 
-allVariants.forEach(url => {
-  const testImg = new Image();
-  testImg.src = url;
-  testImg.onload = function () {
-    const colorMatch = url.match(/-(\w+)\.jpg$/);
-    const labelText = colorMatch ? colorMatch[1] : '';
+            optionDiv.appendChild(checkbox);
+            optionDiv.appendChild(imageWrapper);
+            optionDiv.appendChild(details);
+            subDetails.appendChild(optionDiv);
+          });
 
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = optionNum + (labelText ? ' - ' + labelText : '');
-    img.style.width = '100px';
-    img.style.height = '100px';
-    img.style.objectFit = 'cover';
-    img.style.borderRadius = '6px';
-
-    const box = document.createElement('div');
-    box.style.textAlign = 'center';
-    box.style.width = '100px';
-    box.appendChild(img);
-
-    if (labelText) {
-      const label = document.createElement('div');
-      label.textContent = labelText;
-      label.style.fontSize = '0.75rem';
-      label.style.textAlign = 'center';
-      box.appendChild(label);
-    }
-
-    imageWrapper.appendChild(box);
-    imageAdded = true;
-  };
-
-  testImg.onerror = function () {
-    attempted++;
-    if (attempted === allVariants.length && !imageAdded) {
-      const placeholder = document.createElement('div');
-      placeholder.textContent = 'No image available';
-      placeholder.style.fontSize = '0.75rem';
-      placeholder.style.color = '#888';
-      placeholder.style.padding = '1rem';
-      imageWrapper.appendChild(placeholder);
-    }
-  };
-});
-
-
-          const details = document.createElement('div');
-          details.className = 'option-details';
-
-          const formattedPrice = formatPrice(opt.amount);
-          const rawPrice = parsePrice(opt.amount);
-
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.setAttribute('data-price', rawPrice);
-          checkbox.addEventListener('change', updateTotal);
-
-          details.innerHTML = `
-            <strong>${opt.optionNumber} — ${opt.description}</strong>
-            <em>${opt.salesDesc || ''}</em>
-            <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
-          `;
-
-          optionDiv.appendChild(checkbox);
-          optionDiv.appendChild(imageWrapper);
-          optionDiv.appendChild(details);
-          subDetails.appendChild(optionDiv);
+          catDetails.appendChild(subDetails);
         });
 
-        catDetails.appendChild(subDetails);
+        container.appendChild(catDetails);
       });
-      container.appendChild(catDetails);
-    });
-  }
-</script>
-<div class="modal" id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
-<span onclick="closeImageModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-<img id="modal-image" style="max-width:90%; max-height:90%;"/>
-</div>
-<script>
-function openImageModal(src) {
-  const modal = document.getElementById('image-modal');
-  const modalImg = document.getElementById('modal-image');
-  modalImg.src = src;
-  modal.style.display = 'flex';
-}
-function closeImageModal() {
-  document.getElementById('image-modal').style.display = 'none';
-}
-</script>
-
-<!-- Image Modal -->
-<div class="modal" id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.8);">
-<span class="close" style="position:absolute; top:20px; right:35px; color:#fff; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-<img class="modal-content" id="modalImage" style="margin:auto; display:block; max-width:90%; max-height:90%;"/>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
-  const closeBtn = document.querySelector(".close");
-
-  document.querySelectorAll("img").forEach(img => {
-    img.style.cursor = "pointer";
-    img.addEventListener("click", function() {
-      modal.style.display = "block";
-      modalImg.src = this.src;
-    });
-  });
-
-  closeBtn.onclick = function() {
-    modal.style.display = "none";
-  };
-
-  window.onclick = function(event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
     }
-  };
-});
-</script>
+  </script>
 </body>
 </html>
+<!-- END OF HTML -->
