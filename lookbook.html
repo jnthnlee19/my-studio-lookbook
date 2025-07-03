@@ -154,6 +154,16 @@
    <div style="text-align: center; margin-bottom: 1rem;">
   <input
     type="text"
+    id="address-input"
+    placeholder="Enter Customer Address (e.g. 123 Main St)"
+    style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;"
+  />
+  <button onclick="exportLookbook()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Export Lookbook</button>
+</div>
+
+   <div style="text-align: center; margin-bottom: 1rem;">
+  <input
+    type="text"
     id="search-input"
     placeholder="Search by option, description, or keyword..."
     style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;"
@@ -546,6 +556,44 @@ function clearSearch() {
   filterOptions();
 }
 </script>
+   <script>
+function exportLookbook() {
+  const address = document.getElementById("address-input").value.trim();
+  if (!address) {
+    alert("Please enter an address first.");
+    return;
+  }
+
+  const base64 = localStorage.getItem('workbook');
+  if (!base64) {
+    alert("No workbook found. Please upload a file first.");
+    return;
+  }
+
+  // Clone the current HTML and inject the base64 inline
+  let html = document.documentElement.outerHTML;
+
+  // Replace the line where the workbook is pulled from localStorage
+  html = html.replace(
+    /const base64 = localStorage\.getItem\('workbook'\);/,
+    `const base64 = \`${base64}\`;`
+  );
+
+  // Create the file name
+  const safeAddress = address.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9\-]/g, "");
+  const filename = `${safeAddress}.html`;
+
+  // Create and download the file
+  const blob = new Blob(["<!DOCTYPE html>\n" + html], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
 </body>
 </html>
 
