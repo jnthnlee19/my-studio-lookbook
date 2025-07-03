@@ -180,14 +180,22 @@
     return isNaN(num) ? 0 : num;
   }
 
-  function updateTotal() {
-    let total = 0;
-    document.querySelectorAll('.option input[type="checkbox"]:checked').forEach(box => {
-      const price = parseFloat(box.getAttribute('data-price'));
-      if (!isNaN(price)) total += price;
-    });
-    document.getElementById('total-bar').textContent = `Your Total: $${total.toLocaleString()}`;
-  }
+function updateTotal() {
+  let total = 0;
+  document.querySelectorAll('.option').forEach(option => {
+    const checkbox = option.querySelector('.option-checkbox');
+    const qtyInput = option.querySelector('.option-qty');
+
+    if (checkbox && checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+      const qty = parseInt(qtyInput?.value || 1);
+      total += price * qty;
+    }
+  });
+
+  document.getElementById('total-bar').textContent = `Your Total: $${total.toLocaleString()}`;
+}
+
    function toggleAllSelections(masterCheckbox) {
   const allBoxes = document.querySelectorAll('.option input[type="checkbox"]');
   allBoxes.forEach(box => {
