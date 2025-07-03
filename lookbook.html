@@ -150,6 +150,16 @@
 </div>
 </div>
 <h1>KB Home Lookbook</h1>
+   <div style="text-align: center; margin-bottom: 1rem;">
+  <input
+    type="text"
+    id="search-input"
+    placeholder="Search by option, description, or keyword..."
+    style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;"
+    oninput="filterOptions()"
+  />
+  <button onclick="clearSearch()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Clear</button>
+</div>
 <div style="text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">
   <label style="font-size: 0.95rem;">
     <input type="checkbox" id="toggle-all" style="transform: scale(1.2); margin-right: 0.4rem;" onchange="toggleAllSelections(this)">
@@ -453,6 +463,67 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 });
+<script>
+// (This is your last existing script for the image modal)
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const closeBtn = document.querySelector(".close");
+
+  document.querySelectorAll("img").forEach(img => {
+    img.style.cursor = "pointer";
+    img.addEventListener("click", function() {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+    });
+  });
+
+  closeBtn.onclick = function() {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+});
+</script>
+
+<!-- ✅ Paste Search Script Below This -->
+<script>
+function filterOptions() {
+  const query = document.getElementById('search-input').value.toLowerCase();
+  const allOptions = document.querySelectorAll('.option');
+  let anyVisible = false;
+
+  allOptions.forEach(opt => {
+    const text = opt.innerText.toLowerCase();
+    const matches = text.includes(query);
+
+    opt.style.display = matches ? 'flex' : 'none';
+
+    if (matches) anyVisible = true;
+  });
+
+  document.querySelectorAll('details.subcategory').forEach(sub => {
+    const hasVisibleChild = Array.from(sub.querySelectorAll('.option')).some(opt => opt.style.display !== 'none');
+    sub.style.display = hasVisibleChild ? '' : 'none';
+    sub.open = hasVisibleChild; // Auto-expand if it has matches
+  });
+
+  document.querySelectorAll('#lookbook-container > details').forEach(cat => {
+    const hasVisibleSub = Array.from(cat.querySelectorAll('details.subcategory')).some(sub => sub.style.display !== 'none');
+    cat.style.display = hasVisibleSub ? '' : 'none';
+    cat.open = hasVisibleSub;
+  });
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  filterOptions();
+}
 </script>
 </body>
 </html>
+
