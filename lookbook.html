@@ -395,10 +395,22 @@ allVariants.forEach(url => {
           const formattedPrice = formatPrice(opt.amount);
           const rawPrice = parsePrice(opt.amount);
 
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.setAttribute('data-price', rawPrice);
-          checkbox.addEventListener('change', updateTotal);
+const checkbox = document.createElement('input');
+checkbox.type = 'checkbox';
+checkbox.setAttribute('data-price', rawPrice);
+checkbox.className = 'option-checkbox';
+
+const qtyInput = document.createElement('input');
+qtyInput.type = 'number';
+qtyInput.min = '1';
+qtyInput.value = '1';
+qtyInput.className = 'option-qty';
+qtyInput.style.width = '50px';
+qtyInput.style.marginLeft = '0.5rem';
+
+checkbox.addEventListener('change', updateTotal);
+qtyInput.addEventListener('input', updateTotal);
+
 
           details.innerHTML = `
             <strong>${opt.optionNumber} — ${opt.description}</strong>
@@ -407,6 +419,7 @@ allVariants.forEach(url => {
           `;
 
           optionDiv.appendChild(checkbox);
+           optionDiv.appendChild(qtyInput);
           optionDiv.appendChild(imageWrapper);
           optionDiv.appendChild(details);
           subDetails.appendChild(optionDiv);
