@@ -560,42 +560,33 @@ function clearSearch() {
 }
 </script>
    <script>
-function exportLookbook() {
+async function exportLookbook() {
   const address = document.getElementById("address-input").value.trim();
-  if (!address) {
-    alert("Please enter an address first.");
-    return;
+  if (!address) return alert("Please enter an address first.");
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) return alert("No workbook found. Please upload a file first.");
+
+  const html = document.documentElement.outerHTML;
+
+  const response = await fetch("/.netlify/functions/generate-page", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ address, base64, htmlTemplate: html })
+  });
+
+  const result = await response.json();
+
+  if (response.ok) {
+    alert("Page created! Link copied to clipboard.");
+    navigator.clipboard.writeText(result.url);
+    window.open(result.url, "_blank");
+  } else {
+    alert("Failed to create page: " + result.body);
   }
-
-  const base64 = localStorage.getItem('workbook');
-  if (!base64) {
-    alert("No workbook found. Please upload a file first.");
-    return;
-  }
-
-  // Clone the current HTML and inject the base64 inline
-  let html = document.documentElement.outerHTML;
-
-  // Replace the line where the workbook is pulled from localStorage
-  html = html.replace(
-    /const base64 = localStorage\.getItem\('workbook'\);/,
-    `const base64 = \`${base64}\`;`
-  );
-
-  // Create the file name
-  const safeAddress = address.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9\-]/g, "");
-  const filename = `${safeAddress}.html`;
-
-  // Create and download the file
-  const blob = new Blob(["<!DOCTYPE html>\n" + html], { type: "text/html" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 </script>
+
 
 </body>
 </html>
