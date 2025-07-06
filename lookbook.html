@@ -637,6 +637,70 @@ function saveSelections() {
   URL.revokeObjectURL(url);
 }
 </script>
+<script>
+  // Called when customer clicks "Save My Selections"
+  function saveSelections() {
+    const selectedOptions = [];
+    document.querySelectorAll('.option').forEach(option => {
+      const checkbox = option.querySelector('input[type="checkbox"]');
+      const qtyInput = option.querySelector('input[type="number"]');
+      if (checkbox && checkbox.checked) {
+        const title = option.querySelector('.option-details strong')?.innerText;
+        const price = checkbox.getAttribute('data-price');
+        const qty = qtyInput?.value || 1;
+        selectedOptions.push({ title, price, qty });
+      }
+    });
+
+    if (selectedOptions.length === 0) {
+      alert("You haven’t selected anything yet.");
+      return;
+    }
+
+    // Build PDF content
+    const container = document.createElement("div");
+    container.innerHTML = `
+      <h2>My KB Home Selections</h2>
+      <ul>
+        ${selectedOptions.map(opt => `<li><strong>${opt.title}</strong> — $${opt.price} × ${opt.qty}</li>`).join("")}
+      </ul>
+    `;
+
+    // Generate PDF and send to backend
+    html2pdf().from(container).outputPdf("blob").then(async (pdfBlob) => {
+      const formData = new FormData();
+      formData.append("file", pdfBlob, "my-selections.pdf");
+      formData.append("address", document.title); // or use something like URL
+
+      const res = await fetch("/.netlify/functions/save-pdf", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert("Your selections have been saved and emailed!");
+      } else {
+        alert("There was a problem saving your selections.");
+      }
+    });
+  }
+
+  // Only show button on customer pages
+  document.addEventListener('DOMContentLoaded', () => {
+    const isCustomerPage = window.location.pathname.includes("/customers/");
+    if (isCustomerPage) {
+      const exportSection = document.querySelector('#address-input')?.parentElement;
+      if (exportSection) exportSection.style.display = "none";
+
+      const saveBtn = document.createElement('button');
+      saveBtn.textContent = "Save My Selections";
+      saveBtn.style.cssText = "padding: 0.5rem 1rem; font-size: 1rem; background: linear-gradient(to bottom, #FFC527, #e5b021); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 1rem;";
+      saveBtn.onclick = saveSelections;
+
+      document.querySelector('.right-panel')?.appendChild(saveBtn);
+    }
+  });
+</script>
 
 
 </body>
