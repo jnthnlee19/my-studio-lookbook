@@ -350,63 +350,35 @@ imageWrapper.style.flexWrap = 'wrap';
 imageWrapper.style.gap = '0.5rem';
 
 const optionNum = opt.optionNumber;
-const suffixes = ['', '-a', '-b', '-c', '-d', '-e'];
-const colorNames = ['White', 'Gray', 'Black', 'Espresso', 'Ivory', 'Charcoal', 'Siberian'];
+const imageUrl = `/images/${optionNum}.jpg`;
 
-const allVariants = [
-  ...suffixes.map(suffix => `/images/${opt.optionNumber}${suffix}.jpg`),
-  ...colorNames.map(color => `/images/${opt.optionNumber}-${color}.jpg`)
-];
+const img = new Image();
+img.src = imageUrl;
+img.alt = optionNum;
+img.style.width = '100px';
+img.style.height = '100px';
+img.style.objectFit = 'contain';
+img.style.backgroundColor = '#ffffff';
+img.style.borderRadius = '6px';
+img.addEventListener('click', () => openImageModal(img.src));
 
-let attempted = 0;
-let imageAdded = false;
+img.onload = () => {
+  const box = document.createElement('div');
+  box.style.textAlign = 'center';
+  box.style.width = '100px';
+  box.appendChild(img);
+  imageWrapper.appendChild(box);
+};
 
-allVariants.forEach(url => {
-  const testImg = new Image();
-  testImg.src = url;
-  testImg.onload = function () {
-    const colorMatch = url.match(/-(\w+)\.jpg$/);
-    const labelText = colorMatch ? colorMatch[1] : '';
+img.onerror = () => {
+  const placeholder = document.createElement('div');
+  placeholder.textContent = 'No image available';
+  placeholder.style.fontSize = '0.75rem';
+  placeholder.style.color = '#888';
+  placeholder.style.padding = '1rem';
+  imageWrapper.appendChild(placeholder);
+};
 
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = optionNum + (labelText ? ' - ' + labelText : '');
-    img.style.width = '100px';
-    img.style.height = '100px';
-    img.style.objectFit = 'contain';
-    img.style.backgroundColor = '#ffffff'; 
-    img.style.borderRadius = '6px';
-    img.addEventListener('click', () => openImageModal(img.src));
-
-    const box = document.createElement('div');
-    box.style.textAlign = 'center';
-    box.style.width = '100px';
-    box.appendChild(img);
-
-    if (labelText) {
-      const label = document.createElement('div');
-      label.textContent = labelText;
-      label.style.fontSize = '0.75rem';
-      label.style.textAlign = 'center';
-      box.appendChild(label);
-    }
-
-    imageWrapper.appendChild(box);
-    imageAdded = true;
-  };
-
-  testImg.onerror = function () {
-    attempted++;
-    if (attempted === allVariants.length && !imageAdded) {
-      const placeholder = document.createElement('div');
-      placeholder.textContent = 'No image available';
-      placeholder.style.fontSize = '0.75rem';
-      placeholder.style.color = '#888';
-      placeholder.style.padding = '1rem';
-      imageWrapper.appendChild(placeholder);
-    }
-  };
-});
 
 
           const details = document.createElement('div');
