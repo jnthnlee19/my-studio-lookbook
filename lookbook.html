@@ -586,6 +586,55 @@ async function exportLookbook() {
   }
 }
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const isCustomerPage = window.location.pathname.includes("/customers/");
+  
+  // Hide the address input/export button if it's a customer page
+  if (isCustomerPage) {
+    const exportSection = document.querySelector('#address-input')?.parentElement;
+    if (exportSection) exportSection.style.display = "none";
+
+    // Create "Save Selections" button
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = "Save My Selections";
+    saveBtn.style.cssText = "padding: 0.5rem 1rem; font-size: 1rem; background: linear-gradient(to bottom, #FFC527, #e5b021); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 1rem;";
+
+    saveBtn.onclick = saveSelections;
+
+    document.querySelector('.right-panel')?.appendChild(saveBtn);
+  }
+});
+
+function saveSelections() {
+  const selected = [];
+
+  document.querySelectorAll('.option').forEach(option => {
+    const checkbox = option.querySelector('input[type="checkbox"]');
+    const qtyInput = option.querySelector('input[type="number"]');
+    if (checkbox && checkbox.checked) {
+      const title = option.querySelector('.option-details strong')?.innerText;
+      const price = checkbox.getAttribute('data-price');
+      const qty = qtyInput?.value || 1;
+      selected.push({ title, price, qty });
+    }
+  });
+
+  if (selected.length === 0) {
+    alert("You haven’t selected anything yet.");
+    return;
+  }
+
+  const blob = new Blob([JSON.stringify(selected, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "my-selections.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
 
 
 </body>
