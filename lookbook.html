@@ -610,7 +610,6 @@ function saveSelections() {
 }
 </script>
 <script>
-  // Called when customer clicks "Save My Selections"
   function saveSelections() {
     const selectedOptions = [];
     document.querySelectorAll('.option').forEach(option => {
@@ -629,7 +628,6 @@ function saveSelections() {
       return;
     }
 
-    // Build PDF content
     const container = document.createElement("div");
     container.innerHTML = `
       <h2>My KB Home Selections</h2>
@@ -638,11 +636,10 @@ function saveSelections() {
       </ul>
     `;
 
-    // Generate PDF and send to backend
     html2pdf().from(container).outputPdf("blob").then(async (pdfBlob) => {
       const formData = new FormData();
       formData.append("file", pdfBlob, "my-selections.pdf");
-      formData.append("address", document.title); // or use something like URL
+      formData.append("address", document.title);
 
       const res = await fetch("/.netlify/functions/save-pdf", {
         method: "POST",
@@ -657,22 +654,26 @@ function saveSelections() {
     });
   }
 
-  // Only show button on customer pages
   document.addEventListener('DOMContentLoaded', () => {
     const isCustomerPage = window.location.pathname.includes("/customers/");
     if (isCustomerPage) {
       const exportSection = document.querySelector('#address-input')?.parentElement;
       if (exportSection) exportSection.style.display = "none";
 
-      const saveBtn = document.createElement('button');
-      saveBtn.textContent = "Save My Selections";
-      saveBtn.style.cssText = "padding: 0.5rem 1rem; font-size: 1rem; background: linear-gradient(to bottom, #FFC527, #e5b021); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 1rem;";
-      saveBtn.onclick = saveSelections;
+      // 🧠 Prevent duplicates
+      if (!document.getElementById("save-selections-btn")) {
+        const saveBtn = document.createElement('button');
+        saveBtn.id = "save-selections-btn";
+        saveBtn.textContent = "Save My Selections";
+        saveBtn.style.cssText = "padding: 0.5rem 1rem; font-size: 1rem; background: linear-gradient(to bottom, #FFC527, #e5b021); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 1rem;";
+        saveBtn.onclick = saveSelections;
 
-      document.querySelector('.right-panel')?.appendChild(saveBtn);
+        document.querySelector('.right-panel')?.appendChild(saveBtn);
+      }
     }
   });
 </script>
+
 
 
 </body>
