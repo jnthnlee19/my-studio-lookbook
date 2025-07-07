@@ -257,9 +257,14 @@ function printFull() {
     const options = cat.querySelectorAll(".option");
 
     options.forEach(opt => {
-      const img = opt.querySelector("img").outerHTML;
-      const details = opt.querySelector(".option-details").innerHTML;
-      win.document.write(`<div class="option">${img}<div>${details}</div></div>`);
+const img = opt.querySelector("img").outerHTML;
+const details = opt.querySelector(".option-details").innerHTML;
+const commentBox = opt.querySelector("textarea");
+const commentText = commentBox?.value?.trim();
+const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+catContent += `<div class="option">${img}<div>${details}${commentHTML}</div></div>`;
+
     });
 
     win.document.write("<hr/>");
@@ -420,11 +425,17 @@ checkbox.addEventListener('change', updateTotal);
 qtyInput.addEventListener('input', updateTotal);
 
 
-          details.innerHTML = `
-            <strong>${opt.optionNumber} — ${opt.description}</strong>
-            <em>${opt.salesDesc || ''}</em>
-            <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
-          `;
+        const commentId = `comment-${opt.optionNumber}`;
+details.innerHTML = `
+  <strong>${opt.optionNumber} — ${opt.description}</strong>
+  <em>${opt.salesDesc || ''}</em>
+  <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
+  <div style="margin-top: 0.5rem;">
+    <label for="${commentId}" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+    <textarea id="${commentId}" data-option="${opt.optionNumber}" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+  </div>
+`;
+
 
           optionDiv.appendChild(checkbox);
            optionDiv.appendChild(qtyInput);
