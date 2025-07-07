@@ -258,12 +258,16 @@ function printFull() {
 
     options.forEach(opt => {
 const img = opt.querySelector("img").outerHTML;
-const details = opt.querySelector(".option-details").innerHTML;
-const commentBox = opt.querySelector("textarea");
-const commentText = commentBox?.value?.trim();
+const detailsClone = opt.querySelector(".option-details").cloneNode(true);
+const commentBox = detailsClone.querySelector("textarea");
+if (commentBox) commentBox.remove(); // Remove the textarea from the visual content
+
+const commentInput = opt.querySelector("textarea");
+const commentText = commentInput?.value?.trim();
 const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
 
-catContent += `<div class="option">${img}<div>${details}${commentHTML}</div></div>`;
+catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${commentHTML}</div></div>`;
+
 
     });
 
