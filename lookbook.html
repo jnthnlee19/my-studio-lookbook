@@ -241,7 +241,7 @@ function updateTotal() {
 function printFull() {
   const win = window.open('', '_blank');
   win.document.write('<html><head><title>Full Lookbook</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
-  win.document.write('<img src="kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Lookbook</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
 
@@ -271,7 +271,7 @@ function printSelected() {
   let total = 0;
 
   win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
-  win.document.write('<img src="kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
 
