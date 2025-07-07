@@ -189,22 +189,25 @@ img.logo {
   </style>
 </head>
 <body>
-<div class="sticky-header">
-<div class="top-row">
-<img alt="KB Home Logo" class="logo" src="/kb logo.png"/>
-<div class="house-info" id="house-info"></div>
-<div class="right-panel">
-<div class="total-bar" id="total-bar">Your Total: $0</div>
-<div class="top-buttons">
-<button onclick="expandAll()">Expand All</button>
-<button onclick="collapseAll()">Collapse All</button>
-<button onclick="printSelected()">Print Selections Only</button>
-</div>
-</div>
-  
+  <div class="sticky-header">
+    <div class="top-row">
+      <img alt="KB Home Logo" class="logo" src="/kb logo.png"/>
+      <div class="house-info" id="house-info"></div>
+      <div class="right-panel">
+        <div class="total-bar" id="total-bar">Your Total: $0</div>
+        <div class="top-buttons">
+          <button onclick="expandAll()">Expand All</button>
+          <button onclick="collapseAll()">Collapse All</button>
+          <button onclick="printSelected()">Print Selections Only</button>
+        </div>
+      </div>
+    </div>
+  </div> <!-- ✅ CLOSE sticky-header -->
 
-</div>
-    <div style="height: 50px;"></div>
+  <div style="height: 50px;"></div> <!-- ✅ SPACER -->
+
+  <h1>KB Home Lookbook</h1>
+
 <h1>KB Home Lookbook</h1>
    <div style="text-align: center; margin-bottom: 1rem;">
   <input
