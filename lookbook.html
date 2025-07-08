@@ -654,6 +654,28 @@ async function exportLookbook() {
     if (isCustomerPage) {
       const exportSection = document.querySelector('#address-input')?.parentElement;
       if (exportSection) exportSection.style.display = "none";
+       if (isCustomerPage) {
+  const exportSection = document.querySelector('#address-input')?.parentElement;
+  if (exportSection) exportSection.style.display = "none";
+
+  // ✅ Add this block to display the address
+  const address = document.title;
+  const houseInfo = document.getElementById('house-info');
+  if (address && houseInfo) {
+    const addrDiv = document.createElement('div');
+    addrDiv.textContent = address;
+    addrDiv.style.fontWeight = 'bold';
+    addrDiv.style.fontSize = '1rem';
+    addrDiv.style.marginBottom = '0.2rem';
+    houseInfo.prepend(addrDiv);
+  }
+
+  // 🧠 Prevent duplicates
+  if (!document.getElementById("save-selections-btn")) {
+    ...
+  }
+}
+
 
       // 🧠 Prevent duplicates
       if (!document.getElementById("save-selections-btn")) {
