@@ -156,11 +156,13 @@ img.logo {
       <div class="house-info" id="house-info"></div>
       <div class="right-panel">
         <div class="total-bar" id="total-bar">Your Total: $0</div>
-        <div class="top-buttons">
-          <button onclick="expandAll()">Expand All</button>
-          <button onclick="collapseAll()">Collapse All</button>
-          <button onclick="printSelected()">Print Selections Only</button>
-        </div>
+<div class="top-buttons">
+  <button onclick="expandAll()">Expand All</button>
+  <button onclick="collapseAll()">Collapse All</button>
+  <button onclick="printSelected()">Print Selections Only</button>
+  <button onclick="printSelectedNoTotal()">Print (No Total)</button>
+</div>
+
       </div>
     </div>
   </div> <!-- ✅ CLOSE sticky-header -->
@@ -330,6 +332,55 @@ catHasSelections = true;
   win.document.write('</body></html>');
   win.document.close();
 }
+     win.document.write('</body></html>');
+  win.document.close();
+}
+
+function printSelectedNoTotal() {
+  const win = window.open('', '_blank');
+
+  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<h2>KB Home Selected Options</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img").outerHTML;
+        const details = opt.querySelector(".option-details").cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const liveTextarea = opt.querySelector("textarea");
+        const commentText = liveTextarea?.value?.trim();
+        const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+
+        catContent += `<div class="option">${img}<div>${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) {
+      win.document.write(catContent + "<hr/>");
+    }
+  });
+
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
 
   const base64 = localStorage.getItem('workbook');
   if (!base64) {
