@@ -298,12 +298,24 @@ function printSelected() {
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox && checkbox.checked) {
-        const img = opt.querySelector("img").outerHTML;
-        const details = opt.querySelector(".option-details").innerHTML;
-        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
-        total += price;
-        catContent += `<div class="option">${img}<div>${details}</div></div>`;
-        catHasSelections = true;
+const img = opt.querySelector("img").outerHTML;
+const details = opt.querySelector(".option-details").cloneNode(true);
+
+// Remove the textarea from the cloned version
+const textarea = details.querySelector("textarea");
+if (textarea) textarea.remove();
+
+// Get the actual comment from the live textarea
+const liveTextarea = opt.querySelector("textarea");
+const commentText = liveTextarea?.value?.trim();
+const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+total += price;
+
+catContent += `<div class="option">${img}<div>${details.innerHTML}${commentHTML}</div></div>`;
+catHasSelections = true;
+
       }
     });
 
