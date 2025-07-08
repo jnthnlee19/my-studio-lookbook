@@ -311,9 +311,11 @@ const commentText = liveTextarea?.value?.trim();
 const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
 
 const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
-total += price;
+const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+total += price * qty;
 
-catContent += `<div class="option">${img}<div>${details.innerHTML}${commentHTML}</div></div>`;
+catContent += `<div class="option">${img}<div>${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+
 catHasSelections = true;
 
       }
