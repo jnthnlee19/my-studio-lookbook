@@ -730,24 +730,69 @@ const response = await fetch('/.netlify/functions/generate-page', {
 
 <script>
 async function generatePage() {
-  
- const pathParts = window.location.pathname.split("/");
-const currentSlug = pathParts[pathParts.length - 1].replace(".html", "").replace("/", "");
-const address = `${currentSlug}-wishlist`;
-
+  // Auto-name page from current path
+  const pathParts = window.location.pathname.split("/");
+  const currentSlug = pathParts[pathParts.length - 1].replace(".html", "").replace("/", "");
+  const address = `${currentSlug}-wishlist`;
 
   const base64 = localStorage.getItem("workbook");
   if (!base64) return alert("Workbook not loaded. This page must be generated from the original file.");
 
-  const html = document.documentElement.outerHTML.replace(
-    /const base64 = localStorage\.getItem\('workbook'\);/,
-    `const base64 = \`${base64}\`;`
-  );
-
+  // Show loading
   const loading = document.createElement("div");
-  loading.textContent = "Generating page...";
+  loading.textContent = "Generating wishlist page...";
   loading.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;font-size:2rem;font-weight:bold;background:white;z-index:9999;";
   document.body.appendChild(loading);
+
+  // Build trimmed HTML with only selected items
+  let html = `
+  <!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>${address}</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; padding: 2rem; }
+    h2, h3 { color: #222; }
+    .option { margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .option img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; background: #eee; }
+    .option-details { flex: 1; }
+    .comment { margin-top: 0.5rem; font-style: italic; color: #555; }
+    strong { display: block; margin-bottom: 0.25rem; }
+  </style></head><body>
+  <h2>My Wishlist</h2>`;
+
+  // Add house info
+  html += document.getElementById("house-info")?.innerHTML || '';
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img")?.outerHTML || "";
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+
+        // Remove textarea from cloned view
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? `<div class="comment">Comment: ${commentText}</div>` : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+
+        catContent += `<div class="option">${img}<div class="option-details">${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) html += catContent;
+  });
+
+  html += "</body></html>";
 
   try {
     const response = await fetch("/.netlify/functions/generate-page", {
@@ -760,7 +805,7 @@ const address = `${currentSlug}-wishlist`;
     document.body.removeChild(loading);
 
     if (response.ok) {
-      alert("Page created! Link copied to clipboard.");
+      alert("Wishlist page created! Link copied to clipboard.");
       navigator.clipboard.writeText(result.url);
       window.open(result.url, "_blank");
     } else {
@@ -772,6 +817,7 @@ const address = `${currentSlug}-wishlist`;
   }
 }
 </script>
+
 <script>
 async function exportLookbook() {
   const address = document.getElementById("address-input").value.trim();
