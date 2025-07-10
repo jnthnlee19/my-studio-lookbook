@@ -730,8 +730,11 @@ const response = await fetch('/.netlify/functions/generate-page', {
 
 <script>
 async function generatePage() {
-  const address = document.getElementById("address-input").value.trim();
-  if (!address) return alert("Please enter an address.");
+  
+ const pathParts = window.location.pathname.split("/");
+const currentSlug = pathParts[pathParts.length - 1].replace(".html", "").replace("/", "");
+const address = `${currentSlug}-wishlist`;
+
 
   const base64 = localStorage.getItem("workbook");
   if (!base64) return alert("Workbook not loaded. This page must be generated from the original file.");
