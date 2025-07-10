@@ -163,8 +163,9 @@ img.logo {
   <button onclick="collapseAll()">Collapse All</button>
      <button onclick="generatePage()">Save Wishlist</button>
    <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
-  <button onclick="printSelected()">Print Selections Only</button>
-  <button onclick="printSelectedNoTotal()">Print (No Total)</button>
+<button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
+<button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
+
 </div>
 
       </div>
@@ -707,30 +708,28 @@ const response = await fetch('/.netlify/functions/generate-page', {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const isCustomerPage = window.location.pathname.includes("/customers/");
-    if (isCustomerPage) {
-      const exportSection = document.querySelector('#address-input')?.parentElement;
-      if (exportSection) exportSection.style.display = "none";
+document.addEventListener('DOMContentLoaded', () => {
+  const isCustomerPage = window.location.pathname.includes("/customers/");
+  if (isCustomerPage) {
+    const exportSection = document.querySelector('#address-input')?.parentElement;
+    if (exportSection) exportSection.style.display = "none";
 
-      // 🧠 Prevent duplicates
-      if (!document.getElementById("save-selections-btn")) {
-        const saveBtn = document.createElement('button');
-        saveBtn.id = "save-selections-btn";
-        saveBtn.textContent = "Save My Selections";
-        saveBtn.style.cssText = "padding: 0.5rem 1rem; font-size: 1rem; background: linear-gradient(to bottom, #FFC527, #e5b021); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 1rem;";
-        saveBtn.onclick = saveSelections;
+    // Hide print buttons on customer pages
+    const printBtn = document.getElementById("print-selected-btn");
+    const noTotalBtn = document.getElementById("print-no-total-btn");
+    if (printBtn) printBtn.style.display = "none";
+    if (noTotalBtn) noTotalBtn.style.display = "none";
 
-// document.querySelector('.right-panel')?.appendChild(saveBtn);
-
-      }
+    if (!document.getElementById("save-selections-btn")) {
+      // existing Save My Selections button logic
     }
-  });
+  }
+});
+
 </script>
 
 <script>
 async function generatePage() {
-  // Auto-name page from current path
   const pathParts = window.location.pathname.split("/");
   const currentSlug = pathParts[pathParts.length - 1].replace(".html", "").replace("/", "");
   const address = `${currentSlug}-wishlist`;
@@ -738,13 +737,13 @@ async function generatePage() {
   const base64 = localStorage.getItem("workbook");
   if (!base64) return alert("Workbook not loaded. This page must be generated from the original file.");
 
-  // Show loading
   const loading = document.createElement("div");
   loading.textContent = "Generating wishlist page...";
   loading.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;font-size:2rem;font-weight:bold;background:white;z-index:9999;";
   document.body.appendChild(loading);
 
-  // Build trimmed HTML with only selected items
+  let total = 0;
+
   let html = `
   <!DOCTYPE html><html><head><meta charset="UTF-8">
   <title>${address}</title>
@@ -756,10 +755,10 @@ async function generatePage() {
     .option-details { flex: 1; }
     .comment { margin-top: 0.5rem; font-style: italic; color: #555; }
     strong { display: block; margin-bottom: 0.25rem; }
+    .total-line { font-weight: bold; font-size: 1.25rem; margin-top: 2rem; border-top: 2px solid #ccc; padding-top: 1rem; }
   </style></head><body>
   <h2>My Wishlist</h2>`;
 
-  // Add house info
   html += document.getElementById("house-info")?.innerHTML || '';
 
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
@@ -775,7 +774,6 @@ async function generatePage() {
         const img = opt.querySelector("img")?.outerHTML || "";
         const details = opt.querySelector(".option-details")?.cloneNode(true);
 
-        // Remove textarea from cloned view
         const textarea = details.querySelector("textarea");
         if (textarea) textarea.remove();
 
@@ -783,6 +781,8 @@ async function generatePage() {
         const commentHTML = commentText ? `<div class="comment">Comment: ${commentText}</div>` : '';
 
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+        total += price * qty;
 
         catContent += `<div class="option">${img}<div class="option-details">${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
         catHasSelections = true;
@@ -792,6 +792,7 @@ async function generatePage() {
     if (catHasSelections) html += catContent;
   });
 
+  html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
   html += "</body></html>";
 
   try {
@@ -817,6 +818,7 @@ async function generatePage() {
   }
 }
 </script>
+
 
 <script>
 async function exportLookbook() {
