@@ -161,6 +161,7 @@ img.logo {
 <div class="top-buttons">
   <button onclick="expandAll()">Expand All</button>
   <button onclick="collapseAll()">Collapse All</button>
+     <button onclick="generateSelectionPage()">Generate Selection Page</button>
    <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
   <button onclick="printSelected()">Print Selections Only</button>
   <button onclick="printSelectedNoTotal()">Print (No Total)</button>
@@ -724,6 +725,82 @@ async function exportLookbook() {
   });
 </script>
 
+<script>
+async function generateSelectionPage() {
+  const overlay = document.createElement('div');
+  overlay.id = 'loading-overlay';
+  overlay.innerHTML = `<div class="loading-message">Generating your page...<br/>This may take 20–30 seconds.</div>`;
+  Object.assign(overlay.style, {
+    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+    background: 'rgba(255,255,255,0.95)', zIndex: 9999,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: '1.5rem', color: '#222', fontWeight: 'bold'
+  });
+  document.body.appendChild(overlay);
+
+  let html = `
+    <!DOCTYPE html><html><head><meta charset="UTF-8"><title>KB Home Selections</title>
+    <style>
+      body { font-family: Arial; padding: 2rem; }
+      h2, h3 { color: #222; }
+      .option { margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; display: flex; gap: 1rem; align-items: flex-start; }
+      .option img { width: 120px; height: 120px; object-fit: cover; border-radius: 6px; background: #eee; }
+      .comment { margin-top: 0.5rem; font-style: italic; color: #555; }
+    </style></head><body>
+    <h2>KB Home Selected Options</h2>`;
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img")?.outerHTML || '';
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? `<div class="comment">Comment: ${commentText}</div>` : '';
+
+        catContent += `<div class="option">${img}<div>${details.innerHTML}${commentHTML}</div></div>`;
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) html += catContent;
+  });
+
+  html += '</body></html>';
+
+  const address = prompt("Enter an address or name for the customer page (e.g. '123 Main')").trim();
+  if (!address) {
+    alert("Cancelled. No address provided.");
+    document.body.removeChild(overlay);
+    return;
+  }
+
+  const response = await fetch('/.netlify/functions/generate-page', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address, htmlTemplate: html })
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    navigator.clipboard.writeText(result.url);
+    window.open(result.url, '_blank');
+  } else {
+    alert("Failed to create page.");
+  }
+
+  document.body.removeChild(overlay);
+}
+</script>
 
 
 </body>
