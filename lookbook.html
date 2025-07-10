@@ -769,6 +769,43 @@ async function generatePage() {
   }
 }
 </script>
+<script>
+async function exportLookbook() {
+  const address = document.getElementById("address-input").value.trim();
+  if (!address) {
+    alert("Please enter an address.");
+    return;
+  }
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) {
+    alert("No workbook found. Please upload a file first.");
+    return;
+  }
+
+  const html = document.documentElement.outerHTML;
+
+  try {
+    const response = await fetch('/.netlify/functions/generate-page', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address, htmlTemplate: html, base64 })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Page created! Link copied to clipboard.");
+      navigator.clipboard.writeText(result.url);
+      window.open(result.url, "_blank");
+    } else {
+      alert("Failed to create page: " + result.body);
+    }
+  } catch (error) {
+    alert("Unexpected error: " + error.message);
+  }
+}
+</script>
 
 
 </body>
