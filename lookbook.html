@@ -645,7 +645,8 @@ const base64 = localStorage.getItem("workbook");
 const response = await fetch('/.netlify/functions/generate-page', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ address, htmlTemplate, base64 })
+  body: JSON.stringify({ address, htmlTemplate: html, base64 })
+
 });
 
 
@@ -749,7 +750,7 @@ async function generatePage() {
     const response = await fetch("/.netlify/functions/generate-page", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ address, base64, htmlTemplate: html })
+      body: JSON.stringify({ address, htmlTemplate: html, base64 })
     });
 
     const result = await response.json();
