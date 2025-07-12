@@ -152,9 +152,9 @@ img.logo {
 /* Grid container for options inside each subcategory */
 .subcategory .option-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
+  grid-template-columns: repeat(4, 1fr); /* max of 4 items per row */
+  gap: 1.2rem;
+  padding: 1.2rem;
 }
 
 /* Make each option a card */
@@ -172,7 +172,7 @@ img.logo {
 /* Ensure image and content are stacked nicely */
 .option img {
   width: 100% !important;
-  height: 160px !important;
+  height: 200px !important;
   object-fit: contain !important;
   margin-bottom: 1rem;
   background-color: #f9f9f9;
