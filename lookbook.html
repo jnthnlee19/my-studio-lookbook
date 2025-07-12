@@ -188,6 +188,77 @@ img.logo {
   margin-bottom: 0.5rem;
   display: block;
 }
+
+/* Grid container for options inside each subcategory */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* max of 4 items per row */
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+/* Make each option a card */
+.option {
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+/* Larger image */
+.option img {
+  width: 100% !important;
+  height: 280px !important;
+  object-fit: contain !important;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+/* Details styling */
+.option-details {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.option-details strong {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Top control row */
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.option-controls label {
+  font-size: 0.85rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+}
+
+.option-checkbox {
+  transform: scale(1.3);
+  margin-right: 0.4rem;
+  cursor: pointer;
+}
+
+.option-qty {
+  width: 60px;
+  padding: 0.25rem;
+  font-size: 0.85rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 </style>
 </head>
 <body>
@@ -224,7 +295,6 @@ img.logo {
     Select / Deselect All
   </label>
 </div>
-
 <div id="lookbook-container">Loading...</div>
 <script>
   function formatPrice(value) {
@@ -459,6 +529,14 @@ optionContainer.className = 'option-container';
 subcats[sub].forEach(opt => {
           const optionDiv = document.createElement('div');
           optionDiv.className = 'option';
+const controlRow = document.createElement('div');
+controlRow.className = 'option-controls';
+const checkboxLabel = document.createElement('label');
+checkboxLabel.innerHTML = `<input type='checkbox' class='option-checkbox' data-price='${parsePrice(opt.amount)}' /> Select Item`;
+const qtyLabel = document.createElement('label');
+qtyLabel.innerHTML = `Qty <input type='number' min='1' value='1' class='option-qty' />`;
+controlRow.appendChild(checkboxLabel);
+controlRow.appendChild(qtyLabel);
 
           
 const imageWrapper = document.createElement('div');
@@ -533,9 +611,10 @@ details.innerHTML = `
 `;
 
 
-          optionDiv.appendChild(checkbox);
-           optionDiv.appendChild(qtyInput);
-          optionDiv.appendChild(imageWrapper);
+          // checkbox already in label
+           // qtyInput already in label
+          optionDiv.appendChild(controlRow);
+optionDiv.appendChild(imageWrapper);
           optionDiv.appendChild(details);
           optionContainer.appendChild(optionDiv);
         });
