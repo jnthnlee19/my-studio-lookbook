@@ -392,6 +392,7 @@ img.logo {
     return isNaN(num) ? 0 : num;
   }
 
+
 function updateTotal() {
   let total = 0;
   document.querySelectorAll('.option').forEach(option => {
@@ -405,10 +406,13 @@ function updateTotal() {
     }
   });
 
-  document.getElementById('total-bar').textContent = `Your Total: $${total.toLocaleString()}`;
+  const totalEl = document.getElementById('total-bar');
+  if (totalEl) {
+    totalEl.textContent = `Your Total: $${total.toLocaleString()}`;
+  }
 }
 
-   function toggleAllSelections(masterCheckbox) {
+function toggleAllSelections(masterCheckbox) {
   const allBoxes = document.querySelectorAll('.option input[type="checkbox"]');
   allBoxes.forEach(box => {
     box.checked = masterCheckbox.checked;
