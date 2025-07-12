@@ -5,8 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>KB Home Lookbook</title>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <style>
     * { box-sizing: border-box; }
@@ -149,60 +148,83 @@ img.logo {
   display: none !important;
 }
 
-  </style>
+  
+/* Grid container for options inside each subcategory */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Make each option a card */
+.option {
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Ensure image and content are stacked nicely */
+.option img {
+  width: 100% !important;
+  height: 160px !important;
+  object-fit: contain !important;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+}
+
+.option-details {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.option-details strong {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+</style>
 </head>
 <body>
-  <div class="sticky-header">
-    <div class="top-row">
-      <img alt="KB Home Logo" class="logo" src="/kb logo.png"/>
-      <div class="house-info" id="house-info"></div>
-      <div class="right-panel">
-        <div class="total-bar" id="total-bar">Your Total: $0</div>
+<div class="sticky-header">
+<div class="top-row">
+<img alt="KB Home Logo" class="logo" src="/kb logo.png"/>
+<div class="house-info" id="house-info"></div>
+<div class="right-panel">
+<div class="total-bar" id="total-bar">Your Total: $0</div>
 <div class="top-buttons">
-  <button onclick="expandAll()">Expand All</button>
-  <button onclick="collapseAll()">Collapse All</button>
-     <button onclick="generatePage()">Save Wishlist</button>
-   <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
+<button onclick="expandAll()">Expand All</button>
+<button onclick="collapseAll()">Collapse All</button>
+<button onclick="generatePage()">Save Wishlist</button>
+<button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
-
 </div>
-
-      </div>
-    </div>
-  </div> <!-- ✅ CLOSE sticky-header -->
-
-  <div style="height: 50px;"></div> <!-- ✅ SPACER -->
-
-
+</div>
+</div>
+</div> <!-- ✅ CLOSE sticky-header -->
+<div style="height: 50px;"></div> <!-- ✅ SPACER -->
 <h1>KB Home Lookbook</h1>
-   <div style="text-align: center; margin-bottom: 1rem;">
-  <input
-    type="text"
-    id="address-input"
-    placeholder="Enter Customer Address (e.g. 123 Main St)"
-    style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;"
-  />
-  <button onclick="exportLookbook()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Generate Lookbook</button>
+<div style="text-align: center; margin-bottom: 1rem;">
+<input id="address-input" placeholder="Enter Customer Address (e.g. 123 Main St)" style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" type="text"/>
+<button onclick="exportLookbook()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Generate Lookbook</button>
 </div>
-
-   <div style="text-align: center; margin-bottom: 1rem;">
-  <input
-    type="text"
-    id="search-input"
-    placeholder="Search by option, description, or keyword..."
-    style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;"
-    oninput="filterOptions()"
-  />
-  <button onclick="clearSearch()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Clear</button>
+<div style="text-align: center; margin-bottom: 1rem;">
+<input id="search-input" oninput="filterOptions()" placeholder="Search by option, description, or keyword..." style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" type="text"/>
+<button onclick="clearSearch()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Clear</button>
 </div>
 <div style="text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">
-  <label style="font-size: 0.95rem;">
-    <input type="checkbox" id="toggle-all" style="transform: scale(1.2); margin-right: 0.4rem;" onchange="toggleAllSelections(this)">
+<label style="font-size: 0.95rem;">
+<input id="toggle-all" onchange="toggleAllSelections(this)" style="transform: scale(1.2); margin-right: 0.4rem;" type="checkbox"/>
     Select / Deselect All
   </label>
 </div>
-</div>
+
 <div id="lookbook-container">Loading...</div>
 <script>
   function formatPrice(value) {
@@ -432,7 +454,9 @@ function printSelectedNoTotal() {
         subSummary.textContent = sub;
         subDetails.appendChild(subSummary);
 
-        subcats[sub].forEach(opt => {
+        const optionContainer = document.createElement('div');
+optionContainer.className = 'option-container';
+subcats[sub].forEach(opt => {
           const optionDiv = document.createElement('div');
           optionDiv.className = 'option';
 
@@ -513,8 +537,9 @@ details.innerHTML = `
            optionDiv.appendChild(qtyInput);
           optionDiv.appendChild(imageWrapper);
           optionDiv.appendChild(details);
-          subDetails.appendChild(optionDiv);
+          optionContainer.appendChild(optionDiv);
         });
+subDetails.appendChild(optionContainer);
 
         catDetails.appendChild(subDetails);
       });
@@ -537,13 +562,11 @@ function closeImageModal() {
   document.getElementById('image-modal').style.display = 'none';
 }
 </script>
-
 <!-- Image Modal -->
 <div class="modal" id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.8);">
 <span class="close" style="position:absolute; top:20px; right:35px; color:#fff; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
 <img class="modal-content" id="modalImage" style="margin:auto; display:block; max-width:90%; max-height:90%;"/>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById("imageModal");
@@ -597,7 +620,6 @@ window.addEventListener('click', function(event) {
 
 });
 </script>
-
 <!-- ✅ Paste Search Script Below This -->
 <script>
 function filterOptions() {
@@ -632,7 +654,7 @@ function clearSearch() {
   filterOptions();
 }
 </script>
-   <script>
+<script>
 async function exportLookbook() {
   const address = document.getElementById("address-input").value.trim();
   if (!address) return alert("Please enter an address first.");
@@ -662,7 +684,6 @@ const response = await fetch('/.netlify/functions/generate-page', {
   }
 }
 </script>
-
 <script>
   function saveSelections() {
     const selectedOptions = [];
@@ -727,7 +748,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-
 <script>
 async function generatePage() {
   const pathParts = window.location.pathname.split("/");
@@ -818,8 +838,6 @@ async function generatePage() {
   }
 }
 </script>
-
-
 <script>
 async function exportLookbook() {
   const address = document.getElementById("address-input").value.trim();
@@ -857,7 +875,5 @@ async function exportLookbook() {
   }
 }
 </script>
-
-
 </body>
 </html>
