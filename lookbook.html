@@ -288,6 +288,48 @@ img.logo {
   display: flex;
   flex-direction: column;
 }
+
+.option img {
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 400px !important;
+  object-fit: contain !important;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.option-container .option {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.option-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.option-details .bottom-section {
+  margin-top: auto;
+}
+
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
 </style>
 </head>
 <body>
@@ -632,10 +674,12 @@ qtyInput.addEventListener('input', updateTotal);
 details.innerHTML = `
   <strong>${opt.optionNumber} — ${opt.description}</strong>
   <em>${opt.salesDesc || ''}</em>
-  <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
-  <div style="margin-top: 0.5rem;">
-    <label for="${commentId}" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
-    <textarea id="${commentId}" data-option="${opt.optionNumber}" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+  <div class='bottom-section'>
+    <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="${commentId}" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="${commentId}" data-option="${opt.optionNumber}" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
   </div>
 `;
 
