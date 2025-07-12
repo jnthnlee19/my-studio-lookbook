@@ -393,9 +393,11 @@ img.logo {
   }
 
 
+
 function updateTotal() {
   let total = 0;
-  document.querySelectorAll('.option').forEach(option => {
+  const options = document.querySelectorAll('.option');
+  options.forEach(option => {
     const checkbox = option.querySelector('.option-checkbox');
     const qtyInput = option.querySelector('.option-qty');
 
@@ -406,12 +408,11 @@ function updateTotal() {
     }
   });
 
-  const totalEl = document.getElementById('total-bar');
-  if (totalEl) {
-    totalEl.textContent = `Your Total: $${total.toLocaleString()}`;
+  const totalBar = document.getElementById('total-bar');
+  if (totalBar) {
+    totalBar.textContent = `Your Total: $${total.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
   }
 }
-
 function toggleAllSelections(masterCheckbox) {
   const allBoxes = document.querySelectorAll('.option input[type="checkbox"]');
   allBoxes.forEach(box => {
