@@ -394,23 +394,26 @@ img.logo {
 
 
 
+
 function updateTotal() {
   let total = 0;
-  const options = document.querySelectorAll('.option');
-  options.forEach(option => {
-    const checkbox = option.querySelector('.option-checkbox');
-    const qtyInput = option.querySelector('.option-qty');
+  const optionCards = document.querySelectorAll('.option');
 
-    if (checkbox && checkbox.checked) {
-      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+  optionCards.forEach(card => {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    const qtyInput = card.querySelector('input[type="number"]');
+    const priceEl = card.querySelector('.option-total');
+
+    if (checkbox && checkbox.checked && priceEl) {
+      const price = parseFloat(priceEl.textContent.replace('$', '')) || 0;
       const qty = parseInt(qtyInput?.value || 1);
       total += price * qty;
     }
   });
 
-  const totalBar = document.getElementById('total-bar');
-  if (totalBar) {
-    totalBar.textContent = `Your Total: $${total.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+  const totalEl = document.getElementById('total-bar');
+  if (totalEl) {
+    totalEl.textContent = `Your Total: $${total.toFixed(2)}`;
   }
 }
 function toggleAllSelections(masterCheckbox) {
