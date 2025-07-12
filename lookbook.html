@@ -9,14 +9,12 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <style>
     * { box-sizing: border-box; }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #f7f7f7;
       margin: 0;
       padding: 0;
     }
-
 .sticky-header {
   position: sticky;
   top: 0;
@@ -29,7 +27,6 @@
   align-items: center;
 }
 
-
 .top-row {
   display: flex;
   align-items: center;
@@ -38,12 +35,10 @@
   flex-wrap: nowrap;
 }
 
-
 img.logo {
   max-width: 60px;
   height: auto;
 }
-
 
 .house-info {
   flex: 1;
@@ -52,7 +47,6 @@ img.logo {
   font-weight: 500;
 }
 
-
 .right-panel {
   display: flex;
   flex-direction: column;
@@ -60,20 +54,17 @@ img.logo {
   gap: 0.2rem;
 }
 
-
 .total-bar {
   font-size: 1rem;
   font-weight: bold;
   white-space: nowrap;
 }
 
-
 .top-buttons {
   display: flex;
   flex-direction: row; /* side by side */
   gap: 0.4rem;
 }
-
 
 .top-buttons button {
   background: linear-gradient(to bottom, #FFC527, #e5b021);
@@ -87,23 +78,19 @@ img.logo {
   white-space: nowrap;
 }
 
-
     h1 {
       text-align: center;
       font-size: 1.6rem;
       margin: 1rem 0 1.5rem;
       color: #222;
     }
-
     #lookbook-container {
       padding: 1rem 2rem;
     }
-
     details {
       text-align: left;
       margin-bottom: 0.5rem;
     }
-
     summary {
       background: linear-gradient(to bottom, #FFC527, #e5b021);
       padding: 0.75rem 1rem;
@@ -113,13 +100,11 @@ img.logo {
       border-radius: 10px;
       cursor: pointer;
     }
-
     .subcategory summary {
       font-size: 0.95rem;
       border-radius: 8px;
       margin-left: 1rem;
     }
-
     .option {
       padding: 1rem 1rem 1rem 2rem;
       display: flex;
@@ -127,41 +112,41 @@ img.logo {
       border-top: 1px solid #ddd;
       align-items: center;
     }
-
+    .option img {
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+      object-fit: cover;
+      border-radius: 6px;
+    }
     .option-details {
       flex: 1;
     }
-
     .option-details strong {
       display: block;
       font-size: 1rem;
       color: #333;
     }
-
     .option-details em {
       color: #444;
       display: block;
       margin-top: 0.4rem;
       font-style: italic;
     }
-
     .option-details span {
       display: block;
       color: #666;
       margin-top: 0.3rem;
     }
-
 .option input[type="checkbox"] {
   transform: scale(1.3);
   margin-right: 0.5rem;
   cursor: pointer;
 }
 
-
 #save-selections-btn {
   display: none !important;
 }
-
 
   
 /* Grid container for options inside each subcategory */
@@ -171,7 +156,6 @@ img.logo {
   gap: 1.2rem;
   padding: 1.2rem;
 }
-
 
 /* Make each option a card */
 .option {
@@ -185,7 +169,6 @@ img.logo {
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-
 /* Ensure image and content are stacked nicely */
 .option img {
   width: 100% !important;
@@ -195,19 +178,16 @@ img.logo {
   background-color: #f9f9f9;
 }
 
-
 .option-details {
   flex: 1;
   font-size: 0.95rem;
 }
-
 
 .option-details strong {
   font-size: 1rem;
   margin-bottom: 0.5rem;
   display: block;
 }
-
 
 /* Grid container for options inside each subcategory */
 .subcategory .option-container {
@@ -216,7 +196,6 @@ img.logo {
   gap: 1.5rem;
   padding: 1.5rem;
 }
-
 
 /* Make each option a card */
 .option {
@@ -231,7 +210,6 @@ img.logo {
   position: relative;
 }
 
-
 /* Larger image */
 .option img {
   width: 100% !important;
@@ -242,20 +220,17 @@ img.logo {
   border-radius: 6px;
 }
 
-
 /* Details styling */
 .option-details {
   flex: 1;
   font-size: 0.95rem;
 }
 
-
 .option-details strong {
   font-size: 1rem;
   margin-bottom: 0.5rem;
   display: block;
 }
-
 
 /* Top control row */
 .option-controls {
@@ -265,20 +240,17 @@ img.logo {
   margin-bottom: 0.5rem;
 }
 
-
 .option-controls label {
   font-size: 0.85rem;
   margin-left: 0.3rem;
   margin-right: 0.3rem;
 }
 
-
 .option-checkbox {
   transform: scale(1.3);
   margin-right: 0.4rem;
   cursor: pointer;
 }
-
 
 .option-qty {
   width: 60px;
@@ -288,18 +260,33 @@ img.logo {
   border-radius: 4px;
 }
 
-}
 .option img {
-  width: 100% !important;
+  max-width: 100% !important;
   height: auto !important;
-  max-height: 320px;
+  max-height: 320px !important;
   object-fit: contain !important;
-  margin-bottom: 1rem;
   background-color: #f9f9f9;
   border-radius: 6px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 1rem;
+}
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.option-controls label {
+  font-size: 0.85rem;
+}
+.option-container .option {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  display: flex;
+  flex-direction: column;
 }
 </style>
 </head>
@@ -592,8 +579,8 @@ const imageUrl = `/images/${optionNum}.jpg`;
 const img = new Image();
 img.src = imageUrl;
 img.alt = optionNum;
-img.style.width = '100px';
-img.style.height = '100px';
+img.style.width = '100%';
+img.style.height = 'auto'; img.style.maxHeight = '320px';
 img.style.objectFit = 'contain';
 img.style.backgroundColor = '#ffffff';
 img.style.borderRadius = '6px';
