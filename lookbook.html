@@ -662,7 +662,7 @@ img.addEventListener('click', () => openImageModal(img.src));
 img.onload = () => {
   const box = document.createElement('div');
   box.style.textAlign = 'center';
-  box.style.width = '100px';
+  box.style.width = '100%';
   box.appendChild(img);
   imageWrapper.appendChild(box);
 };
