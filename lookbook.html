@@ -395,6 +395,7 @@ img.logo {
 
 
 
+
 function updateTotal() {
   let total = 0;
   const optionCards = document.querySelectorAll('.option');
@@ -402,10 +403,9 @@ function updateTotal() {
   optionCards.forEach(card => {
     const checkbox = card.querySelector('input[type="checkbox"]');
     const qtyInput = card.querySelector('input[type="number"]');
-    const priceEl = card.querySelector('.option-total');
 
-    if (checkbox && checkbox.checked && priceEl) {
-      const price = parseFloat(priceEl.textContent.replace('$', '')) || 0;
+    if (checkbox && checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
       const qty = parseInt(qtyInput?.value || 1);
       total += price * qty;
     }
@@ -413,7 +413,7 @@ function updateTotal() {
 
   const totalEl = document.getElementById('total-bar');
   if (totalEl) {
-    totalEl.textContent = `Your Total: $${total.toFixed(2)}`;
+    totalEl.textContent = `Your Total: $${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
   }
 }
 function toggleAllSelections(masterCheckbox) {
