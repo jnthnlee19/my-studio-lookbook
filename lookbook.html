@@ -356,7 +356,6 @@ img.logo {
 <div class="top-buttons">
 <button onclick="expandAll()">Expand All</button>
 <button onclick="collapseAll()">Collapse All</button>
-<button onclick="generatePage()">Save Wishlist</button>
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
@@ -435,7 +434,7 @@ function toggleAllSelections(masterCheckbox) {
 
 function printFull() {
   const win = window.open('', '_blank');
-  win.document.write('<html><head><title>Full Lookbook</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<html><head><title>Full Lookbook</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Lookbook</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
@@ -474,7 +473,7 @@ function printSelected() {
   const win = window.open('', '_blank');
   let total = 0;
 
-  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
@@ -527,7 +526,7 @@ catHasSelections = true;
 function printSelectedNoTotal() {
   const win = window.open('', '_blank');
 
-  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:80px;height:80px;margin-right:1rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
@@ -945,8 +944,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide print buttons on customer pages
     const printBtn = document.getElementById("print-selected-btn");
     const noTotalBtn = document.getElementById("print-no-total-btn");
-    if (printBtn) printBtn.style.display = "none";
-    if (noTotalBtn) noTotalBtn.style.display = "none";
+    
+    
 
     if (!document.getElementById("save-selections-btn")) {
       // existing Save My Selections button logic
