@@ -500,7 +500,12 @@ function printSelected() {
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox && checkbox.checked) {
-        const imgHTML = opt.querySelector("img")?.outerHTML.replace('<img', '<img class="thumbnail"');
+        const originalImg = opt.querySelector("img");
+        let imgHTML = "";
+        if (originalImg) {
+          imgHTML = '<img class="thumbnail" src="' + originalImg.src + '" alt="' + (originalImg.alt || "") + '">';
+        }
+
         const details = opt.querySelector(".option-details")?.cloneNode(true);
         const textarea = details.querySelector("textarea");
         if (textarea) textarea.remove();
