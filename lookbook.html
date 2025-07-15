@@ -464,7 +464,23 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     win.document.write("<hr/>");
   });
 
-  win.document.write('</body></html>');
+  win.document.write('
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     'KB-Selections.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
@@ -487,6 +503,7 @@ function printSelected() {
   );
 
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<button onclick="downloadPDF()" style="margin-bottom: 1rem; padding: 0.5rem 1rem; font-weight: bold;">📄 Download as PDF</button>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
 
@@ -534,7 +551,23 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('</body></html>');
+  win.document.write('
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     'KB-Selections.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
@@ -545,6 +578,7 @@ function printSelectedNoTotal() {
 
   win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<button onclick="downloadPDF()" style="margin-bottom: 1rem; padding: 0.5rem 1rem; font-weight: bold;">📄 Download as PDF</button>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
 
@@ -581,7 +615,23 @@ function printSelectedNoTotal() {
     }
   });
 
-  win.document.write('</body></html>');
+  win.document.write('
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     'KB-Selections.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
@@ -1008,7 +1058,23 @@ async function generatePage() {
   });
 
   html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
-  html += "</body></html>";
+  html += "
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     'KB-Selections.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
+</body></html>";
 
   try {
     const response = await fetch("/.netlify/functions/generate-page", {
@@ -1070,5 +1136,21 @@ async function exportLookbook() {
   }
 }
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     'KB-Selections.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
 </body>
 </html>
