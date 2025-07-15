@@ -489,19 +489,26 @@ function printSelected() {
   const win = window.open('', '_blank');
   let total = 0;
 
-  win.document.write('<html><head><title>Selected Options</title>' +
-    '<style>' +
-    'body { font-family: Segoe UI; padding: 2rem; }' +
-    'h2, h3 { color: #222; }' +
-    'img.thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }' +
-    '.option { display: flex; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; gap: 1rem; }' +
-    '.option-content { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 2rem; }' +
-    '.details { flex-grow: 1; max-width: 100%; }' +
-    '.qty-price { text-align: right; min-width: 100px; white-space: nowrap; }' +
-    '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
-    '</style></head><body>'
-  );
+  const style = \`
+    <style>
+      body { font-family: Segoe UI; padding: 2rem; }
+      h2, h3 { color: #222; }
+      img.thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }
+      .option { display: flex; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; gap: 1rem; }
+      .option-content { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 2rem; }
+      .details { flex-grow: 1; max-width: 100%; }
+      .qty-price { text-align: right; min-width: 100px; white-space: nowrap; }
+      .comment { margin-top: 0.5rem; font-style: italic; color: #555; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+      function downloadPDF() {
+        html2pdf().from(document.body).save("KB-Selections.pdf");
+      }
+    </script>
+  \`;
 
+  win.document.write(\`<html><head><title>Selected Options</title>\${style}</head><body>\`);
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<button onclick="downloadPDF()" style="margin-bottom: 1rem; padding: 0.5rem 1rem; font-weight: bold;">📄 Download as PDF</button>');
   win.document.write('<h2>KB Home Selected Options</h2>');
@@ -511,36 +518,39 @@ function printSelected() {
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary").textContent;
     let catHasSelections = false;
-    let catContent = "<h3>" + catTitle + "</h3>";
+    let catContent = \`<h3>\${catTitle}</h3>\`;
 
     const options = cat.querySelectorAll(".option");
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox && checkbox.checked) {
         const originalImg = opt.querySelector("img");
-        let imgHTML = "";
-        if (originalImg) {
-          imgHTML = '<img class="thumbnail" src="' + originalImg.src + '" alt="' + (originalImg.alt || "") + '">';
-        }
+        const imgSrc = originalImg?.src || '';
+        const imgAlt = originalImg?.alt || '';
+        const imgHTML = \`<img class="thumbnail" src="\${imgSrc}" alt="\${imgAlt}">\`;
 
         const details = opt.querySelector(".option-details")?.cloneNode(true);
-        const textarea = details.querySelector("textarea");
+        const textarea = details?.querySelector("textarea");
         if (textarea) textarea.remove();
 
         const commentText = opt.querySelector("textarea")?.value?.trim();
-        const commentHTML = commentText ? '<div class="comment">Comment: ' + commentText + '</div>' : '';
+        const commentHTML = commentText ? \`<div class="comment">Comment: \${commentText}</div>\` : '';
 
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
         total += price * qty;
 
-        catContent += '<div class="option">' +
-          imgHTML +
-          '<div class="option-content">' +
-          '<div class="details">' + details.innerHTML + commentHTML + '</div>' +
-          '<div class="qty-price"><div><strong>Qty:</strong> ' + qty + '</div>' +
-          '<div><strong>Price:</strong> $' + (price * qty).toFixed(2) + '</div></div>' +
-          '</div></div>';
+        catContent += \`
+          <div class="option">
+            \${imgHTML}
+            <div class="option-content">
+              <div class="details">\${details?.innerHTML || ''}\${commentHTML}</div>
+              <div class="qty-price">
+                <div><strong>Qty:</strong> \${qty}</div>
+                <div><strong>Price:</strong> $\${(price * qty).toFixed(2)}</div>
+              </div>
+            </div>
+          </div>\`;
         catHasSelections = true;
       }
     });
@@ -550,24 +560,7 @@ function printSelected() {
     }
   });
 
-  win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-function downloadPDF() {
-  const element = document.body;
-  const opt = {
-    margin:       0.5,
-    filename:     'KB-Selections.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(element).save();
-}
-</script>
-
-</body></html>');
+  win.document.write(\`<h3>Total: $\${total.toLocaleString()}</h3></body></html>\`);
   win.document.close();
 }
 
