@@ -472,7 +472,49 @@ function printSelected() {
   const win = window.open('', '_blank');
   let total = 0;
 
-  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write(\`
+    <html><head><title>Selected Options</title>
+    <style>
+      body { font-family: Segoe UI; padding: 2rem; }
+      h2, h3 { color: #222; }
+      img.thumbnail {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 1rem;
+      }
+      .option {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 1rem;
+      }
+      .option-content {
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+      }
+      .details {
+        flex: 1;
+      }
+      .qty-price {
+        text-align: right;
+        min-width: 120px;
+        padding-left: 1rem;
+      }
+      .comment {
+        margin-top: 0.5rem;
+        font-style: italic;
+        color: #555;
+      }
+    </style>
+    </head><body>
+  \`);
+
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
@@ -482,32 +524,36 @@ function printSelected() {
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary").textContent;
     let catHasSelections = false;
-    let catContent = `<h3>${catTitle}</h3>`;
+    let catContent = \`<h3>\${catTitle}</h3>\`;
 
     const options = cat.querySelectorAll(".option");
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox && checkbox.checked) {
-const img = opt.querySelector("img").outerHTML;
-const details = opt.querySelector(".option-details").cloneNode(true);
+        const imgHTML = opt.querySelector("img")?.outerHTML.replace('<img', '<img class="thumbnail"');
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
 
-// Remove the textarea from the cloned version
-const textarea = details.querySelector("textarea");
-if (textarea) textarea.remove();
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? \`<div class="comment">Comment: \${commentText}</div>\` : '';
 
-// Get the actual comment from the live textarea
-const liveTextarea = opt.querySelector("textarea");
-const commentText = liveTextarea?.value?.trim();
-const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+        total += price * qty;
 
-const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
-const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
-total += price * qty;
-
-catContent += `<div class="option">${img}<div>${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
-
-catHasSelections = true;
-
+        catContent += \`
+          <div class="option">
+            \${imgHTML}
+            <div class="option-content">
+              <div class="details">\${details.innerHTML}\${commentHTML}</div>
+              <div class="qty-price">
+                <div><strong>Qty:</strong> \${qty}</div>
+                <div><strong>Price:</strong> $\${(price * qty).toFixed(2)}</div>
+              </div>
+            </div>
+          </div>\`;
+        catHasSelections = true;
       }
     });
 
@@ -516,7 +562,7 @@ catHasSelections = true;
     }
   });
 
-  win.document.write(`<h3>Total: $${total.toLocaleString()}</h3>`);
+  win.document.write(\`<h3>Total: $\${total.toLocaleString()}</h3>\`);
   win.document.write('</body></html>');
   win.document.close();
 }
