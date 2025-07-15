@@ -468,63 +468,33 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
   win.document.close();
 }
 
+
 function printSelected() {
   const win = window.open('', '_blank');
   let total = 0;
 
-  win.document.write(\`
-    <html><head><title>Selected Options</title>
-    <style>
-      body { font-family: Segoe UI; padding: 2rem; }
-      h2, h3 { color: #222; }
-      img.thumbnail {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-right: 1rem;
-      }
-      .option {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 1rem;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 1rem;
-      }
-      .option-content {
-        display: flex;
-        flex: 1;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-      }
-      .details {
-        flex: 1;
-      }
-      .qty-price {
-        text-align: right;
-        min-width: 120px;
-        padding-left: 1rem;
-      }
-      .comment {
-        margin-top: 0.5rem;
-        font-style: italic;
-        color: #555;
-      }
-    </style>
-    </head><body>
-  \`);
+  win.document.write('<html><head><title>Selected Options</title>' +
+    '<style>' +
+    'body { font-family: Segoe UI; padding: 2rem; }' +
+    'h2, h3 { color: #222; }' +
+    'img.thumbnail { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; margin-right: 1rem; }' +
+    '.option { display: flex; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; }' +
+    '.option-content { display: flex; flex: 1; justify-content: space-between; align-items: flex-start; width: 100%; }' +
+    '.details { flex: 1; }' +
+    '.qty-price { text-align: right; min-width: 120px; padding-left: 1rem; }' +
+    '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
+    '</style></head><body>'
+  );
 
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
   win.document.write('<h2>KB Home Selected Options</h2>');
   win.document.write(document.getElementById("house-info").innerHTML);
 
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
-
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary").textContent;
     let catHasSelections = false;
-    let catContent = \`<h3>\${catTitle}</h3>\`;
+    let catContent = "<h3>" + catTitle + "</h3>";
 
     const options = cat.querySelectorAll(".option");
     options.forEach(opt => {
@@ -536,23 +506,19 @@ function printSelected() {
         if (textarea) textarea.remove();
 
         const commentText = opt.querySelector("textarea")?.value?.trim();
-        const commentHTML = commentText ? \`<div class="comment">Comment: \${commentText}</div>\` : '';
+        const commentHTML = commentText ? '<div class="comment">Comment: ' + commentText + '</div>' : '';
 
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
         total += price * qty;
 
-        catContent += \`
-          <div class="option">
-            \${imgHTML}
-            <div class="option-content">
-              <div class="details">\${details.innerHTML}\${commentHTML}</div>
-              <div class="qty-price">
-                <div><strong>Qty:</strong> \${qty}</div>
-                <div><strong>Price:</strong> $\${(price * qty).toFixed(2)}</div>
-              </div>
-            </div>
-          </div>\`;
+        catContent += '<div class="option">' +
+          imgHTML +
+          '<div class="option-content">' +
+          '<div class="details">' + details.innerHTML + commentHTML + '</div>' +
+          '<div class="qty-price"><div><strong>Qty:</strong> ' + qty + '</div>' +
+          '<div><strong>Price:</strong> $' + (price * qty).toFixed(2) + '</div></div>' +
+          '</div></div>';
         catHasSelections = true;
       }
     });
@@ -562,10 +528,11 @@ function printSelected() {
     }
   });
 
-  win.document.write(\`<h3>Total: $\${total.toLocaleString()}</h3>\`);
+  win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
   win.document.write('</body></html>');
   win.document.close();
 }
+
 
 
 function printSelectedNoTotal() {
@@ -842,35 +809,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 });
-<script>
-// (This is your last existing script for the image modal)
-document.addEventListener('DOMContentLoaded', function() {
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
-  const closeBtn = document.querySelector(".close");
 
-  document.querySelectorAll("img").forEach(img => {
-    img.style.cursor = "pointer";
-    img.addEventListener("click", function() {
-      modal.style.display = "block";
-      modalImg.src = this.src;
-    });
-  });
-
-  closeBtn.onclick = function() {
-    modal.style.display = "none";
-  };
-
-window.addEventListener('click', function(event) {
-  if (modal.style.display === 'block' || modal.style.display === 'flex') {
-    if (!modalImg.contains(event.target)) {
-      modal.style.display = 'none';
-    }
-  }
-});
-
-});
-</script>
 <!-- ✅ Paste Search Script Below This -->
 <script>
 function filterOptions() {
