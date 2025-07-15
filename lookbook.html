@@ -499,10 +499,7 @@ function printSelected() {
     '.details { flex-grow: 1; max-width: 100%; }' +
     '.qty-price { text-align: right; min-width: 100px; white-space: nowrap; }' +
     '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
-    '</style>' +
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>' +
-    '<script>function downloadPDF(){html2pdf().from(document.body).save("KB-Selections.pdf");}</script>' +
-    '</head><body>'
+    '</style></head><body>'
   );
 
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
@@ -523,9 +520,7 @@ function printSelected() {
         const originalImg = opt.querySelector("img");
         let imgHTML = "";
         if (originalImg) {
-          const safeSrc = originalImg.src.replace(/"/g, '&quot;');
-          const safeAlt = (originalImg.alt || "").replace(/"/g, '&quot;');
-          imgHTML = '<img class="thumbnail" src="' + safeSrc + '" alt="' + safeAlt + '">';
+          imgHTML = '<img class="thumbnail" src="' + originalImg.src + '" alt="' + (originalImg.alt || "") + '">';
         }
 
         const details = opt.querySelector(".option-details")?.cloneNode(true);
@@ -556,7 +551,23 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('</body></html>');
+  win.document.write('
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body;
+  const opt = {
+    margin:       0.5,
+    filename:     'KB-Selections.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
