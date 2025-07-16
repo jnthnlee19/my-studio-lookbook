@@ -484,11 +484,7 @@ function printSelected() {
     '.details { flex-grow: 1; max-width: 100%; }' +
     '.qty-price { text-align: right; min-width: 100px; white-space: nowrap; }' +
     '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
-    '</style>' +
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>' +
-    '</head><body>' +
-    '<button onclick="downloadPDF()" style="position:fixed; top:1rem; right:1rem; padding:0.5rem 1rem; font-size:0.9rem; background:#FFC527; border:none; border-radius:5px; cursor:pointer;">Download PDF</button>' +
-    '<script>function downloadPDF() { html2pdf().from(document.body).save("kb-selections.pdf"); }</script>'
+    '</style></head><body>'
   );
 
   win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
