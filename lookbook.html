@@ -359,6 +359,7 @@ img.logo {
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
+<button onclick="downloadSelectedAsPDF()">Download PDF</button>
 </div>
 </div>
 </div>
@@ -464,7 +465,67 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     win.document.write("<hr/>");
   });
 
-  win.document.write('</body></html>');
+  win.document.write('
+<script>
+function downloadSelectedAsPDF() {
+  const container = document.createElement("div");
+  container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
+
+  const houseInfo = document.getElementById("house-info");
+  if (houseInfo) {
+    container.innerHTML += houseInfo.innerHTML;
+  }
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  let total = 0;
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    const options = cat.querySelectorAll(".option");
+    let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
+    let hasSelected = false;
+
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox?.checked) {
+        const title = opt.querySelector(".option-details strong")?.outerHTML || "";
+        const comment = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+
+        total += qty * price;
+
+        catContent += `
+          <div style="margin-bottom:1rem;">
+            ${title}
+            <div><strong>Qty:</strong> ${qty}</div>
+            <div><strong>Price:</strong> $${(price * qty).toFixed(2)}</div>
+            ${commentHTML}
+          </div>
+        `;
+        hasSelected = true;
+      }
+    });
+
+    if (hasSelected) {
+      container.innerHTML += catContent;
+    }
+  });
+
+  container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
+
+  html2pdf().from(container).set({
+    margin: 0.5,
+    filename: 'kb-home-selections.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
@@ -535,7 +596,67 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('</body></html>');
+  win.document.write('
+<script>
+function downloadSelectedAsPDF() {
+  const container = document.createElement("div");
+  container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
+
+  const houseInfo = document.getElementById("house-info");
+  if (houseInfo) {
+    container.innerHTML += houseInfo.innerHTML;
+  }
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  let total = 0;
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    const options = cat.querySelectorAll(".option");
+    let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
+    let hasSelected = false;
+
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox?.checked) {
+        const title = opt.querySelector(".option-details strong")?.outerHTML || "";
+        const comment = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+
+        total += qty * price;
+
+        catContent += `
+          <div style="margin-bottom:1rem;">
+            ${title}
+            <div><strong>Qty:</strong> ${qty}</div>
+            <div><strong>Price:</strong> $${(price * qty).toFixed(2)}</div>
+            ${commentHTML}
+          </div>
+        `;
+        hasSelected = true;
+      }
+    });
+
+    if (hasSelected) {
+      container.innerHTML += catContent;
+    }
+  });
+
+  container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
+
+  html2pdf().from(container).set({
+    margin: 0.5,
+    filename: 'kb-home-selections.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
@@ -582,7 +703,67 @@ function printSelectedNoTotal() {
     }
   });
 
-  win.document.write('</body></html>');
+  win.document.write('
+<script>
+function downloadSelectedAsPDF() {
+  const container = document.createElement("div");
+  container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
+
+  const houseInfo = document.getElementById("house-info");
+  if (houseInfo) {
+    container.innerHTML += houseInfo.innerHTML;
+  }
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  let total = 0;
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    const options = cat.querySelectorAll(".option");
+    let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
+    let hasSelected = false;
+
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox?.checked) {
+        const title = opt.querySelector(".option-details strong")?.outerHTML || "";
+        const comment = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+
+        total += qty * price;
+
+        catContent += `
+          <div style="margin-bottom:1rem;">
+            ${title}
+            <div><strong>Qty:</strong> ${qty}</div>
+            <div><strong>Price:</strong> $${(price * qty).toFixed(2)}</div>
+            ${commentHTML}
+          </div>
+        `;
+        hasSelected = true;
+      }
+    });
+
+    if (hasSelected) {
+      container.innerHTML += catContent;
+    }
+  });
+
+  container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
+
+  html2pdf().from(container).set({
+    margin: 0.5,
+    filename: 'kb-home-selections.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save();
+}
+</script>
+
+</body></html>');
   win.document.close();
 }
 
@@ -1010,7 +1191,67 @@ async function generatePage() {
   });
 
   html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
-  html += "</body></html>";
+  html += "
+<script>
+function downloadSelectedAsPDF() {
+  const container = document.createElement("div");
+  container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
+
+  const houseInfo = document.getElementById("house-info");
+  if (houseInfo) {
+    container.innerHTML += houseInfo.innerHTML;
+  }
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  let total = 0;
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    const options = cat.querySelectorAll(".option");
+    let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
+    let hasSelected = false;
+
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox?.checked) {
+        const title = opt.querySelector(".option-details strong")?.outerHTML || "";
+        const comment = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+
+        total += qty * price;
+
+        catContent += `
+          <div style="margin-bottom:1rem;">
+            ${title}
+            <div><strong>Qty:</strong> ${qty}</div>
+            <div><strong>Price:</strong> $${(price * qty).toFixed(2)}</div>
+            ${commentHTML}
+          </div>
+        `;
+        hasSelected = true;
+      }
+    });
+
+    if (hasSelected) {
+      container.innerHTML += catContent;
+    }
+  });
+
+  container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
+
+  html2pdf().from(container).set({
+    margin: 0.5,
+    filename: 'kb-home-selections.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save();
+}
+</script>
+
+</body></html>";
 
   try {
     const response = await fetch("/.netlify/functions/generate-page", {
@@ -1072,5 +1313,65 @@ async function exportLookbook() {
   }
 }
 </script>
+
+<script>
+function downloadSelectedAsPDF() {
+  const container = document.createElement("div");
+  container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
+
+  const houseInfo = document.getElementById("house-info");
+  if (houseInfo) {
+    container.innerHTML += houseInfo.innerHTML;
+  }
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  let total = 0;
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    const options = cat.querySelectorAll(".option");
+    let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
+    let hasSelected = false;
+
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox?.checked) {
+        const title = opt.querySelector(".option-details strong")?.outerHTML || "";
+        const comment = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
+
+        total += qty * price;
+
+        catContent += `
+          <div style="margin-bottom:1rem;">
+            ${title}
+            <div><strong>Qty:</strong> ${qty}</div>
+            <div><strong>Price:</strong> $${(price * qty).toFixed(2)}</div>
+            ${commentHTML}
+          </div>
+        `;
+        hasSelected = true;
+      }
+    });
+
+    if (hasSelected) {
+      container.innerHTML += catContent;
+    }
+  });
+
+  container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
+
+  html2pdf().from(container).set({
+    margin: 0.5,
+    filename: 'kb-home-selections.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save();
+}
+</script>
+
 </body>
 </html>
