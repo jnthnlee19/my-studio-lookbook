@@ -359,7 +359,6 @@ img.logo {
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
-<button onclick="downloadSelectedAsPDF()">Download PDF</button>
 </div>
 </div>
 </div>
@@ -467,24 +466,32 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
 
   win.document.write('
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes('print')) {
+    const printBtnContainer = document.querySelector('.top-buttons');
+    if (printBtnContainer) {
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'Download PDF';
+      downloadBtn.onclick = downloadSelectedAsPDF;
+      printBtnContainer.appendChild(downloadBtn);
+    }
+  }
+});
+
 function downloadSelectedAsPDF() {
   const container = document.createElement("div");
   container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
-
   const houseInfo = document.getElementById("house-info");
   if (houseInfo) {
     container.innerHTML += houseInfo.innerHTML;
   }
-
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
   let total = 0;
-
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary")?.textContent || "";
     const options = cat.querySelectorAll(".option");
     let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
     let hasSelected = false;
-
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox?.checked) {
@@ -493,9 +500,7 @@ function downloadSelectedAsPDF() {
         const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
-
         total += qty * price;
-
         catContent += `
           <div style="margin-bottom:1rem;">
             ${title}
@@ -507,14 +512,11 @@ function downloadSelectedAsPDF() {
         hasSelected = true;
       }
     });
-
     if (hasSelected) {
       container.innerHTML += catContent;
     }
   });
-
   container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
-
   html2pdf().from(container).set({
     margin: 0.5,
     filename: 'kb-home-selections.pdf',
@@ -598,24 +600,32 @@ function printSelected() {
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
   win.document.write('
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes('print')) {
+    const printBtnContainer = document.querySelector('.top-buttons');
+    if (printBtnContainer) {
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'Download PDF';
+      downloadBtn.onclick = downloadSelectedAsPDF;
+      printBtnContainer.appendChild(downloadBtn);
+    }
+  }
+});
+
 function downloadSelectedAsPDF() {
   const container = document.createElement("div");
   container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
-
   const houseInfo = document.getElementById("house-info");
   if (houseInfo) {
     container.innerHTML += houseInfo.innerHTML;
   }
-
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
   let total = 0;
-
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary")?.textContent || "";
     const options = cat.querySelectorAll(".option");
     let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
     let hasSelected = false;
-
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox?.checked) {
@@ -624,9 +634,7 @@ function downloadSelectedAsPDF() {
         const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
-
         total += qty * price;
-
         catContent += `
           <div style="margin-bottom:1rem;">
             ${title}
@@ -638,14 +646,11 @@ function downloadSelectedAsPDF() {
         hasSelected = true;
       }
     });
-
     if (hasSelected) {
       container.innerHTML += catContent;
     }
   });
-
   container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
-
   html2pdf().from(container).set({
     margin: 0.5,
     filename: 'kb-home-selections.pdf',
@@ -705,24 +710,32 @@ function printSelectedNoTotal() {
 
   win.document.write('
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes('print')) {
+    const printBtnContainer = document.querySelector('.top-buttons');
+    if (printBtnContainer) {
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'Download PDF';
+      downloadBtn.onclick = downloadSelectedAsPDF;
+      printBtnContainer.appendChild(downloadBtn);
+    }
+  }
+});
+
 function downloadSelectedAsPDF() {
   const container = document.createElement("div");
   container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
-
   const houseInfo = document.getElementById("house-info");
   if (houseInfo) {
     container.innerHTML += houseInfo.innerHTML;
   }
-
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
   let total = 0;
-
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary")?.textContent || "";
     const options = cat.querySelectorAll(".option");
     let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
     let hasSelected = false;
-
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox?.checked) {
@@ -731,9 +744,7 @@ function downloadSelectedAsPDF() {
         const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
-
         total += qty * price;
-
         catContent += `
           <div style="margin-bottom:1rem;">
             ${title}
@@ -745,14 +756,11 @@ function downloadSelectedAsPDF() {
         hasSelected = true;
       }
     });
-
     if (hasSelected) {
       container.innerHTML += catContent;
     }
   });
-
   container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
-
   html2pdf().from(container).set({
     margin: 0.5,
     filename: 'kb-home-selections.pdf',
@@ -1193,24 +1201,32 @@ async function generatePage() {
   html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
   html += "
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes('print')) {
+    const printBtnContainer = document.querySelector('.top-buttons');
+    if (printBtnContainer) {
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'Download PDF';
+      downloadBtn.onclick = downloadSelectedAsPDF;
+      printBtnContainer.appendChild(downloadBtn);
+    }
+  }
+});
+
 function downloadSelectedAsPDF() {
   const container = document.createElement("div");
   container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
-
   const houseInfo = document.getElementById("house-info");
   if (houseInfo) {
     container.innerHTML += houseInfo.innerHTML;
   }
-
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
   let total = 0;
-
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary")?.textContent || "";
     const options = cat.querySelectorAll(".option");
     let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
     let hasSelected = false;
-
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox?.checked) {
@@ -1219,9 +1235,7 @@ function downloadSelectedAsPDF() {
         const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
-
         total += qty * price;
-
         catContent += `
           <div style="margin-bottom:1rem;">
             ${title}
@@ -1233,14 +1247,11 @@ function downloadSelectedAsPDF() {
         hasSelected = true;
       }
     });
-
     if (hasSelected) {
       container.innerHTML += catContent;
     }
   });
-
   container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
-
   html2pdf().from(container).set({
     margin: 0.5,
     filename: 'kb-home-selections.pdf',
@@ -1315,24 +1326,32 @@ async function exportLookbook() {
 </script>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes('print')) {
+    const printBtnContainer = document.querySelector('.top-buttons');
+    if (printBtnContainer) {
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'Download PDF';
+      downloadBtn.onclick = downloadSelectedAsPDF;
+      printBtnContainer.appendChild(downloadBtn);
+    }
+  }
+});
+
 function downloadSelectedAsPDF() {
   const container = document.createElement("div");
   container.innerHTML = "<h2 style='font-family:Segoe UI;'>KB Home Selected Options</h2>";
-
   const houseInfo = document.getElementById("house-info");
   if (houseInfo) {
     container.innerHTML += houseInfo.innerHTML;
   }
-
   const allCategories = document.querySelectorAll("details:not(.subcategory)");
   let total = 0;
-
   allCategories.forEach(cat => {
     const catTitle = cat.querySelector("summary")?.textContent || "";
     const options = cat.querySelectorAll(".option");
     let catContent = `<h3 style='margin-top:1.5rem;'>${catTitle}</h3>`;
     let hasSelected = false;
-
     options.forEach(opt => {
       const checkbox = opt.querySelector("input[type='checkbox']");
       if (checkbox?.checked) {
@@ -1341,9 +1360,7 @@ function downloadSelectedAsPDF() {
         const commentHTML = comment ? `<div><strong>Comment:</strong> ${comment}</div>` : '';
         const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
         const price = parseFloat(checkbox.getAttribute("data-price")) || 0;
-
         total += qty * price;
-
         catContent += `
           <div style="margin-bottom:1rem;">
             ${title}
@@ -1355,14 +1372,11 @@ function downloadSelectedAsPDF() {
         hasSelected = true;
       }
     });
-
     if (hasSelected) {
       container.innerHTML += catContent;
     }
   });
-
   container.innerHTML += `<h3>Total: $${total.toLocaleString()}</h3>`;
-
   html2pdf().from(container).set({
     margin: 0.5,
     filename: 'kb-home-selections.pdf',
