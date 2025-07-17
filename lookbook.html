@@ -469,13 +469,11 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
 }
 
 
-
 function printSelected() {
   const win = window.open('', '_blank');
   let total = 0;
 
   win.document.write('<html><head><title>Selected Options</title>' +
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>' +
     '<style>' +
     'body { font-family: Segoe UI; padding: 2rem; }' +
     'h2 { color: #222; }' +
@@ -486,7 +484,6 @@ function printSelected() {
     '.details { flex-grow: 1; max-width: 100%; }' +
     '.qty-price { text-align: right; min-width: 100px; white-space: nowrap; }' +
     '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
-    'button { margin-top: 2rem; background: #FFC527; padding: 0.5rem 1rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }' +
     '</style></head><body>'
   );
 
@@ -538,19 +535,10 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('<button onclick="downloadPDF()">Download PDF</button>');
-
-  win.document.write(`
-    <script>
-    function downloadPDF() {
-      html2pdf().from(document.body).save('kb-home-selections.pdf');
-    }
-    </script>
-  `);
-
   win.document.write('</body></html>');
   win.document.close();
 }
+
 
 
 function printSelectedNoTotal() {
