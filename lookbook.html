@@ -668,6 +668,26 @@ img.style.borderRadius = '6px';
 img.addEventListener('click', () => openImageModal(img.src));
 
 img.onload = () => {
+
+  // Load additional images dynamically (e.g., -1, -2, -3)
+  for (let i = 1; i <= 5; i++) {
+    const extraImg = new Image();
+    extraImg.src = `/images/${optionNum}-${i}.jpg`;
+    extraImg.alt = `${optionNum}-${i}`;
+    extraImg.style.width = '100px';
+    extraImg.style.height = 'auto';
+    extraImg.style.objectFit = 'contain';
+    extraImg.style.backgroundColor = '#ffffff';
+    extraImg.style.borderRadius = '6px';
+    extraImg.style.cursor = 'pointer';
+    extraImg.style.marginRight = '0.5rem';
+
+    extraImg.addEventListener('click', () => openImageModal(extraImg.src));
+
+    extraImg.onerror = () => { /* fail silently if image doesn't exist */ };
+    imageWrapper.appendChild(extraImg);
+  }
+
   const box = document.createElement('div');
   box.style.textAlign = 'center';
   box.style.width = '100%';
