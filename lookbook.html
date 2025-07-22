@@ -786,19 +786,19 @@ img.onload = () => {
   arrow.style.display = 'none';
 
   const gallery = [`/images/${optionNum}.jpg`];
-  let index = 1;
+
   const preloadExtra = async () => {
     for (let i = 1; i <= 10; i++) {
-      const test = new Image();
       const url = `/images/${optionNum}-${i}.jpg`;
-      test.src = url;
-      await new Promise(r => {
-        test.onload = () => {
+      const probe = new Image();
+      probe.src = url;
+      await new Promise((resolve) => {
+        probe.onload = () => {
           gallery.push(url);
           arrow.style.display = 'block';
-          r();
+          resolve();
         };
-        test.onerror = () => r();
+        probe.onerror = () => resolve();
       });
     }
   };
