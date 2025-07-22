@@ -359,7 +359,7 @@ img.logo {
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
-<button id="save-to-supabase-btn" onclick="saveToSupabase()" style="display: none !important;">Save My Selections</button></div>
+<button id="save-to-supabase-btn" onclick="saveToSupabase()" style="display: none;">Save My Selections</button></div>
 </div>
 </div>
 </div> <!-- ✅ CLOSE sticky-header -->
@@ -667,70 +667,7 @@ img.style.backgroundColor = '#ffffff';
 img.style.borderRadius = '6px';
 img.addEventListener('click', () => openImageModal(img.src));
 
-
 img.onload = () => {
-  const box = document.createElement('div');
-  box.style.position = 'relative';
-  box.style.textAlign = 'center';
-  box.style.width = '100%';
-
-  const arrow = document.createElement('div');
-  arrow.innerHTML = '&#x2192;';
-  arrow.style.position = 'absolute';
-  arrow.style.right = '10px';
-  arrow.style.top = '10px';
-  arrow.style.fontSize = '24px';
-  arrow.style.color = '#fff';
-  arrow.style.backgroundColor = 'rgba(0,0,0,0.5)';
-  arrow.style.borderRadius = '50%';
-  arrow.style.padding = '5px';
-  arrow.style.display = 'none';
-
-  const gallery = [`/images/${optionNum}.jpg`];
-
-  let checkCount = 0;
-  const preloadNext = () => {
-    checkCount++;
-    if (checkCount > 10) return;
-    const url = `/images/${optionNum}-${checkCount}.jpg`;
-    const probe = new Image();
-    probe.onload = () => {
-      gallery.push(url);
-      arrow.style.display = 'block';
-      preloadNext(); // check next
-    };
-    probe.onerror = () => {};
-    probe.src = url;
-  };
-  preloadNext();
-
-  img.addEventListener('click', () => openGalleryModal(gallery));
-
-  box.appendChild(img);
-  box.appendChild(arrow);
-  imageWrapper.appendChild(box);
-};
-
-
-  // Load additional images dynamically (e.g., -1, -2, -3)
-  for (let i = 1; i <= 5; i++) {
-    const extraImg = new Image();
-    extraImg.src = `/images/${optionNum}-${i}.jpg`;
-    extraImg.alt = `${optionNum}-${i}`;
-    extraImg.style.width = '100px';
-    extraImg.style.height = 'auto';
-    extraImg.style.objectFit = 'contain';
-    extraImg.style.backgroundColor = '#ffffff';
-    extraImg.style.borderRadius = '6px';
-    extraImg.style.cursor = 'pointer';
-    extraImg.style.marginRight = '0.5rem';
-
-    extraImg.addEventListener('click', () => openImageModal(extraImg.src));
-
-    extraImg.onerror = () => { /* fail silently if image doesn't exist */ };
-    imageWrapper.appendChild(extraImg);
-  }
-
   const box = document.createElement('div');
   box.style.textAlign = 'center';
   box.style.width = '100%';
@@ -1008,7 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-    
+    if (document.getElementById("save-to-supabase-btn")) document.getElementById("save-to-supabase-btn").style.display = "inline-block";
 </script>
 <script>
 async function generatePage() {
@@ -1188,32 +1125,3 @@ async function saveToSupabase() {
 }
 </script></body>
 </html>
-
-<div id="gallery-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10000; flex-direction:column;">
-  <span onclick="closeGalleryModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-  <img id="gallery-image" style="max-width:90%; max-height:80%;" />
-  <div style="margin-top: 1rem;">
-    <button onclick="prevGalleryImage()" style="margin-right:1rem;">⟵ Prev</button>
-    <button onclick="nextGalleryImage()">Next ⟶</button>
-  </div>
-</div>
-<script>
-  let currentGallery = [], currentIndex = 0;
-  function openGalleryModal(images) {
-    currentGallery = images;
-    currentIndex = 0;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-    document.getElementById('gallery-modal').style.display = 'flex';
-  }
-  function closeGalleryModal() {
-    document.getElementById('gallery-modal').style.display = 'none';
-  }
-  function nextGalleryImage() {
-    currentIndex = (currentIndex + 1) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-  function prevGalleryImage() {
-    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-</script>
