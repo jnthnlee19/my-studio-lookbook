@@ -465,18 +465,16 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
   });
 
   win.document.write('
-<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
   <span onclick="closeImageGallery()" style="position:absolute; top:20px; right:30px; font-size:36px; color:white; cursor:pointer;">&times;</span>
-  <img id="galleryMainImage" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
-  <div id="galleryThumbnails" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; max-width:90%; overflow:auto;"></div>
+  <img id="galleryMain" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
+  <div id="galleryThumbs" style="display:flex; flex-wrap:wrap; gap:10px; max-width:90%; overflow:auto;"></div>
 </div>
 <script>
-let currentImages = [];
 function openImageGallery(images) {
-  currentImages = images;
   const modal = document.getElementById('galleryModal');
-  const main = document.getElementById('galleryMainImage');
-  const thumbs = document.getElementById('galleryThumbnails');
+  const main = document.getElementById('galleryMain');
+  const thumbs = document.getElementById('galleryThumbs');
   modal.style.display = 'flex';
   main.src = images[0];
   thumbs.innerHTML = '';
@@ -487,7 +485,6 @@ function openImageGallery(images) {
     thumb.style.height = '80px';
     thumb.style.objectFit = 'cover';
     thumb.style.cursor = 'pointer';
-    thumb.style.borderRadius = '6px';
     thumb.onclick = () => main.src = src;
     thumbs.appendChild(thumb);
   });
@@ -569,18 +566,16 @@ function printSelected() {
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
   win.document.write('
-<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
   <span onclick="closeImageGallery()" style="position:absolute; top:20px; right:30px; font-size:36px; color:white; cursor:pointer;">&times;</span>
-  <img id="galleryMainImage" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
-  <div id="galleryThumbnails" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; max-width:90%; overflow:auto;"></div>
+  <img id="galleryMain" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
+  <div id="galleryThumbs" style="display:flex; flex-wrap:wrap; gap:10px; max-width:90%; overflow:auto;"></div>
 </div>
 <script>
-let currentImages = [];
 function openImageGallery(images) {
-  currentImages = images;
   const modal = document.getElementById('galleryModal');
-  const main = document.getElementById('galleryMainImage');
-  const thumbs = document.getElementById('galleryThumbnails');
+  const main = document.getElementById('galleryMain');
+  const thumbs = document.getElementById('galleryThumbs');
   modal.style.display = 'flex';
   main.src = images[0];
   thumbs.innerHTML = '';
@@ -591,7 +586,6 @@ function openImageGallery(images) {
     thumb.style.height = '80px';
     thumb.style.objectFit = 'cover';
     thumb.style.cursor = 'pointer';
-    thumb.style.borderRadius = '6px';
     thumb.onclick = () => main.src = src;
     thumbs.appendChild(thumb);
   });
@@ -649,18 +643,16 @@ function printSelectedNoTotal() {
   });
 
   win.document.write('
-<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
   <span onclick="closeImageGallery()" style="position:absolute; top:20px; right:30px; font-size:36px; color:white; cursor:pointer;">&times;</span>
-  <img id="galleryMainImage" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
-  <div id="galleryThumbnails" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; max-width:90%; overflow:auto;"></div>
+  <img id="galleryMain" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
+  <div id="galleryThumbs" style="display:flex; flex-wrap:wrap; gap:10px; max-width:90%; overflow:auto;"></div>
 </div>
 <script>
-let currentImages = [];
 function openImageGallery(images) {
-  currentImages = images;
   const modal = document.getElementById('galleryModal');
-  const main = document.getElementById('galleryMainImage');
-  const thumbs = document.getElementById('galleryThumbnails');
+  const main = document.getElementById('galleryMain');
+  const thumbs = document.getElementById('galleryThumbs');
   modal.style.display = 'flex';
   main.src = images[0];
   thumbs.innerHTML = '';
@@ -671,7 +663,6 @@ function openImageGallery(images) {
     thumb.style.height = '80px';
     thumb.style.objectFit = 'cover';
     thumb.style.cursor = 'pointer';
-    thumb.style.borderRadius = '6px';
     thumb.onclick = () => main.src = src;
     thumbs.appendChild(thumb);
   });
@@ -773,8 +764,9 @@ img.onload = () => {
   box.style.textAlign = 'center';
   box.style.width = '100%';
 
+  const gallery = [`/images/${optionNum}.jpg`];
   const arrow = document.createElement('div');
-  arrow.innerHTML = '&#x27A1;';
+  arrow.innerHTML = '➡';
   arrow.style.position = 'absolute';
   arrow.style.top = '10px';
   arrow.style.right = '10px';
@@ -785,35 +777,30 @@ img.onload = () => {
   arrow.style.padding = '4px';
   arrow.style.display = 'none';
 
-  const gallery = [`/images/${optionNum}.jpg`];
-  let preloadCount = 0;
-
-  const preloadNext = () => {
-    if (preloadCount >= 10) return;
-    preloadCount++;
-    const url = `/images/${optionNum}-${preloadCount}.jpg`;
-    const test = new Image();
-    test.onload = () => {
-      gallery.push(url);
-      arrow.style.display = 'block';
-      preloadNext();
-    };
-    test.onerror = preloadNext;
-    test.src = url;
+  const preloadNext = async () => {
+    for (let i = 1; i <= 10; i++) {
+      const url = `/images/${optionNum}-${i}.jpg`;
+      const extra = new Image();
+      extra.src = url;
+      await new Promise((resolve) => {
+        extra.onload = () => {
+          gallery.push(url);
+          arrow.style.display = 'block';
+          resolve();
+        };
+        extra.onerror = resolve;
+      });
+    }
   };
-  preloadNext();
 
+  preloadNext();
+  img.style.cursor = 'pointer';
   img.addEventListener('click', () => openImageGallery(gallery));
   box.appendChild(img);
   box.appendChild(arrow);
   imageWrapper.appendChild(box);
 };
 
-  const box = document.createElement('div');
-  box.style.textAlign = 'center';
-  box.style.width = '100%';
-  box.appendChild(img);
-  imageWrapper.appendChild(box);
 };
 
 img.onerror = () => {
@@ -1154,18 +1141,16 @@ async function generatePage() {
 
   html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
   html += "
-<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
   <span onclick="closeImageGallery()" style="position:absolute; top:20px; right:30px; font-size:36px; color:white; cursor:pointer;">&times;</span>
-  <img id="galleryMainImage" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
-  <div id="galleryThumbnails" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; max-width:90%; overflow:auto;"></div>
+  <img id="galleryMain" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
+  <div id="galleryThumbs" style="display:flex; flex-wrap:wrap; gap:10px; max-width:90%; overflow:auto;"></div>
 </div>
 <script>
-let currentImages = [];
 function openImageGallery(images) {
-  currentImages = images;
   const modal = document.getElementById('galleryModal');
-  const main = document.getElementById('galleryMainImage');
-  const thumbs = document.getElementById('galleryThumbnails');
+  const main = document.getElementById('galleryMain');
+  const thumbs = document.getElementById('galleryThumbs');
   modal.style.display = 'flex';
   main.src = images[0];
   thumbs.innerHTML = '';
@@ -1176,7 +1161,6 @@ function openImageGallery(images) {
     thumb.style.height = '80px';
     thumb.style.objectFit = 'cover';
     thumb.style.cursor = 'pointer';
-    thumb.style.borderRadius = '6px';
     thumb.onclick = () => main.src = src;
     thumbs.appendChild(thumb);
   });
@@ -1298,18 +1282,16 @@ async function saveToSupabase() {
   }
 }
 </script>
-<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+<div id="galleryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
   <span onclick="closeImageGallery()" style="position:absolute; top:20px; right:30px; font-size:36px; color:white; cursor:pointer;">&times;</span>
-  <img id="galleryMainImage" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
-  <div id="galleryThumbnails" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; max-width:90%; overflow:auto;"></div>
+  <img id="galleryMain" style="max-height:70%; max-width:90%; margin-bottom:1rem;" />
+  <div id="galleryThumbs" style="display:flex; flex-wrap:wrap; gap:10px; max-width:90%; overflow:auto;"></div>
 </div>
 <script>
-let currentImages = [];
 function openImageGallery(images) {
-  currentImages = images;
   const modal = document.getElementById('galleryModal');
-  const main = document.getElementById('galleryMainImage');
-  const thumbs = document.getElementById('galleryThumbnails');
+  const main = document.getElementById('galleryMain');
+  const thumbs = document.getElementById('galleryThumbs');
   modal.style.display = 'flex';
   main.src = images[0];
   thumbs.innerHTML = '';
@@ -1320,7 +1302,6 @@ function openImageGallery(images) {
     thumb.style.height = '80px';
     thumb.style.objectFit = 'cover';
     thumb.style.cursor = 'pointer';
-    thumb.style.borderRadius = '6px';
     thumb.onclick = () => main.src = src;
     thumbs.appendChild(thumb);
   });
