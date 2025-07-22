@@ -464,37 +464,7 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     win.document.write("<hr/>");
   });
 
-  win.document.write('
-<div id="gallery-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10000; flex-direction:column;">
-  <span onclick="closeGalleryModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-  <img id="gallery-image" style="max-width:90%; max-height:80%;" />
-  <div style="margin-top: 1rem;">
-    <button onclick="prevGalleryImage()" style="margin-right:1rem;">⟵ Prev</button>
-    <button onclick="nextGalleryImage()">Next ⟶</button>
-  </div>
-</div>
-<script>
-  let currentGallery = [], currentIndex = 0;
-  function openGalleryModal(images) {
-    currentGallery = images;
-    currentIndex = 0;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-    document.getElementById('gallery-modal').style.display = 'flex';
-  }
-  function closeGalleryModal() {
-    document.getElementById('gallery-modal').style.display = 'none';
-  }
-  function nextGalleryImage() {
-    currentIndex = (currentIndex + 1) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-  function prevGalleryImage() {
-    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-</script>
-
-</body></html>');
+  win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -565,37 +535,7 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('
-<div id="gallery-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10000; flex-direction:column;">
-  <span onclick="closeGalleryModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-  <img id="gallery-image" style="max-width:90%; max-height:80%;" />
-  <div style="margin-top: 1rem;">
-    <button onclick="prevGalleryImage()" style="margin-right:1rem;">⟵ Prev</button>
-    <button onclick="nextGalleryImage()">Next ⟶</button>
-  </div>
-</div>
-<script>
-  let currentGallery = [], currentIndex = 0;
-  function openGalleryModal(images) {
-    currentGallery = images;
-    currentIndex = 0;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-    document.getElementById('gallery-modal').style.display = 'flex';
-  }
-  function closeGalleryModal() {
-    document.getElementById('gallery-modal').style.display = 'none';
-  }
-  function nextGalleryImage() {
-    currentIndex = (currentIndex + 1) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-  function prevGalleryImage() {
-    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-</script>
-
-</body></html>');
+  win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -642,37 +582,7 @@ function printSelectedNoTotal() {
     }
   });
 
-  win.document.write('
-<div id="gallery-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10000; flex-direction:column;">
-  <span onclick="closeGalleryModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-  <img id="gallery-image" style="max-width:90%; max-height:80%;" />
-  <div style="margin-top: 1rem;">
-    <button onclick="prevGalleryImage()" style="margin-right:1rem;">⟵ Prev</button>
-    <button onclick="nextGalleryImage()">Next ⟶</button>
-  </div>
-</div>
-<script>
-  let currentGallery = [], currentIndex = 0;
-  function openGalleryModal(images) {
-    currentGallery = images;
-    currentIndex = 0;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-    document.getElementById('gallery-modal').style.display = 'flex';
-  }
-  function closeGalleryModal() {
-    document.getElementById('gallery-modal').style.display = 'none';
-  }
-  function nextGalleryImage() {
-    currentIndex = (currentIndex + 1) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-  function prevGalleryImage() {
-    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-</script>
-
-</body></html>');
+  win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -819,7 +729,7 @@ img.onload = () => {
     extraImg.addEventListener('click', () => openImageModal(extraImg.src));
 
     extraImg.onerror = () => { /* fail silently if image doesn't exist */ };
-    // imageWrapper.appendChild(extraImg);
+    imageWrapper.appendChild(extraImg);
   }
 
   const box = document.createElement('div');
@@ -1166,37 +1076,7 @@ async function generatePage() {
   });
 
   html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
-  html += "
-<div id="gallery-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10000; flex-direction:column;">
-  <span onclick="closeGalleryModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
-  <img id="gallery-image" style="max-width:90%; max-height:80%;" />
-  <div style="margin-top: 1rem;">
-    <button onclick="prevGalleryImage()" style="margin-right:1rem;">⟵ Prev</button>
-    <button onclick="nextGalleryImage()">Next ⟶</button>
-  </div>
-</div>
-<script>
-  let currentGallery = [], currentIndex = 0;
-  function openGalleryModal(images) {
-    currentGallery = images;
-    currentIndex = 0;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-    document.getElementById('gallery-modal').style.display = 'flex';
-  }
-  function closeGalleryModal() {
-    document.getElementById('gallery-modal').style.display = 'none';
-  }
-  function nextGalleryImage() {
-    currentIndex = (currentIndex + 1) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-  function prevGalleryImage() {
-    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-    document.getElementById('gallery-image').src = currentGallery[currentIndex];
-  }
-</script>
-
-</body></html>";
+  html += "</body></html>";
 
   try {
     const response = await fetch("/.netlify/functions/generate-page", {
@@ -1307,7 +1187,9 @@ async function saveToSupabase() {
     alert("Error saving selections: " + err);
   }
 }
-</script>
+</script></body>
+</html>
+
 <div id="gallery-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:10000; flex-direction:column;">
   <span onclick="closeGalleryModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
   <img id="gallery-image" style="max-width:90%; max-height:80%;" />
@@ -1336,6 +1218,3 @@ async function saveToSupabase() {
     document.getElementById('gallery-image').src = currentGallery[currentIndex];
   }
 </script>
-
-</body>
-</html>
