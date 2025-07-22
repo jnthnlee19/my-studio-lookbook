@@ -359,8 +359,7 @@ img.logo {
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
-<button id="save-to-supabase-btn" onclick="saveToSupabase()" style="display: none;">Save My Selections</button>
-</div>
+<button id="save-to-supabase-btn" onclick="saveToSupabase()" style="display: none;">Save My Selections</button></div>
 </div>
 </div>
 </div> <!-- ✅ CLOSE sticky-header -->
@@ -465,48 +464,7 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     win.document.write("<hr/>");
   });
 
-  win.document.write('
-<script>
-async function saveToSupabase() {
-  const address = document.getElementById("address-input")?.value?.trim();
-  if (!address) return alert("Please enter an address.");
-
-  const selections = [];
-  document.querySelectorAll('.option').forEach(option => {
-    const checkbox = option.querySelector('input[type="checkbox"]');
-    if (checkbox?.checked) {
-      const qty = parseInt(option.querySelector('input[type="number"]')?.value || 1);
-      const comment = option.querySelector('textarea')?.value?.trim() || '';
-      const optionNumber = option.querySelector('.option-details strong')?.innerText?.split("—")[0]?.trim();
-
-      selections.push({
-        option: optionNumber,
-        qty,
-        comment
-      });
-    }
-  });
-
-  if (selections.length === 0) {
-    alert("No selections to save.");
-    return;
-  }
-
-  const response = await fetch('/.netlify/functions/save-selections', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address, selections })
-  });
-
-  if (response.ok) {
-    alert("Selections saved!");
-  } else {
-    const err = await response.text();
-    alert("Error saving selections: " + err);
-  }
-}
-</script>
-</body></html>');
+  win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -577,48 +535,7 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
-  win.document.write('
-<script>
-async function saveToSupabase() {
-  const address = document.getElementById("address-input")?.value?.trim();
-  if (!address) return alert("Please enter an address.");
-
-  const selections = [];
-  document.querySelectorAll('.option').forEach(option => {
-    const checkbox = option.querySelector('input[type="checkbox"]');
-    if (checkbox?.checked) {
-      const qty = parseInt(option.querySelector('input[type="number"]')?.value || 1);
-      const comment = option.querySelector('textarea')?.value?.trim() || '';
-      const optionNumber = option.querySelector('.option-details strong')?.innerText?.split("—")[0]?.trim();
-
-      selections.push({
-        option: optionNumber,
-        qty,
-        comment
-      });
-    }
-  });
-
-  if (selections.length === 0) {
-    alert("No selections to save.");
-    return;
-  }
-
-  const response = await fetch('/.netlify/functions/save-selections', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address, selections })
-  });
-
-  if (response.ok) {
-    alert("Selections saved!");
-  } else {
-    const err = await response.text();
-    alert("Error saving selections: " + err);
-  }
-}
-</script>
-</body></html>');
+  win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -665,48 +582,7 @@ function printSelectedNoTotal() {
     }
   });
 
-  win.document.write('
-<script>
-async function saveToSupabase() {
-  const address = document.getElementById("address-input")?.value?.trim();
-  if (!address) return alert("Please enter an address.");
-
-  const selections = [];
-  document.querySelectorAll('.option').forEach(option => {
-    const checkbox = option.querySelector('input[type="checkbox"]');
-    if (checkbox?.checked) {
-      const qty = parseInt(option.querySelector('input[type="number"]')?.value || 1);
-      const comment = option.querySelector('textarea')?.value?.trim() || '';
-      const optionNumber = option.querySelector('.option-details strong')?.innerText?.split("—")[0]?.trim();
-
-      selections.push({
-        option: optionNumber,
-        qty,
-        comment
-      });
-    }
-  });
-
-  if (selections.length === 0) {
-    alert("No selections to save.");
-    return;
-  }
-
-  const response = await fetch('/.netlify/functions/save-selections', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address, selections })
-  });
-
-  if (response.ok) {
-    alert("Selections saved!");
-  } else {
-    const err = await response.text();
-    alert("Error saving selections: " + err);
-  }
-}
-</script>
-</body></html>');
+  win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -1053,7 +929,6 @@ const response = await fetch('/.netlify/functions/generate-page', {
 document.addEventListener('DOMContentLoaded', () => {
   const isCustomerPage = window.location.pathname.includes("/customers/");
   if (isCustomerPage) {
-    document.getElementById("save-to-supabase-btn").style.display = "inline-block";
     const exportSection = document.querySelector('#address-input')?.parentElement;
     if (exportSection) exportSection.style.display = "none";
 
@@ -1069,6 +944,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+    if (document.getElementById("save-to-supabase-btn")) document.getElementById("save-to-supabase-btn").style.display = "inline-block";
 </script>
 <script>
 async function generatePage() {
@@ -1135,48 +1012,7 @@ async function generatePage() {
   });
 
   html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
-  html += "
-<script>
-async function saveToSupabase() {
-  const address = document.getElementById("address-input")?.value?.trim();
-  if (!address) return alert("Please enter an address.");
-
-  const selections = [];
-  document.querySelectorAll('.option').forEach(option => {
-    const checkbox = option.querySelector('input[type="checkbox"]');
-    if (checkbox?.checked) {
-      const qty = parseInt(option.querySelector('input[type="number"]')?.value || 1);
-      const comment = option.querySelector('textarea')?.value?.trim() || '';
-      const optionNumber = option.querySelector('.option-details strong')?.innerText?.split("—")[0]?.trim();
-
-      selections.push({
-        option: optionNumber,
-        qty,
-        comment
-      });
-    }
-  });
-
-  if (selections.length === 0) {
-    alert("No selections to save.");
-    return;
-  }
-
-  const response = await fetch('/.netlify/functions/save-selections', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address, selections })
-  });
-
-  if (response.ok) {
-    alert("Selections saved!");
-  } else {
-    const err = await response.text();
-    alert("Error saving selections: " + err);
-  }
-}
-</script>
-</body></html>";
+  html += "</body></html>";
 
   try {
     const response = await fetch("/.netlify/functions/generate-page", {
@@ -1238,7 +1074,6 @@ async function exportLookbook() {
   }
 }
 </script>
-
 <script>
 async function saveToSupabase() {
   const address = document.getElementById("address-input")?.value?.trim();
@@ -1278,6 +1113,5 @@ async function saveToSupabase() {
     alert("Error saving selections: " + err);
   }
 }
-</script>
-</body>
+</script></body>
 </html>
