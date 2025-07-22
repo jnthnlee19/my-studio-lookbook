@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "nodemailer": "^6.9.0",
-    "busboy": "^1.6.0"
+    "busboy": "^1.6.0",
+    "@octokit/rest": "^20.0.1"
   }
 }
