@@ -1076,8 +1076,18 @@ async function exportLookbook() {
 </script>
 <script>
 async function saveToSupabase() {
-  const address = document.getElementById("address-input")?.value?.trim();
-  if (!address) return alert("Please enter an address.");
+  let address = document.getElementById("address-input")?.value?.trim();
+  if (!address) {
+    const pathParts = window.location.pathname.split("/");
+    address = pathParts[pathParts.length - 1]
+      .replace(".html", "")
+      .replace("/", "");
+  }
+
+  if (!address) {
+    alert("Address not found.");
+    return;
+  }
 
   const selections = [];
   document.querySelectorAll('.option').forEach(option => {
