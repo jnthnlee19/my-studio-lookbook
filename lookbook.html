@@ -687,23 +687,22 @@ img.onload = () => {
   arrow.style.display = 'none';
 
   const gallery = [`/images/${optionNum}.jpg`];
-  const preload = (url) => new Promise(res => {
-    const i = new Image();
-    i.onload = () => res(url);
-    i.onerror = () => res(null);
-    i.src = url;
-  });
 
-  const preloadImages = async () => {
-    for (let i = 1; i <= 5; i++) {
-      const extraUrl = `/images/${optionNum}-${i}.jpg`;
-      const exists = await preload(extraUrl);
-      if (exists) gallery.push(extraUrl);
-    }
-    if (gallery.length > 1) arrow.style.display = 'block';
+  let checkCount = 0;
+  const preloadNext = () => {
+    checkCount++;
+    if (checkCount > 10) return;
+    const url = `/images/${optionNum}-${checkCount}.jpg`;
+    const probe = new Image();
+    probe.onload = () => {
+      gallery.push(url);
+      arrow.style.display = 'block';
+      preloadNext(); // check next
+    };
+    probe.onerror = () => {};
+    probe.src = url;
   };
-
-  preloadImages();
+  preloadNext();
 
   img.addEventListener('click', () => openGalleryModal(gallery));
 
