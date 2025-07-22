@@ -786,26 +786,24 @@ img.onload = () => {
   arrow.style.display = 'none';
 
   const gallery = [`/images/${optionNum}.jpg`];
+  let preloadCount = 0;
 
-  const preloadExtra = async () => {
-    for (let i = 1; i <= 10; i++) {
-      const url = `/images/${optionNum}-${i}.jpg`;
-      const probe = new Image();
-      probe.src = url;
-      await new Promise((resolve) => {
-        probe.onload = () => {
-          gallery.push(url);
-          arrow.style.display = 'block';
-          resolve();
-        };
-        probe.onerror = () => resolve();
-      });
-    }
+  const preloadNext = () => {
+    if (preloadCount >= 10) return;
+    preloadCount++;
+    const url = `/images/${optionNum}-${preloadCount}.jpg`;
+    const test = new Image();
+    test.onload = () => {
+      gallery.push(url);
+      arrow.style.display = 'block';
+      preloadNext();
+    };
+    test.onerror = preloadNext;
+    test.src = url;
   };
+  preloadNext();
 
-  preloadExtra();
   img.addEventListener('click', () => openImageGallery(gallery));
-
   box.appendChild(img);
   box.appendChild(arrow);
   imageWrapper.appendChild(box);
