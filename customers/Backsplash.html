@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>KB Home Lookbook</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1000;
+  height: 60px; /* increased to fit logo */
+  padding: 0 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+}
+
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+
+img.logo {
+  max-width: 60px;
+  height: auto;
+}
+
+
+.house-info {
+  flex: 1;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+
+.total-bar {
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+
+.top-buttons {
+  display: flex;
+  flex-direction: row; /* side by side */
+  gap: 0.4rem;
+}
+
+
+.top-buttons button {
+  background: linear-gradient(to bottom, #FFC527, #e5b021);
+  border: none;
+  color: #222;
+  font-weight: bold;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin: 1rem 0 1.5rem;
+      color: #222;
+    }
+
+    #lookbook-container {
+      padding: 1rem 2rem;
+    }
+
+    details {
+      text-align: left;
+      margin-bottom: 0.5rem;
+    }
+
+    summary {
+      background: linear-gradient(to bottom, #E8E8E8, #D1D1D1);
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #222;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .subcategory summary {
+      font-size: 0.95rem;
+      border-radius: 8px;
+      margin-left: 1rem;
+    }
+
+    .option {
+      padding: 1rem 1rem 1rem 2rem;
+      display: flex;
+      gap: 1rem;
+      border-top: 1px solid #ddd;
+      align-items: center;
+    }
+
+    .option-details {
+      flex: 1;
+    }
+
+    .option-details strong {
+      display: block;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .option-details em {
+      color: #444;
+      display: block;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+
+    .option-details span {
+      display: block;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+.option input[type="checkbox"] {
+  transform: scale(1.3);
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+
+#save-selections-btn {
+  display: none !important;
+}
+
+
+  
+/* Grid container for options inside each subcategory */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* max of 4 items per row */
+  gap: 1.2rem;
+  padding: 1.2rem;
+}
+
+
+/* Make each option a card */
+.option {
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+
+.option-details {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+
+.option-details strong {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+
+/* Grid container for options inside each subcategory */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* max of 4 items per row */
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+
+/* Make each option a card */
+.option {
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+
+/* Details styling */
+.option-details {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+
+.option-details strong {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+
+/* Top control row */
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+
+.option-controls label {
+  font-size: 0.85rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+}
+
+
+.option-checkbox {
+  transform: scale(1.3);
+  margin-right: 0.4rem;
+  cursor: pointer;
+}
+
+
+.option-qty {
+  width: 60px;
+  padding: 0.25rem;
+  font-size: 0.85rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.option-controls label {
+  font-size: 0.85rem;
+}
+
+.option-container .option {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.option-container .option {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+
+.option-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.option-details .bottom-section {
+  margin-top: auto;
+}
+
+
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+
+/* Allow grid items to grow for larger images */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+}
+.option img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  padding: 0.5rem;
+  max-height: 400px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto 1rem;
+}
+</style>
+</head>
+<body>
+<div class="sticky-header">
+<div class="top-row">
+<img alt="KB Home Logo" class="logo" src="/kb logo.png" style="cursor: pointer;">
+<div class="house-info" id="house-info"><div>Kitchen Backsplash Options</div></div>
+<div class="right-panel">
+<div class="total-bar" id="total-bar">Your Total: $0.00</div>
+<div class="top-buttons">
+<button onclick="expandAll()">Expand All</button>
+<button onclick="collapseAll()">Collapse All</button>
+<button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
+<button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
+<button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
+<button id="save-to-supabase-btn" style="display: inline-block;" onclick="saveToSupabase()">Save My Selections</button></div>
+</div>
+</div>
+</div> <!-- ✅ CLOSE sticky-header -->
+<div style="height: 50px;"></div> <!-- ✅ SPACER -->
+<h1>KB Home Lookbook</h1>
+<div style="text-align: center; margin-bottom: 1rem;">
+<input id="address-input" placeholder="Enter Customer Address (e.g. 123 Main St)" style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" type="text">
+<button onclick="exportLookbook()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Generate Lookbook</button>
+</div>
+<div style="text-align: center; margin-bottom: 1rem;">
+<input id="search-input" oninput="filterOptions()" placeholder="Search by option, description, or keyword..." style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" type="text">
+<button onclick="clearSearch()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Clear</button>
+</div>
+<div style="text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">
+<label style="font-size: 0.95rem;">
+<input id="toggle-all" onchange="toggleAllSelections(this)" style="transform: scale(1.2); margin-right: 0.4rem;" type="checkbox">
+    Select / Deselect All
+  </label>
+</div>
+<div id="lookbook-container"><details open=""><summary>Kichen Backsplash</summary><details class="subcategory" open=""><summary>General</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025001.jpg" alt="2025001" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025001 — Group 1 - Finishline Subway </strong>
+  <em>Colors: White, Fawn. 
+Sizes: 3X6, 4X12, 4X16.
+Finishes: Polished
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025001" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025001" data-option="2025001" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025002.jpg" alt="2025002" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025002 — Group 1 - Hawthorne Beveled</strong>
+  <em>Colors: Refined White, Scholarly Gray. 
+Sizes: 8X24.
+Finishes: Polished &amp; Beveled
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025002" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025002" data-option="2025002" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025003.jpg" alt="2025003" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025003 — Group 1 - Stagecraft Picket</strong>
+  <em>Colors: White, Desert Gray, Spa, Galaxy, Black
+Sizes: 3X12.
+Finishes: Polished 
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025003" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025003" data-option="2025003" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025004.jpg" alt="2025004" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025004 — Group 2 - Mesmerist Subway</strong>
+  <em>Colors: Whimsey, Allure, Spirit, Trance, Mystique, Charm
+Sizes: 3X6, 3X12
+Finishes: Polished &amp; High Variation
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025004" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025004" data-option="2025004" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025005.jpg" alt="2025005" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025005 — Group 2 - Mesmerist Arabesque</strong>
+  <em>Colors: Whimsey, Allure, Spirit, Trance, Mystique, Charm
+Sizes: 3X3
+Finishes: Polished &amp; High Variation
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025005" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025005" data-option="2025005" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025006.jpg" alt="2025006" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025006 — Group 2 - Zellige</strong>
+  <em>Colors: Gesso, Lana, Argilla, Bosco, China
+Sizes: 4X4
+Finishes:  Polished &amp; High Variation
+Included Lay: Straight Stacked</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025006" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025006" data-option="2025006" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025007.jpg" alt="2025007" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025007 — Group 2 - Remedy</strong>
+  <em>Colors: Antidote, Alchemy, Hydro, Herbal
+Sizes: 3X9
+Finishes: Polished &amp; High Variation 
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025007" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025007" data-option="2025007" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="font-size: 0.75rem; color: rgb(136, 136, 136); padding: 1rem;">No image available</div></div><div class="option-details">
+  <strong>2025008 — Group 2 - Memoir</strong>
+  <em>Colors: Petal Grey, Petal Black, Crystal Grey, Crystal Black, Jewel Grey, Jewel Black, Cosmo Grey, Cosmo Blue
+Sizes: 12X12
+Finishes: Matte
+Included Lay: Straight Stacked</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025008" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025008" data-option="2025008" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025009.jpg" alt="2025009" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025009 — Group 3 - Artezen Herringbone</strong>
+  <em>Colors: Elegant White, Nordic Sand, Ideal Grey, Classic Blue, Deep Blue, Metallic Vibe
+Sizes: 2X4
+Finishes: Polished
+Included Lay: Herringbone</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025009" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025009" data-option="2025009" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025010.jpg" alt="2025010" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025010 — Group 3 - Artezen Brick Joint</strong>
+  <em>Colors: Elegant White, Nordic Sand, Ideal Grey, Classic Blue, Deep Blue, Metallic Vibe
+Sizes: 2X4
+Finishes: Polished
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025010" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025010" data-option="2025010" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025011.jpg" alt="2025011" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025011 — Group 3 - Artezen Picket</strong>
+  <em>Colors: Elegant White, Nordic Sand, Ideal Grey, Classic Blue, Deep Blue, Metallic Vibe
+Sizes: 2X5
+Finishes: Polished
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025011" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025011" data-option="2025011" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025012.jpg" alt="2025012" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025012 — Group 3 - Artezen Hexagon</strong>
+  <em>Colors: Elegant White, Nordic Sand, Ideal Grey, Classic Blue, Deep Blue, Metallic Vibe
+Sizes: 1.5X1.5
+Finishes: Polished
+Included Lay: Horizontal</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025012" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025012" data-option="2025012" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025013.jpg" alt="2025013" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025013 — Group 3 - Marble Obsession</strong>
+  <em>Colors: Calacatta Gold, Grigio
+Sizes: 2X5
+Finishes:  Matte
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025013" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025013" data-option="2025013" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025014.jpg" alt="2025014" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025014 — Group 3 - Revalia Remix Bevel</strong>
+  <em>Colors: Centennial White, Restive Gray, Jubilee Beige, Celebration Teal
+Sizes: 2X6
+Finishes: Polished &amp; Crackle
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025014" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025014" data-option="2025014" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025015.jpg" alt="2025015" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025015 — Group 3 - Revalia Remix Fan</strong>
+  <em>Colors: Felicity White, Graceful Greige, Sublime Gray, Delightful Tan, Exquisite Sky
+Sizes: 3 Inch Fan
+Finishes: Polished
+Included Lay: Horizontal (Fan Up)</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025015" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025015" data-option="2025015" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025016.jpg" alt="2025016" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025016 — Group 3 - Color Wheel Retro - Harlequin</strong>
+  <em>Colors: Arctic White, Black, Desert Gray, Spa, Peacock, Galaxy, Waterfall
+Sizes: 2X3
+Finishes:  Gloss (Arctic White and Black Available in Matte Finish)
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025016" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025016" data-option="2025016" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025017.jpg" alt="2025017" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025017 — Group 3 - Color Wheel Retro - Chevron</strong>
+  <em>Colors: Arctic White, Black, Desert Gray, Spa, Peacock, Galaxy, Waterfall
+Sizes: 2X3
+Finishes:  Gloss (Arctic White and Black Available in Matte Finish)
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025017" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025017" data-option="2025017" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025018.jpg" alt="2025018" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025018 — Group 3 - Color Wheel Retro - Arabesque</strong>
+  <em>Colors: Arctic White, Black, Desert Gray, Spa, Peacock, Galaxy, Waterfall
+Sizes: 3X3
+Finishes:  Gloss (Arctic White and Black Available in Matte Finish)
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025018" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025018" data-option="2025018" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025019.jpg" alt="2025019" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025019 — Group 3 - Miramo 1X6</strong>
+  <em>Colors: Pearl, Oyster, Sand, Aqua, Horizon, Reef
+Sizes: 1X6
+Finishes:  Polished &amp; High Variation
+Included Lay: Horizontal Stacked</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025019" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025019" data-option="2025019" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025020.jpg" alt="2025020" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025020 — Group 3 - Miramo Picket</strong>
+  <em>Colors: Pearl, Oyster, Sand, Aqua, Horizon, Reef
+Sizes: 2X5
+Finishes:  Polished &amp; High Variation
+Included Lay: Vertical</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025020" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025020" data-option="2025020" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025021.jpg" alt="2025021" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025021 — Group 3 - Miramo Fan</strong>
+  <em>Colors: Pearl, Oyster, Sand, Aqua, Horizon, Reef
+Sizes: 3 Inch Fan
+Finishes:  Polished &amp; High Variation
+Included Lay: Vertical (Fan Up)</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025021" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025021" data-option="2025021" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2025022.jpg" alt="2025022" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2025022 — Group 3 - Conrad Brick</strong>
+  <em>Colors: Polar, Linen, Tin, Stark, Sage, Siren, Marine
+Sizes: 2X8
+Finishes:  Polished &amp; High Variation
+Included Lay: Horizontal Brick</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> See Pricing Packet</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2025022" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2025022" data-option="2025022" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details></details></div>
+<script>
+  function formatPrice(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? null : '$' + num.toLocaleString();
+  }
+
+  function parsePrice(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? 0 : num;
+  }
+
+
+
+
+
+function updateTotal() {
+  let total = 0;
+  const optionCards = document.querySelectorAll('.option');
+
+  optionCards.forEach(card => {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    const qtyInput = card.querySelector('input[type="number"]');
+
+    if (checkbox && checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+      const qty = parseInt(qtyInput?.value || 1);
+      total += price * qty;
+    }
+  });
+
+  const totalEl = document.getElementById('total-bar');
+  if (totalEl) {
+    totalEl.textContent = `Your Total: $${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+  }
+}
+function toggleAllSelections(masterCheckbox) {
+  const allBoxes = document.querySelectorAll('.option input[type="checkbox"]');
+  allBoxes.forEach(box => {
+    box.checked = masterCheckbox.checked;
+  });
+  updateTotal();
+}
+
+
+  function expandAll() {
+    document.querySelectorAll("details").forEach(el => el.open = true);
+  }
+
+  function collapseAll() {
+    document.querySelectorAll("details").forEach(el => el.open = false);
+  }
+
+function printFull() {
+  const win = window.open('', '_blank');
+ win.document.write('<html><head><title>Full Lookbook</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:40px;height:40px;float:left;margin:0 1rem 0 0;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<h2>KB Home Lookbook</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    win.document.write(`<h3>${catTitle}</h3>`);
+
+    const options = cat.querySelectorAll(".option");
+
+    options.forEach(opt => {
+const img = opt.querySelector("img").outerHTML;
+const detailsClone = opt.querySelector(".option-details").cloneNode(true);
+const commentBox = detailsClone.querySelector("textarea");
+if (commentBox) commentBox.remove(); // Remove the textarea from the visual content
+
+const commentInput = opt.querySelector("textarea");
+const commentText = commentInput?.value?.trim();
+const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${commentHTML}</div></div>`;
+
+
+    });
+
+    win.document.write("<hr/>");
+  });
+
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+
+function printSelected() {
+  const win = window.open('', '_blank');
+  let total = 0;
+
+  win.document.write('<html><head><title>Selected Options</title>' +
+    '<style>' +
+    'body { font-family: Segoe UI; padding: 2rem; }' +
+    'h2 { color: #222; }' +
+    'h3 { background: #f0f0f0; padding: 0.75rem 1rem; border-left: 6px solid #FFC527; margin-top: 2rem; }' +
+    'img.thumbnail { width: 100px; height: auto; max-height: 150px; object-fit: contain; border-radius: 4px; margin-right: 1rem; }' +
+    '.option { display: flex; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; gap: 1rem; }' +
+    '.option-content { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 2rem; }' +
+    '.details { flex-grow: 1; max-width: 100%; }' +
+    '.qty-price { text-align: right; min-width: 100px; white-space: nowrap; }' +
+    '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
+    '</style></head><body>'
+  );
+
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<h2>KB Home Selected Options</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    let catHasSelections = false;
+    let catContent = "<h3>" + catTitle + "</h3>";
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const originalImg = opt.querySelector("img");
+        let imgHTML = "";
+        if (originalImg) {
+          imgHTML = '<img class="thumbnail" src="' + originalImg.src + '" alt="' + (originalImg.alt || "") + '">';
+        }
+
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? '<div class="comment">Comment: ' + commentText + '</div>' : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+        total += price * qty;
+
+        catContent += '<div class="option">' +
+          imgHTML +
+          '<div class="option-content">' +
+          '<div class="details">' + details.innerHTML + commentHTML + '</div>' +
+          '<div class="qty-price"><div><strong>Qty:</strong> ' + qty + '</div>' +
+          '<div><strong>Price:</strong> $' + (price * qty).toFixed(2) + '</div></div>' +
+          '</div></div>';
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) {
+      win.document.write(catContent + "<hr/>");
+    }
+  });
+
+  win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+
+
+function printSelectedNoTotal() {
+  const win = window.open('', '_blank');
+
+  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<h2>KB Home Selected Options</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img").outerHTML;
+        const details = opt.querySelector(".option-details").cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const liveTextarea = opt.querySelector("textarea");
+        const commentText = liveTextarea?.value?.trim();
+        const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+
+        catContent += `<div class="option">${img}<div>${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) {
+      win.document.write(catContent + "<hr/>");
+    }
+  });
+
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+
+  const base64 = `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`;
+  if (!base64) {
+    document.getElementById('lookbook-container').innerHTML = '<p>No workbook found. Please upload from the home page.</p>';
+  } else {
+    const workbook = XLSX.read(base64, { type: 'base64' });
+    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets['Sheet2'], { header: 1 });
+    const houseInfoText = sheet[11]?.[0] || '';
+    const infoParts = houseInfoText.split("  ").map(s => s.trim());
+    document.getElementById('house-info').innerHTML = infoParts.map(line => `<div>${line}</div>`).join('');
+
+    let currentCategory = '', currentSubcategory = '', grouped = {};
+    for (let i = 14; i < sheet.length; i++) {
+      const row = sheet[i];
+      const cellA = row[0];
+      const cellC = row[2];
+      if (!cellA) continue;
+
+      if (!cellC) {
+        const parts = cellA.split(' > ');
+        currentCategory = parts[0]?.trim();
+        currentSubcategory = parts[1]?.trim() || 'General';
+        if (!grouped[currentCategory]) grouped[currentCategory] = {};
+        if (!grouped[currentCategory][currentSubcategory]) grouped[currentCategory][currentSubcategory] = [];
+      } else {
+        const optionNumber = cellA;
+        const description = cellC;
+        const salesDesc = row[9];
+        const amount = row[13];
+        grouped[currentCategory][currentSubcategory].push({ optionNumber, description, salesDesc, amount });
+      }
+    }
+
+    const container = document.getElementById('lookbook-container');
+    container.innerHTML = '';
+    Object.keys(grouped).forEach(category => {
+      const catDetails = document.createElement('details');
+      const catSummary = document.createElement('summary');
+      catSummary.textContent = category;
+      catDetails.appendChild(catSummary);
+      const subcats = grouped[category];
+      Object.keys(subcats).forEach(sub => {
+        const subDetails = document.createElement('details');
+        subDetails.className = 'subcategory';
+        const subSummary = document.createElement('summary');
+        subSummary.textContent = sub;
+        subDetails.appendChild(subSummary);
+
+        const optionContainer = document.createElement('div');
+optionContainer.className = 'option-container';
+subcats[sub].forEach(opt => {
+          const optionDiv = document.createElement('div');
+          optionDiv.className = 'option';
+const controlRow = document.createElement('div');
+controlRow.className = 'option-controls';
+const checkboxLabel = document.createElement('label');
+checkboxLabel.innerHTML = `<input type='checkbox' class='option-checkbox' data-price='${parsePrice(opt.amount)}' /> Select Item`;
+const qtyLabel = document.createElement('label');
+qtyLabel.innerHTML = `Qty <input type='number' min='1' value='1' class='option-qty' />`;
+controlRow.appendChild(checkboxLabel);
+controlRow.appendChild(qtyLabel);
+
+          
+const imageWrapper = document.createElement('div');
+imageWrapper.style.display = 'flex';
+imageWrapper.style.flexWrap = 'wrap';
+imageWrapper.style.gap = '0.5rem';
+
+const optionNum = opt.optionNumber;
+const imageUrl = `/images/${optionNum}.jpg`;
+
+const img = new Image();
+img.src = imageUrl;
+img.alt = optionNum;
+img.style.width = '100%';
+img.style.height = 'auto'; img.style.maxHeight = '320px';
+img.style.objectFit = 'contain';
+img.style.backgroundColor = '#ffffff';
+img.style.borderRadius = '6px';
+img.addEventListener('click', () => openImageModal(img.src));
+
+img.onload = () => {
+  const box = document.createElement('div');
+  box.style.textAlign = 'center';
+  box.style.width = '100%';
+  box.appendChild(img);
+  imageWrapper.appendChild(box);
+};
+
+img.onerror = () => {
+  const placeholder = document.createElement('div');
+  placeholder.textContent = 'No image available';
+  placeholder.style.fontSize = '0.75rem';
+  placeholder.style.color = '#888';
+  placeholder.style.padding = '1rem';
+  imageWrapper.appendChild(placeholder);
+};
+
+
+
+          const details = document.createElement('div');
+          details.className = 'option-details';
+
+          const formattedPrice = formatPrice(opt.amount);
+          const rawPrice = parsePrice(opt.amount);
+
+const checkbox = document.createElement('input');
+checkbox.type = 'checkbox';
+checkbox.setAttribute('data-price', rawPrice);
+checkbox.className = 'option-checkbox';
+
+const qtyInput = document.createElement('input');
+qtyInput.type = 'number';
+qtyInput.min = '1';
+qtyInput.value = '1';
+qtyInput.className = 'option-qty';
+qtyInput.style.width = '50px';
+qtyInput.style.marginLeft = '0.5rem';
+
+checkbox.addEventListener('change', updateTotal);
+qtyInput.addEventListener('input', updateTotal);
+
+
+        const commentId = `comment-${opt.optionNumber}`;
+details.innerHTML = `
+  <strong>${opt.optionNumber} — ${opt.description}</strong>
+  <em>${opt.salesDesc || ''}</em>
+  <div class='bottom-section'>
+    <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="${commentId}" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="${commentId}" data-option="${opt.optionNumber}" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+`;
+
+
+          // checkbox already in label
+           // qtyInput already in label
+          optionDiv.appendChild(controlRow);
+optionDiv.appendChild(imageWrapper);
+          optionDiv.appendChild(details);
+          optionContainer.appendChild(optionDiv);
+        });
+subDetails.appendChild(optionContainer);
+
+        catDetails.appendChild(subDetails);
+      });
+      container.appendChild(catDetails);
+    });
+  }
+
+
+function updateTotal() {
+  let total = 0;
+  const optionCards = document.querySelectorAll('.option');
+
+  optionCards.forEach(card => {
+    const checkbox = card.querySelector('.option-checkbox');
+    const qtyInput = card.querySelector('.option-qty');
+
+    if (checkbox && checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+      const qty = parseInt(qtyInput?.value || 1);
+      total += price * qty;
+    }
+  });
+
+  const totalEl = document.getElementById('total-bar');
+  if (totalEl) {
+    totalEl.textContent = `Your Total: $${total.toFixed(2)}`;
+  }
+}
+
+// Ensure all inputs are wired to trigger updateTotal
+document.addEventListener('DOMContentLoaded', () => {
+  updateTotal();
+  document.querySelectorAll('.option-checkbox').forEach(cb => {
+    cb.addEventListener('change', updateTotal);
+  });
+  document.querySelectorAll('.option-qty').forEach(input => {
+    input.addEventListener('input', updateTotal);
+  });
+});
+</script>
+<div class="modal" id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+<span onclick="closeImageModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
+<img id="modal-image" style="max-width: 90%; max-height: 90%; cursor: pointer;">
+</div>
+<script>
+function openImageModal(src) {
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-image');
+  modalImg.src = src;
+  modal.style.display = 'flex';
+}
+function closeImageModal() {
+  document.getElementById('image-modal').style.display = 'none';
+}
+</script>
+<!-- Image Modal -->
+<div class="modal" id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.8);">
+<span class="close" style="position:absolute; top:20px; right:35px; color:#fff; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
+<img class="modal-content" id="modalImage" style="margin: auto; display: block; max-width: 90%; max-height: 90%; cursor: pointer;">
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const closeBtn = document.querySelector(".close");
+
+  document.querySelectorAll("img").forEach(img => {
+    img.style.cursor = "pointer";
+    img.addEventListener("click", function() {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+    });
+  });
+
+  closeBtn.onclick = function() {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+});
+
+<!-- ✅ Paste Search Script Below This -->
+</script>
+<script>
+function filterOptions() {
+  const query = document.getElementById('search-input').value.toLowerCase();
+  const allOptions = document.querySelectorAll('.option');
+  let anyVisible = false;
+
+  allOptions.forEach(opt => {
+    const text = opt.innerText.toLowerCase();
+    const matches = text.includes(query);
+
+    opt.style.display = matches ? 'flex' : 'none';
+
+    if (matches) anyVisible = true;
+  });
+
+  document.querySelectorAll('details.subcategory').forEach(sub => {
+    const hasVisibleChild = Array.from(sub.querySelectorAll('.option')).some(opt => opt.style.display !== 'none');
+    sub.style.display = hasVisibleChild ? '' : 'none';
+    sub.open = hasVisibleChild; // Auto-expand if it has matches
+  });
+
+  document.querySelectorAll('#lookbook-container > details').forEach(cat => {
+    const hasVisibleSub = Array.from(cat.querySelectorAll('details.subcategory')).some(sub => sub.style.display !== 'none');
+    cat.style.display = hasVisibleSub ? '' : 'none';
+    cat.open = hasVisibleSub;
+  });
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  filterOptions();
+}
+</script>
+<script>
+async function exportLookbook() {
+  const address = document.getElementById("address-input").value.trim();
+  if (!address) return alert("Please enter an address first.");
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) return alert("No workbook found. Please upload a file first.");
+
+  const html = document.documentElement.outerHTML;
+
+const base64 = localStorage.getItem("workbook");
+const response = await fetch('/.netlify/functions/generate-page', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ address, htmlTemplate: html, base64 })
+
+});
+
+
+  const result = await response.json();
+
+  if (response.ok) {
+    alert("Page created! Link copied to clipboard.");
+    navigator.clipboard.writeText(result.url);
+    window.open(result.url, "_blank");
+  } else {
+    alert("Failed to create page: " + result.body);
+  }
+}
+</script>
+<script>
+  function saveSelections() {
+    const selectedOptions = [];
+    document.querySelectorAll('.option').forEach(option => {
+      const checkbox = option.querySelector('input[type="checkbox"]');
+      const qtyInput = option.querySelector('input[type="number"]');
+      if (checkbox && checkbox.checked) {
+        const title = option.querySelector('.option-details strong')?.innerText;
+        const price = checkbox.getAttribute('data-price');
+        const qty = qtyInput?.value || 1;
+        selectedOptions.push({ title, price, qty });
+      }
+    });
+
+    if (selectedOptions.length === 0) {
+      alert("You haven’t selected anything yet.");
+      return;
+    }
+
+    const container = document.createElement("div");
+    container.innerHTML = `
+      <h2>My KB Home Selections</h2>
+      <ul>
+        ${selectedOptions.map(opt => `<li><strong>${opt.title}</strong> — $${opt.price} × ${opt.qty}</li>`).join("")}
+      </ul>
+    `;
+
+    html2pdf().from(container).outputPdf("blob").then(async (pdfBlob) => {
+      const formData = new FormData();
+      formData.append("file", pdfBlob, "my-selections.pdf");
+      formData.append("address", document.title);
+
+      const res = await fetch("/.netlify/functions/save-pdf", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert("Your selections have been saved and emailed!");
+      } else {
+        alert("There was a problem saving your selections.");
+      }
+    });
+  }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const isCustomerPage = window.location.pathname.includes("/customers/");
+  if (isCustomerPage) {
+    const exportSection = document.querySelector('#address-input')?.parentElement;
+    if (exportSection) exportSection.style.display = "none";
+
+    // Hide print buttons on customer pages
+    const printBtn = document.getElementById("print-selected-btn");
+    const noTotalBtn = document.getElementById("print-no-total-btn");
+    
+    
+
+    if (!document.getElementById("save-selections-btn")) {
+      // existing Save My Selections button logic
+    }
+  }
+});
+
+
+    if (document.getElementById("save-to-supabase-btn")) document.getElementById("save-to-supabase-btn").style.display = "inline-block";
+</script>
+<script>
+async function generatePage() {
+  const pathParts = window.location.pathname.split("/");
+  const currentSlug = pathParts[pathParts.length - 1].replace(".html", "").replace("/", "");
+  const address = `${currentSlug}-wishlist`;
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) return alert("Workbook not loaded. This page must be generated from the original file.");
+
+  const loading = document.createElement("div");
+  loading.textContent = "Generating wishlist page...";
+  loading.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;font-size:2rem;font-weight:bold;background:white;z-index:9999;";
+  document.body.appendChild(loading);
+
+  let total = 0;
+
+  let html = `
+  <!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>${address}</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; padding: 2rem; }
+    h2, h3 { color: #222; }
+    .option { margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .option img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; background: #eee; }
+    .option-details { flex: 1; }
+    .comment { margin-top: 0.5rem; font-style: italic; color: #555; }
+    strong { display: block; margin-bottom: 0.25rem; }
+    .total-line { font-weight: bold; font-size: 1.25rem; margin-top: 2rem; border-top: 2px solid #ccc; padding-top: 1rem; }
+  </style></head><body>
+  <h2>My Wishlist</h2>`;
+
+  html += document.getElementById("house-info")?.innerHTML || '';
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img")?.outerHTML || "";
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? `<div class="comment">Comment: ${commentText}</div>` : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+        total += price * qty;
+
+        catContent += `<div class="option">${img}<div class="option-details">${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) html += catContent;
+  });
+
+  html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
+  html += "</body></html>";
+
+  try {
+    const response = await fetch("/.netlify/functions/generate-page", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address, htmlTemplate: html, base64 })
+    });
+
+    const result = await response.json();
+    document.body.removeChild(loading);
+
+    if (response.ok) {
+      alert("Wishlist page created! Link copied to clipboard.");
+      navigator.clipboard.writeText(result.url);
+      window.open(result.url, "_blank");
+    } else {
+      alert("Error: " + result.body);
+    }
+  } catch (err) {
+    document.body.removeChild(loading);
+    alert("Unexpected error: " + err.message);
+  }
+}
+</script>
+<script>
+async function exportLookbook() {
+  const address = document.getElementById("address-input").value.trim();
+  if (!address) {
+    alert("Please enter an address.");
+    return;
+  }
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) {
+    alert("No workbook found. Please upload a file first.");
+    return;
+  }
+
+  const html = document.documentElement.outerHTML;
+
+  try {
+    const response = await fetch('/.netlify/functions/generate-page', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address, htmlTemplate: html, base64 })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Page created! Link copied to clipboard.");
+      navigator.clipboard.writeText(result.url);
+      window.open(result.url, "_blank");
+    } else {
+      alert("Failed to create page: " + result.body);
+    }
+  } catch (error) {
+    alert("Unexpected error: " + error.message);
+  }
+}
+</script>
+<script>
+async function saveToSupabase() {
+  let address = document.getElementById("address-input")?.value?.trim();
+  if (!address) {
+    const pathParts = window.location.pathname.split("/");
+    address = pathParts[pathParts.length - 1]
+      .replace(".html", "")
+      .replace("/", "");
+  }
+
+  if (!address) {
+    alert("Address not found.");
+    return;
+  }
+
+  const selections = [];
+  document.querySelectorAll('.option').forEach(option => {
+    const checkbox = option.querySelector('input[type="checkbox"]');
+    if (checkbox?.checked) {
+      const qty = parseInt(option.querySelector('input[type="number"]')?.value || 1);
+      const comment = option.querySelector('textarea')?.value?.trim() || '';
+      const optionNumber = option.querySelector('.option-details strong')?.innerText?.split("—")[0]?.trim();
+
+      selections.push({
+        option: optionNumber,
+        qty,
+        comment
+      });
+    }
+  });
+
+  if (selections.length === 0) {
+    alert("No selections to save.");
+    return;
+  }
+
+  const response = await fetch('/.netlify/functions/save-selections', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address, selections })
+  });
+
+  if (response.ok) {
+    alert("Selections saved!");
+  } else {
+    const err = await response.text();
+    alert("Error saving selections: " + err);
+  }
+}
+</script>
+
+</body></html>
