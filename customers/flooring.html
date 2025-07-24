@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>KB Home Lookbook</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1000;
+  height: 60px; /* increased to fit logo */
+  padding: 0 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+}
+
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+
+img.logo {
+  max-width: 60px;
+  height: auto;
+}
+
+
+.house-info {
+  flex: 1;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+
+.total-bar {
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+
+.top-buttons {
+  display: flex;
+  flex-direction: row; /* side by side */
+  gap: 0.4rem;
+}
+
+
+.top-buttons button {
+  background: linear-gradient(to bottom, #FFC527, #e5b021);
+  border: none;
+  color: #222;
+  font-weight: bold;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin: 1rem 0 1.5rem;
+      color: #222;
+    }
+
+    #lookbook-container {
+      padding: 1rem 2rem;
+    }
+
+    details {
+      text-align: left;
+      margin-bottom: 0.5rem;
+    }
+
+    summary {
+      background: linear-gradient(to bottom, #E8E8E8, #D1D1D1);
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #222;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .subcategory summary {
+      font-size: 0.95rem;
+      border-radius: 8px;
+      margin-left: 1rem;
+    }
+
+    .option {
+      padding: 1rem 1rem 1rem 2rem;
+      display: flex;
+      gap: 1rem;
+      border-top: 1px solid #ddd;
+      align-items: center;
+    }
+
+    .option-details {
+      flex: 1;
+    }
+
+    .option-details strong {
+      display: block;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .option-details em {
+      color: #444;
+      display: block;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+
+    .option-details span {
+      display: block;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+.option input[type="checkbox"] {
+  transform: scale(1.3);
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+
+#save-selections-btn {
+  display: none !important;
+}
+
+
+  
+/* Grid container for options inside each subcategory */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* max of 4 items per row */
+  gap: 1.2rem;
+  padding: 1.2rem;
+}
+
+
+/* Make each option a card */
+.option {
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+
+.option-details {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+
+.option-details strong {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+
+/* Grid container for options inside each subcategory */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* max of 4 items per row */
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+
+/* Make each option a card */
+.option {
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+
+/* Details styling */
+.option-details {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+
+.option-details strong {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+
+/* Top control row */
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+
+.option-controls label {
+  font-size: 0.85rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+}
+
+
+.option-checkbox {
+  transform: scale(1.3);
+  margin-right: 0.4rem;
+  cursor: pointer;
+}
+
+
+.option-qty {
+  width: 60px;
+  padding: 0.25rem;
+  font-size: 0.85rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.option-controls label {
+  font-size: 0.85rem;
+}
+
+.option-container .option {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.option-container .option {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+
+.option-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.option-details .bottom-section {
+  margin-top: auto;
+}
+
+
+.option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+
+/* Allow grid items to grow for larger images */
+.subcategory .option-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+}
+.option img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  padding: 0.5rem;
+  max-height: 400px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto 1rem;
+}
+</style>
+</head>
+<body>
+<div class="sticky-header">
+<div class="top-row">
+<img alt="KB Home Logo" class="logo" src="/kb logo.png" style="cursor: pointer;">
+<div class="house-info" id="house-info"><div>Flooring Options</div></div>
+<div class="right-panel">
+<div class="total-bar" id="total-bar">Your Total: $0.00</div>
+<div class="top-buttons">
+<button onclick="expandAll()">Expand All</button>
+<button onclick="collapseAll()">Collapse All</button>
+<button onclick="window.open('https://myonlinelookbook.netlify.app/customers/floors', '_blank')">Flooring Options</button>
+<button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
+<button id="print-no-total-btn" onclick="printSelectedNoTotal()">Print (No Total)</button>
+<button id="save-to-supabase-btn" style="display: inline-block;" onclick="saveToSupabase()">Save My Selections</button></div>
+</div>
+</div>
+</div> <!-- ✅ CLOSE sticky-header -->
+<div style="height: 50px;"></div> <!-- ✅ SPACER -->
+<h1>KB Home Lookbook</h1>
+<div style="text-align: center; margin-bottom: 1rem;">
+<input id="address-input" placeholder="Enter Customer Address (e.g. 123 Main St)" style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" type="text">
+<button onclick="exportLookbook()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Generate Lookbook</button>
+</div>
+<div style="text-align: center; margin-bottom: 1rem;">
+<input id="search-input" oninput="filterOptions()" placeholder="Search by option, description, or keyword..." style="width: 60%; padding: 0.5rem; font-size: 1rem; border-radius: 6px; border: 1px solid #ccc;" type="text">
+<button onclick="clearSearch()" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Clear</button>
+</div>
+<div style="text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">
+<label style="font-size: 0.95rem;">
+<input id="toggle-all" onchange="toggleAllSelections(this)" style="transform: scale(1.2); margin-right: 0.4rem;" type="checkbox">
+    Select / Deselect All
+  </label>
+</div>
+<div id="lookbook-container"><details open=""><summary>Flooring</summary><details class="subcategory" open=""><summary>Carpet - Cut Pile</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018056.jpg" alt="2018056" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018056 — Vineyard Creek PET Polyester - Choice</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> Included</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018056" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018056" data-option="2018056" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018206.jpg" alt="2018206" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018206 — Maxville Plaza PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018206" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018206" data-option="2018206" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018124.jpg" alt="2018124" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018124 — Avery Circle Polyester-Performance Fiber - Choice</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018124" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018124" data-option="2018124" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022575.jpg" alt="2022575" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022575 — Palmer Court Endurance High Performance Fiber - Choice</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022575" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022575" data-option="2022575" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021211.jpg" alt="2021211" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021211 — Centrella Estate Endurance High Performance Fiber</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021211" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021211" data-option="2021211" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021900.jpg" alt="2021900" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021900 — Dundee Garden Endurance Enhanced HP Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021900" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021900" data-option="2021900" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018212.jpg" alt="2018212" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018212 — Big Ranch PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018212" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018212" data-option="2018212" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Carpet - Patterned</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018208.jpg" alt="2018208" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018208 — Silver Sands Pattern-PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018208" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018208" data-option="2018208" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018209.jpg" alt="2018209" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018209 — Long Gardens Pattern-PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018209" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018209" data-option="2018209" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018210.jpg" alt="2018210" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018210 — Storybook Valley Pattern-PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018210" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018210" data-option="2018210" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021901.jpg" alt="2021901" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021901 — Winter Haven Endurance High Performance Fiber</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021901" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021901" data-option="2021901" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021212.jpg" alt="2021212" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021212 — Marshall Springs Pattern PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021212" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021212" data-option="2021212" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021216.jpg" alt="2021216" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021216 — Harbor Bluff Pattern PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021216" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021216" data-option="2021216" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021217.jpg" alt="2021217" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021217 — Panther Creek Pattern PET Polyester</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021217" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021217" data-option="2021217" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021902.jpg" alt="2021902" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021902 — Haines River Endurance High Performance Fiber</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021902" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021902" data-option="2021902" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Carpet - Loop</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022576.jpg" alt="2022576" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022576 — Kennedy Ranch Pet Perfect+ Endurance Enhanced High Performance PET</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022576" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022576" data-option="2022576" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021215.jpg" alt="2021215" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021215 — Sandler Park Textured Loop Anso Nylon</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021215" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021215" data-option="2021215" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Tile</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022333.jpg" alt="2022333" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022333 — Stella Vista - Included Choice</strong>
+  <em>Included in Wet Areas (Entry, Kitchen, Laundry, and Baths)</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> Included</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022333" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022333" data-option="2022333" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018961.jpg" alt="2018961" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018961 — Memoir </strong>
+  <em>Available in: 12X12 Only</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018961" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018961" data-option="2018961" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2019053.jpg" alt="2019053" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2019053 — Florentine</strong>
+  <em>Available in: 12X12, 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2019053" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2019053" data-option="2019053" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020754.jpg" alt="2020754" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020754 — C.F. Choice</strong>
+  <em>Available in: 12X12, 18X18, 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020754" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020754" data-option="2020754" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020837.jpg" alt="2020837" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020837 — C.F. Advantage</strong>
+  <em>Available in: 12X12, 18X18, 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020837" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020837" data-option="2020837" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021223.jpg" alt="2021223" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021223 — C.F. Prime Balans</strong>
+  <em>Available in: 12X12, 18X18, 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021223" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021223" data-option="2021223" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022326.jpg" alt="2022326" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022326 — Coastline</strong>
+  <em>Available in: 12X12, 18X18, 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022326" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022326" data-option="2022326" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022327.jpg" alt="2022327" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022327 — Costar</strong>
+  <em>Calacatta Empire 12X12 Only; Calacatta Sky 12X24 Only</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022327" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022327" data-option="2022327" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020136.jpg" alt="2020136" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020136 — Marble Obsession Matte or Polished</strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020136" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020136" data-option="2020136" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020138.jpg" alt="2020138" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020138 — Scripter </strong>
+  <em>Available in: 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020138" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020138" data-option="2020138" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020603.jpg" alt="2020603" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020603 — Vertuo </strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020603" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020603" data-option="2020603" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020605.jpg" alt="2020605" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020605 — Perpetuo Matte or Polished</strong>
+  <em>Available in: 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020605" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020605" data-option="2020605" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021242.jpg" alt="2021242" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021242 — Rekindle</strong>
+  <em>Available in: 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021242" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021242" data-option="2021242" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021246.jpg" alt="2021246" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021246 — Stone Theory</strong>
+  <em>Available in: 12X24, 18X18</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021246" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021246" data-option="2021246" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021248.jpg" alt="2021248" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021248 — Wanderwise</strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021248" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021248" data-option="2021248" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022334.jpg" alt="2022334" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022334 — Alterations</strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022334" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022334" data-option="2022334" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022335.jpg" alt="2022335" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022335 — Articulo Matte or Polished</strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022335" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022335" data-option="2022335" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022337.jpg" alt="2022337" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022337 — Artsy Matte or Polished</strong>
+  <em>Available in: 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022337" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022337" data-option="2022337" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022341.jpg" alt="2022341" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022341 — Calgary Matte </strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022341" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022341" data-option="2022341" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022343.jpg" alt="2022343" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022343 — Forgehaus</strong>
+  <em>Available in: 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022343" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022343" data-option="2022343" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022345.jpg" alt="2022345" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022345 — Portfolio </strong>
+  <em>Available in: 12X24, 24X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022345" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022345" data-option="2022345" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021227.jpg" alt="2021227" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021227 — C.F. Advantage Epitomize</strong>
+  <em>Available in: 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021227" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021227" data-option="2021227" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022328.jpg" alt="2022328" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022328 — CF Prime NS</strong>
+  <em>Available in: 12X24, 18X18</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022328" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022328" data-option="2022328" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022332.jpg" alt="2022332" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022332 — Stella Vista</strong>
+  <em>Available in: 18X18, 12X24</em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022332" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022332" data-option="2022332" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Tile - Design</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020606.jpg" alt="2020606" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020606 — Moroccan Concrete 8" Hexagon Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020606" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020606" data-option="2020606" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020607.jpg" alt="2020607" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020607 — Perpetuo 8x8 Hexagon Colorbody Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020607" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020607" data-option="2020607" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020135.jpg" alt="2020135" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020135 — Marble Obsession 8x8 Hexagon Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020135" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020135" data-option="2020135" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Tile - Wood-Look Tile</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2019056.jpg" alt="2019056" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2019056 — Emblem 7x20 Glazed Ceramic</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2019056" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2019056" data-option="2019056" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022352.jpg" alt="2022352" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022352 — Sleigh Creek 6x36 Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022352" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022352" data-option="2022352" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022353.jpg" alt="2022353" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022353 — Valence 6x24 Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022353" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022353" data-option="2022353" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020081.jpg" alt="2020081" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020081 — Vicinity 6x36 Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020081" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020081" data-option="2020081" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2020083.jpg" alt="2020083" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2020083 — Edgewood 6x24 Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2020083" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2020083" data-option="2020083" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021249.jpg" alt="2021249" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021249 — Wanderwise 6x24 Glazed Porcelain</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021249" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021249" data-option="2021249" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Engineered Wood</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021218.jpg" alt="2021218" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021218 — Aegean Oak 5" Random Length</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021218" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021218" data-option="2021218" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2022577.jpg" alt="2022577" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2022577 — Archer Landing - 7 1/2"x3/8"xRL</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2022577" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2022577" data-option="2022577" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018201.jpg" alt="2018201" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018201 — Heritage Square Pecan 7 1/2"x1/2"xRL</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018201" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018201" data-option="2018201" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details><details class="subcategory" open=""><summary>Vinyl Plank</summary><div class="option-container"><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018593.jpg" alt="2018593" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018593 — Layton Lake 7" x 48" - Choice</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018593" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018593" data-option="2018593" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018417.jpg" alt="2018417" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018417 — Bandera 7"x48"x7mm</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018417" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018417" data-option="2018417" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021903.jpg" alt="2021903" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021903 — Del Oro Point 7" x 60" x 6.5mm</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021903" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021903" data-option="2021903" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021904.jpg" alt="2021904" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021904 — Heartland Ranch 9" x 60" x 7mm</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021904" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021904" data-option="2021904" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021905.jpg" alt="2021905" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021905 — Mystic Estates 9"x 60" x 8mm</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021905" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021905" data-option="2021905" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021906.jpg" alt="2021906" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021906 — Tortosa Ridge 9" x 72" x 6.5mm</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021906" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021906" data-option="2021906" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2018422.jpg" alt="2018422" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2018422 — Bryan Crossing COREtec 9"x72"x5.2mm</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2018422" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2018422" data-option="2018422" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021222.jpg" alt="2021222" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021222 — Rio Duvall 9" x 72"</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021222" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021222" data-option="2021222" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div><div class="option"><div class="option-controls"><label><input type="checkbox" class="option-checkbox" data-price="0"> Select Item</label><label>Qty <input type="number" min="1" value="1" class="option-qty"></label></div><div style="display: flex; flex-wrap: wrap; gap: 0.5rem;"><div style="text-align: center; width: 100%;"><img src="/images/2021000.jpg" alt="2021000" style="width: 100%; height: auto; max-height: 320px; object-fit: contain; background-color: rgb(255, 255, 255); border-radius: 6px;"></div></div><div class="option-details">
+  <strong>2021000 — Emerald Hollow 9"x72"</strong>
+  <em></em>
+  <div class="bottom-section">
+    <span><strong>Price:</strong> TBD</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="comment-2021000" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="comment-2021000" data-option="2021000" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+</div></div></div></details></details></div>
+<script>
+  function formatPrice(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? null : '$' + num.toLocaleString();
+  }
+
+  function parsePrice(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? 0 : num;
+  }
+
+
+
+
+
+function updateTotal() {
+  let total = 0;
+  const optionCards = document.querySelectorAll('.option');
+
+  optionCards.forEach(card => {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    const qtyInput = card.querySelector('input[type="number"]');
+
+    if (checkbox && checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+      const qty = parseInt(qtyInput?.value || 1);
+      total += price * qty;
+    }
+  });
+
+  const totalEl = document.getElementById('total-bar');
+  if (totalEl) {
+    totalEl.textContent = `Your Total: $${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+  }
+}
+function toggleAllSelections(masterCheckbox) {
+  const allBoxes = document.querySelectorAll('.option input[type="checkbox"]');
+  allBoxes.forEach(box => {
+    box.checked = masterCheckbox.checked;
+  });
+  updateTotal();
+}
+
+
+  function expandAll() {
+    document.querySelectorAll("details").forEach(el => el.open = true);
+  }
+
+  function collapseAll() {
+    document.querySelectorAll("details").forEach(el => el.open = false);
+  }
+
+function printFull() {
+  const win = window.open('', '_blank');
+ win.document.write('<html><head><title>Full Lookbook</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:40px;height:40px;float:left;margin:0 1rem 0 0;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<h2>KB Home Lookbook</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    win.document.write(`<h3>${catTitle}</h3>`);
+
+    const options = cat.querySelectorAll(".option");
+
+    options.forEach(opt => {
+const img = opt.querySelector("img").outerHTML;
+const detailsClone = opt.querySelector(".option-details").cloneNode(true);
+const commentBox = detailsClone.querySelector("textarea");
+if (commentBox) commentBox.remove(); // Remove the textarea from the visual content
+
+const commentInput = opt.querySelector("textarea");
+const commentText = commentInput?.value?.trim();
+const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${commentHTML}</div></div>`;
+
+
+    });
+
+    win.document.write("<hr/>");
+  });
+
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+
+function printSelected() {
+  const win = window.open('', '_blank');
+  let total = 0;
+
+  win.document.write('<html><head><title>Selected Options</title>' +
+    '<style>' +
+    'body { font-family: Segoe UI; padding: 2rem; }' +
+    'h2 { color: #222; }' +
+    'h3 { background: #f0f0f0; padding: 0.75rem 1rem; border-left: 6px solid #FFC527; margin-top: 2rem; }' +
+    'img.thumbnail { width: 100px; height: auto; max-height: 150px; object-fit: contain; border-radius: 4px; margin-right: 1rem; }' +
+    '.option { display: flex; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; gap: 1rem; }' +
+    '.option-content { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; gap: 2rem; }' +
+    '.details { flex-grow: 1; max-width: 100%; }' +
+    '.qty-price { text-align: right; min-width: 100px; white-space: nowrap; }' +
+    '.comment { margin-top: 0.5rem; font-style: italic; color: #555; }' +
+    '</style></head><body>'
+  );
+
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<h2>KB Home Selected Options</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    let catHasSelections = false;
+    let catContent = "<h3>" + catTitle + "</h3>";
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const originalImg = opt.querySelector("img");
+        let imgHTML = "";
+        if (originalImg) {
+          imgHTML = '<img class="thumbnail" src="' + originalImg.src + '" alt="' + (originalImg.alt || "") + '">';
+        }
+
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? '<div class="comment">Comment: ' + commentText + '</div>' : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+        total += price * qty;
+
+        catContent += '<div class="option">' +
+          imgHTML +
+          '<div class="option-content">' +
+          '<div class="details">' + details.innerHTML + commentHTML + '</div>' +
+          '<div class="qty-price"><div><strong>Qty:</strong> ' + qty + '</div>' +
+          '<div><strong>Price:</strong> $' + (price * qty).toFixed(2) + '</div></div>' +
+          '</div></div>';
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) {
+      win.document.write(catContent + "<hr/>");
+    }
+  });
+
+  win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+
+
+function printSelectedNoTotal() {
+  const win = window.open('', '_blank');
+
+  win.document.write('<html><head><title>Selected Options</title><style>body{font-family:Segoe UI;padding:2rem;}h2,h3{color:#222;}img{width:50px;height:50px;margin-right:0.5rem;}div.option{margin-bottom:1rem;border-bottom:1px solid #ccc;padding-bottom:1rem;display:flex;align-items:center;}em{font-style:italic;}hr{border:none;border-top:1px solid #ccc;margin:1rem 0;}</style></head><body>');
+  win.document.write('<img src="/kb logo.png" style="max-width:120px;"><br><br>');
+  win.document.write('<h2>KB Home Selected Options</h2>');
+  win.document.write(document.getElementById("house-info").innerHTML);
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary").textContent;
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img").outerHTML;
+        const details = opt.querySelector(".option-details").cloneNode(true);
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const liveTextarea = opt.querySelector("textarea");
+        const commentText = liveTextarea?.value?.trim();
+        const commentHTML = commentText ? `<div style="margin-top: 0.5rem;"><strong>Comment:</strong> ${commentText}</div>` : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+
+        catContent += `<div class="option">${img}<div>${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) {
+      win.document.write(catContent + "<hr/>");
+    }
+  });
+
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+
+  const base64 = `UEsDBBQABgAIAAAAIQCsAajdlQEAAKkGAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAIooAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADEVctOwzAQvCPxD5GvqHHhgBBq2gOPI1Rq+QATbxKriW15F9r+PWu3RQiVVlErccnD9s7MzmrXo8mqa7NPCGicLcR1PhQZ2NJpY+tCvM2fB3ciQ1JWq9ZZKMQaUEzGlxej+doDZhxtsRANkb+XEssGOoW582B5p3KhU8S/oZZelQtVg7wZDm9l6SyBpQFFDDEePUKlPlrKnla8vFHybqzIHjbnIlUhlPetKRWxUPlp9S+SgasqU4J25UfH0Dn6AEpjA0Bdm/tgmDHMgIgTQyH3cnpb/+I0XdQc1/dHBGixn8ytDzlHplSwMR6v2Kw/GOLO3z5s4165gMFoyKYq0Ivq2C25auXShcW7c4v8MEhfM5OpeaeM3ek+wJ8Oo0yv6zMLifkl4J46bv5JB3F3gEzP061IMEcSR1q3gOcufwI9xtyoAHpG3Hf12QX8xD6iQwe1jBLk9uN037dAh3h5CE2D88hzLkB/93cjIkYPPANBIAPfQ2Jfs30z8pA8udwQp7AG3Zc76h2ePV2ZLprxFwAAAP//AwBQSwMEFAAGAAgAAAAhALHLMA3/AAAA3wIAAAsACAJfcmVscy8ucmVscyCiBAIooAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACsks9KxDAQh++C7xDmvp3uKiKy7V4WYW8i9QHGZPqHtpmQRO2+vfEgWlirwh4zk/zmm49sd9M4qFf2oRNbwDrLQbHVYjrbFPBU3a9uQYVI1tAglgs4coBdeXmxfeSBYnoU2s4FlVJsKKCN0d0hBt3ySCETxzZ1avEjxXT0DTrSPTWMmzy/Qf89A8pZpjqYAvzBXIGqji5N/j1b6rrTvBf9MrKNJ0YgT5GtYbNyPrH52KVtVEW+4ViAEf2QygHJuSxhA54m2vyd6OdtceRIhiKhFs/LPB83loDW51Q0l/hlZxrwTXz/LNIvsVyfSU4y8w87+ScSzr5l+Q4AAP//AwBQSwMEFAAGAAgAAAAhADl9KFV8AwAAxAgAAA8AAAB4bC93b3JrYm9vay54bWykVm1vozgQ/n7S/QfO2q8UTIAkqGRFQtBValdVm21vpUqVA07xFjBrTEO12v9+Ywg02ZxWuW6U2Hg8fubtGZPzj02eaS9UVIwXPsJnJtJoEfOEFU8++ryK9AnSKkmKhGS8oD56pRX6OPvzj/MtF89rzp81ACgqH6VSlp5hVHFKc1Kd8ZIWsLPhIicSluLJqEpBSVKllMo8MyzTdI2csAJ1CJ44BYNvNiymIY/rnBayAxE0IxLcr1JWVj1aHp8ClxPxXJd6zPMSINYsY/K1BUVaHnsXTwUXZJ1B2A12tEbA14UfNmGwekuwdWQqZ7HgFd/IM4A2OqeP4semgfFBCprjHJyGZBuCvjBVw8Er4b7TK3fAct/AsPnbaBio1XLFg+S9E80ZfLPQ7HzDMnrXUVcjZfmJ5KpSGdIyUsllwiRNfDSGJd/SN4GNNFGX85plsGtNxiMTGbOBztdCS+iG1JlcAZF7eOgMy7YsV2kCMYJMUlEQSRe8kMDDXVy/y7kWe5FyYLh2Q7/VTFBoLOAXxAojiT2yrq6JTLVaZD5aeA+fKwj/4auAEw8h3xYZhwZ72GMmOW6D/8FNEquADYi486p7/jl6cE54Pf+updDg+SK8hBrckheoCNQ92TXsBaR88vg9DGwrGrlLfb4czXU7CCb6ZGlOddfBU3ccRGM3Gv+AKITrxZzUMt1VWWH6yIaSHm1dkabfwaZXs+TN/ndz99HV/NPQ7/1Qkar77I7RbfXGB7XUmntWJHzrI91yRhbE8zoIsFpu2+17lsgUKOXY9iD7m7KnFHzGjjUGIYkle6ErsgaJCsJSnvrowMOw8zCCj66GAw+NPRfbmxRcbWetaNnf34xaTkq4uNVdq3IOxoSnLImLBKtI98/cKi24zgZteB60rZYBvSloDVbQRHUaGN5b7cw/NlmRn10LVsjHFZMZvCyg+2KStTY6T2advb8+YO8DHp0beyjAr0MLcDKGjlRTe3iKTWuqPKKNvKxkO0MzMEjh3JnMzdHU0u0IR7qNp6Y+n7u27oTRyBnjcLF0IsUp9bbyGoW4eeclNDHa05TIGhpU9Wa79tQY7aSDcNMJdvk56D3vJlSh7E7/SvEW3sYZPVE5ujtRcfHpanV1ou7lcvV4H52qHFzNw+B0/eDmJviyWv7TmzD+M6EG1BwI0lfe6P+AzP4FAAD//wMAUEsDBBQABgAIAAAAIQBKqaZh+gAAAEcDAAAaAAgBeGwvX3JlbHMvd29ya2Jvb2sueG1sLnJlbHMgogQBKKAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8ks1qxDAMhO+FvoPRvXGS/lDKOnsphb222wcwsRKHTWxjqT95+5qU7jawpJfQoyQ08zHMZvs59OIdI3XeKSiyHAS62pvOtQpe909X9yCItTO69w4VjEiwrS4vNs/Ya05PZLtAIqk4UmCZw4OUVFscNGU+oEuXxsdBcxpjK4OuD7pFWeb5nYy/NaCaaYqdURB35hrEfgzJ+W9t3zRdjY++fhvQ8RkLyYkLk6COLbKCafxeFlkCBXmeoVyT4cPHA1lEPnEcVySnS7kEU/wzzGIyt2vCkNURzQvHVD46pTNbLyVzsyoMj33q+rErNM0/9nJW/+oLAAD//wMAUEsDBBQABgAIAAAAIQDJbVl15SAAACEJAQAYAAAAeGwvd29ya3NoZWV0cy9zaGVldDEueG1snJNbb9owFMffJ+07WH4HJ1wyiAhVu6pdJR6qaZdn45wQC18y2yGgad99x6FAJV5Qo8ROfPmd/3H+Z3G314rswHlpTUHTYUIJGGFLaTYF/fnjaTCjxAduSq6sgYIewNO75edPi866ra8BAkGC8QWtQ2hyxryoQXM/tA0YnKms0zzgp9sw3zjgZb9JKzZKkoxpLg09EnJ3C8NWlRTwaEWrwYQjxIHiAfX7Wjb+RNPiFpzmbts2A2F1g4i1VDIceiglWuQvG2MdXyvMe59OuCB7h/cIn/EpTD9+FUlL4ay3VRgimR01X6c/Z3PGxZl0nf9NmHTCHOxk/IEX1OhjktLpmTW6wMYfhGVnWDwul7eyLOjf5O0aYJ/GJrk0p7l/dLnoffLqlgvbBiUNvDriW40/7PAAynYFTShbLth5WSnREfEUiIOqoPdpfv88z+KafskvCZ1/9058bbtnJ8sVstG+aPxgmxVU4SsohfvH6Pxo8rW127j5BcUnURcoENFuhGO3g+Pyh2yChfKnD43vGBsHzvri/pPW90Ke+urAzEqoeKvCd9t9A7mpA5bilJK3zFewA4VTOIjnGI2Yl4dH8AIrADUNR9MYSViF+WFLtIyljA7me+yz8QyPv5NlqAs6Hs6m00k2+4J00fpg9e/jRNqL7Rn/AQAA//8AAAD//7Td2W5c17WF4Vcx9ACx2coKbAObu+/79k6QidhAYh9YspO8fVYV94lqrX9UkEDcVzY+T04CmoNlsoaq+N3Hn56fPwXvP73/4bvffv37V799/+bmzVcf/+/9Lx/Nv/357u7NVz99Mv92++arD79//PTr35Lnn/9yljdf/ePm/v2HP//4z+D544fnX8zUN3+6fXjzw3cfTlu80xrzgeYf5r98NPzHD9989/UfP3z39Yd95Gkf+ebN17v4kAASQiJIDEkgKSSD5JACUkIqSA1pIC2kg/SQATJCJsgMWSArZIN4/3/lzyf0eFWPZ/V4V4+H9XhZzzrt1yay/86tieh/l9tff//0159/eS6e/3j+6znu/zHIT6e93795d5HjGzvH/svEzec/hAASQiJIDEkgKSSD5JACUkIqSA1pIC2kg/SQATJCJsgMWSArZIN4Hmm/8sUNPZ7V4109HtbjZT3rtFZqzQPsIak97bVTe+uk9mXiMrWQEBJBYkgCSSEZJIcUkBJSQWpIA2khHaSHDJARMkFmyAJZIRvE80hPJJ8UkHhYj5f1rNNaqb0/KLWnvXZq75zUvkxcphYSQiJIDEkgKSSD5JACUkIqSA1pIC2kg/SQATJCJsgMWSArZIN4HumJ5JMCEg/r8bKedVortQ8Hpfa0107tvZPal4nL1EJCSASJIQkkhWSQHFJASkgFqSENpIV0kB4yQEbIBJkhC2SFbBDPIz2RfFJA4mE9XtazTmul9vGg1J722ql9cFL7MnGZWkgIiSAxJIGkkAySQwpICakgNaSBtJAO0kMGyAiZIDNkgayQDeJ5pCeSTwpIPKzHy3rWaa3Uvj0otae9dmofndS+TFymFhJCIkgMSSApJIPkkAJSQipIDWkgLaSD9JABMkImyAxZICtkg3ge6YnkkwISD+vxsp51Wiu13x6U2tNeO7VvndS+TFymFhJCIkgMSSApJIPkkAJSQipIDWkgLaSD9JABMkImyAxZICtkg3ge6YnkkwISD+vxsp51Wiu15rmpQ55DOO21U/utk9qXicvUQkJIBIkhCSSFZJAcUkBKSAWpIQ2khXSQHjJARsgEmSELZIVsEM8jPZF8UkDiYT1e1rNOa6XWpOaY2J4X27l95+R2H7kMLikkRaSYlJBSUkbKSQWpJFWkmtSQWlJH6kkDaSRNpJm0kFbSRjL9wylE5kl8q4Cg+WIuECZObkoI7rOPbsf61JL8V/3Z/9hDnKo0t4hwGjV/n7n44whIISkixaSElJIyUk4qSCWpItWkhtSSOlJPGkgjaSLNpIW0kjaSyTW7tidh4uCmWuPHipObXHPOPrqd61NpckiuX9oY8z+YfxfFN27Dduqf7S/zgBSSIlJMSkgpKSPlpIJUkipSTWpILakj9aSBNJIm0kxaSCtpI5lci+pNmC9MXNx0xtwnbm5a48s5O9enduSQXL/ULlau3Q7uBtVMQApJESkmJaSUlJFyUkEqSRWpJjWkltSRetJAGkkTaSYtpJW0kUyuRTknzBcmLm5yzX3i5ibXl3N2rk/9ySG5filmrFy7Ld0NypuAFJIiUkxKSCkpI+WkglSSKlJNakgtqSP1pIE0kibSTFpIK2kjmVyL+k6YL0xc3OSa+8TNTa4v5+xcnxqWQ3L9Ut1YuXZ7vBvUOwEpJEWkmJSQUlJGykkFqSRVpJrUkFpSR+pJA2kkTaSZtJBW0kYyuRYFnzBfmLi4yTX3iZubXF/O2bk+dTCH5Pql3LFy7TZ9NyiAAlJIikgxKSGlpIyUkwpSSapINakhtaSO1JMG0kiaSDNpIa2kjWRyLSpAYb4wcXGTa+4TNze5vpyzc31qaV5yffuf/z7x//p8yEv9Y+Xa7QJvUBEFpJAUkWJSQkpJGSknFaSSVJFqUkNqSR2pJw2kkTSRZtJCWkkbyeRalITCfGHi4ibX3CdubnJ9OWfn+tTjHJLrl4LIyrXbFt6gRApIISkixaSElJIyUk4qSCWpItWkhtSSOlJPGkgjaSLNpIW0kjaSybWoEYX5wsTFTa65T9zc5Ppyzs71qek5JNcvFZKVa7dPvEHNFJBCUkSKSQkpJWWknFSQSlJFqkkNqSV1pJ40kEbSRJpJC2klbSSTa1E0CvOFiYubXHOfuLnJ9eWclevbz3Xj634fcl7svEDE7Rv3mctehhSSIlJMSkgpKSPlpIJUkipSTWpILakj9aSBNJIm0kxaSCtpI5lXjoi+UZgvLBAmTm5ePiL6RsvsXH/uG1851+wbb92+8RYVUkAKSREpJiWklJSRclJBKkkVqSY1pJbUkXrSQBpJE2kmLaSVtJFMrkXfKMwXJi5uXhXFfeLm5nVRl3N2rj/3ja+ca/aNt3hFH/vGW1BIikgxKSGlpIyUkwpSSapINakhtaSO1JMG0kiaSDNpIa2kjWRyrV7qR/PFXCBMnNw8XnOffXQ715/7xlfONfvGW7dvvGXfSApJESkmJaSUlJFyUkEqSRWpJjWkltSRetJAGkkTaSYtpJW0kUyuRd8ozBcWCBMnN7nm57CPbuf6c9/4yrlm33jr9o237BtJISkixaSElJIyUk4qSCWpItWkhtSSOlJPGkgjaSLNpIW0kjaSybXoG4X5wgJh4uQm1/wc9tHtXH/uG1851+wbb92+0byfhvv3nkghKSLFpISUkjJSTipIJaki1aSG1JI6Uk8aSCNpIs2khbSSNpLJtegbhfnCAmHi5CbX/Bz20e1cf+4bXznX7Btv3b7xln0jKSRFpJiUkFJSRspJBakkVaSa1JBaUkfqSQNpJE2kmbSQVtJGMrkWfaMwX1ggTJzc5Jqfwz66neuj+sZb9o23bt+4z1jP86FpCjkVkWJSQkpJGSknFaSSVJFqUkNqSR2pJw2kkTSRZtJCWkkbyeRa9I3CfGGBMHFyk2t+Dvvodq6P6htv2Tfeun3jPmPlGk1TyKmIFJMSUkrKSDmpIJWkilSTGlJL6kg9aSCNpIk0kxbSStpIJteibxTmCwuEiZObXPNz2Ee3c31U33jLvvHW7Rv3GSvXaJpCTkWkmJSQUlJGykkFqSRVpJrUkFpSR+pJA2kkTaSZtJBW0kYyuRZ9ozBfWCBMnNzkmp/DPrqV67uj+sbzYuetvdy+cZ+5zDUpJEWkmJSQUlJGykkFqSRVpJrUkFpSR+pJA2kkTaSZtJBW0kYy7/kl+kZhvrBAmDi5eeMv0TdaZuf6qL7xjn3jnds37jNWrtE0hZyKSDEpIaWkjJSTClJJqkg1qSG1pI7UkwbSSJpIM2khraSNZHIt+kZhvrBAmDi5ybV4faNldq6P6hvv2DfeuX3jPmPlmn0jpyJSTEpIKSkj5aSCVJIqUk1qSC2pI/WkgTSSJtJMWkgraSOZXIu+UZgvLBAWChM3N+/UePX1jae3cD7k7/OdFztv1oj3GGXfuH/YRdRDUkSKSQkpJWWknFSQSlJFqkkNqSV1pJ40kEbSRJpJC2klbSSTa9E3CvOFBcLEyc3jtegbLbMfr4/qG+/YN965feM+Yz1eo1UKORWRYlJCSkkZKScVpJJUkWpSQ2pJHaknDaSRNJFm0kJaSRvJ5Fr0jcJ8YYEwcXKTa9E3Wmbn+qi+8Y59453bN+4zVq7RKoWcikgxKSGlpIyUkwpSSapINakhtaSO1JMG0kiaSDNpIa2kjWRyLfpGYb6wQJg4ucm16Bsts3N9VN94x77xzu0b9xkr12iVQk5FpJiUkFJSRspJBakkVaSa1JBaUkfqSQNpJE2kmbSQVtJGMrkWfaMwX1ggTJzc5Fr0jZbZuT6qb7xj33jn9o37jJVr9o2cikgxKSGlpIyUkwpSSapINakhtaSO1JMG0kiaSDNpIa2kjWRyLfpGYb6wQFgoTNzc/Nx49fWNd0f1jefFzs+Nbt+4z1i5Zt/IqYgUkxJSSspIOakglaSKVJMaUkvqSD1pII2kiTSTFtJK2kgm16JvFOYLC4SFwsTNTa6vvr7x7qi+8bzYybXbN+4zVq7ZN3IqIsWkhJSSMlJOKkglqSLVpIbUkjpSTxpII2kizaSFtJI2ksm16BuF+cICYaEwcXOT66uvb7w/qm88L3Zy7faN+8xlrkkhKSLFpISUkjJSTipIJaki1aSG1JI6Uk8aSCNpIs2khbSSNpL5bS2ibxTmCwuEiZObX9ki+kbLrO+v74/qG8+LnV/b4vaN+4yVa/aNnIpIMSkhpaSMlJMKUkmqSDWpIbWkjtSTBtJImkgzaSGtpI1kci36RmG+sEBYKEzc3Pwuoquvb7w/qm88L3Zy7faN+4yVa/aNnIpIMSkhpaSMlJMKUkmqSDWpIbWkjtSTBtJImkgzaSGtpI1kci36RmG+sEBYKEzc3OT6at94f1TfeF7s5NrtG/cZK9dolUJORaSYlJBSUkbKSQWpJFWkmtSQWlJH6kkDaSRNpJm0kFbSRjK5Fn2jMF9YIEyc3HwfIvpGy+zvQ47qG+/ZN97jtx7y9Y37h1326KSIFJMSUkrKSDmpIJWkilSTGlJL6kg9aSCNpIk0kxbSStpIJteibxTmCwuEhcLEzc3j9dX3U70/qm88L3Yer92+cZ+xHq/ZN3IqIsWkhJSSMlJOKkglqSLVpIbUkjpSTxpII2kizaSFtJI2ksm16BuF+cICYaEwcXOT66vvp3p/VN94Xuzk2u0b9xkr1+wbORWRYlJCSkkZKScVpJJUkWpSQ2pJHaknDaSRNJFm0kJaSRvJ5Fr0jcJ8YYGwUJi4ucn11fdTvT+qbzwvdnLt9o37jJVr9o2cikgxKSGlpIyUkwpSSapINakhtaSO1JMG0kiaSDNpIa2kjWRyLfpGYb6wQFgoTNzc5Ppq33h/VN94Xuzk2u0b9xkr1+wbORWRYlJCSkkZKScVpJJUkWpSQ2pJHaknDaSRNJFm0kJaSRvJ5Fr0jcJ8YYGwUJi4ucn11b7x/qi+8bzYybXbN+4zVq7ZN3IqIsWkhJSSMlJOKkglqSLVpIbUkjpSTxpII2kizaSFtJI2ksm16BuF+cICYaEwcXOT66t948NRfeN5sZNrt2/cZy5zTQpJESkmJaSUlJFyUkEqSRWpJjWkltSRetJAGkkTaSYtpJW0kTxP2JMwX1ggTJzcEzf37KNbz/M9HNU3nhfbuX5w+8Z9xso1+0ZORaSYlJBSUkbKSQWpJFWkmtSQWlJH6kkDaSRNpJm0kFbSRjK5Fn2jMF9YICwUJm5ucn21b3w4qm88L3Zy7faN+4yVa/aNnIpIMSkhpaSMlJMKUkmqSDWpIbWkjtSTBtJImkgzaSGtpI1kci36RmG+sEBYKEzc3OT6at/4cFTfeF7s5NrtG/cZK9fsGzkVkWJSQkpJGSknFaSSVJFqUkNqSR2pJw2kkTSRZtJCWkkbyeRa9I3CfGGBsFCYuLnJ9eXntb8POapvfGDf+OD2jfuMlWu+vpFTESkmJaSUlJFyUkEqSRWpJjWkltSRetJAGkkTaSYtpJW0kUyuRd8ozBcWCAuFiZubXF/tGx+O6hvPi53Ha7dv3GesXLNv5FREikkJKSVlpJxUkEpSRapJDakldaSeNJBG0kSaSQtpJW0kk2vRNwrzhQXCQmHi5ibXV/vGh6P6xvNiJ9du37jPWLlm38ipiBSTElJKykg5qSCVpIpUkxpSS+pIPWkgjaSJNJMW0kraSCbXom8U5gsLhIXCxM1Nrq/2jQ9H9Y3nxU6u3b5xn7Fyzb6RUxEpJiWklJSRclJBKkkVqSY1pJbUkXrSQBpJE2kmLaSVtJFMrkXfKMwXFggLhYmbm1xf7Rsfjuobz4udXLt94z5j5Zp9I6ciUkxKSCkpI+WkglSSKlJNakgtqSP1pIE0kibSTFpIK2kjmVyLvlGYLywQFgoTNze5vto3PhzVN54XO7l2+8Z9xso1+0ZORaSYlJBSUkbKSQWpJFWkmtSQWlJH6kkDaSRNpJm0kFbSRjK5Fn2jMF9YICwUJm5ucn21b3w8qm88L3Zy7faN+8xlrkkhKSLFpISUkjJSTipIJaki1aSG1JI6Uk8aSCNpIs2khbSSNpLnCXsS5gsLhImTe+Lmnn1063m+x6P6xvNiO9ePbt+4z1i5Zt/IqYgUkxJSSspIOakglaSKVJMaUkvqSD1pII2kiTSTFtJK2kgm16JvFOYLC4SFwsTNTa6v9o2PR/WN58VOrt2+cZ+xcs2+kVMRKSYlpJSUkXJSQSpJFakmNaSW1JF60kAaSRNpJi2klbSRTK5F3yjMFxYIC4WJm5tcX+0bH4/qG8+LnVy7feM+Y+WafSOnIlJMSkgpKSPlpIJUkipSTWpILakj9aSBNJIm0kxaSCtpI5lci75RmC8sEBYKEzc3ub7aNz4e1TeeFzu5dvvGfcbKNftGTkWkmJSQUlJGykkFqSRVpJrUkFpSR+pJA2kkTaSZtJBW0kYyuRZ9ozBfWCAsFCZubnJ9tW98PKpvPC92cu32jfuMlWv2jZyKSDEpIaWkjJSTClJJqkg1qSG1pI7UkwbSSJpIM2khraSNZHIt+kZhvrBAWChM3Nzk+mrf+HhU33he7OTa7Rv3GSvX7Bs5FZFiUkJKSRkpJxWkklSRalJDakkdqScNpJE0kWbSQlpJG8nkWvSNwnxhgbBQmLi5yfXVvvHxqL7xvNjJtds37jNWrtk3cioixaSElJIyUk4qSCWpItWkhtSSOlJPGkgjaSLNpIW0kjaSybXoG4X5wgJhoTBxc5Prq33j41F943mxk2u3b9xnrFyzb+RURIpJCSklZaScVJBKUkWqSQ2pJXWknjSQRtJEmkkLaSVtJJNr0TcK84UFwkJh4uYm11f7xsej+sbzYifXbt+4z1i5Zt/IqYgUkxJSSspIOakglaSKVJMaUkvqSD1pII2kiTSTFtJK2kgm16JvFOYLC4SFwsTNTa6v9o1vj+obz4udXLt94z5zmWtSSIpIMSkhpaSMlJMKUkmqSDWpIbWkjtSTBtJImkgzaSGtpI3kecKehPnCAmHi5J64uWcf3eob3x7VN54X27l+6/aN+4yVa/aNnIpIMSkhpaSMlJMKUkmqSDWpIbWkjtSTBtJImkgzaSGtpI1kci36RmG+sEBYKEzc3OT6at/49qi+8bzYybXbN+4zVq7ZN3IqIsWkhJSSMlJOKkglqSLVpIbUkjpSTxpII2kizaSFtJI2ksm16BuF+cICYaEwcXOT66t941vVN5rvTX76+ccfn3/5/o35gvjw+8dPv/4tef75Lz99OsM/bu7ff/jzj/8Mnj9+eP7F2Dd/un148/UP3/3269+/+u37N29V1/OlO9Xz7F+6Uz3H+aU71fNLX7pT/Wz/pTvVz1VfuPNb9T3tl+40ATzF7kvXmC+A11hjvlpeY435AnmNNeZr4jXWmC+D11hjkv8aa0zYX2ONyfcrrHl3yt2Xx+/d66T43euk+N3rpPjd66T43euk+N0Xpvjrjz89P38K3n96/8O/AAAA//8AAAD//6yb3XLbNhCFX4XVRX8uUom/ktM4M7ZsJZ06Y0/tia8ZCZY4oQkNRMVxO32ePkhfrGcpUiLtxRrMpBepTSjl0Qdg92AXfXOvzFJNVZ5vvLneFuXxYBwM3r7ZP/aMujsenPivT975g+GzgdMAAwE3EGIg5AYiDETcQIyBmBtIMJBwA2MMjLmBCQYm3MARBo64AX9E33DEDlVfnv32Pn19n/3+PgHwWQI+IfBZBj5B8FkKPmHwWQ4+gfBZEj6h8FkWPsHwWRoB0QhYGgHRCPi1UC0GlkZANAKWRkA0ApZGQDQClkZANAKWRkA0ApZGQDQClkZANAKWRkg0QpZGSDRClkZINEJ+b1Sbg6UREo2QpRESjZClERKNkKUREo2QpRESjZClERKNkKUREY2IpRERjYilERGNiKUREY2IjxVVsGBpREQjYmlERCNiaUREI2JpREQjYmlERCNiacREI2ZpxEQjZmnERCNmacREI2ZpxEQj5mNnFTxZGjHRiFkaMdGIWRox0YhZGjHRiFkaCdFIWBoJ0UhYGgnRSFgaCdFIWBoJ0UhYGgnRSFgaY5IxZmWMSQayH5PlkioFsQwTYpiwDBNimLAME2KYsAzHxHBcMRwesvPbN6vHtTJ5VnzetH7epefTYODlep6WmS6OBz9dr5Qqg59+OEEi8RbZZp2nj8eD86+lMpk23iz97990obwfl+Vv3v7pqcnmnwfeV/N6my2OB3+P6n9e4d8R/TE6/NGM/UOs9rpqLSGvBQHZWctU59psXMX4OzmsmMgi5ogTc7kmgJsdmJkq5lmxdBURCCIwC9zsIG0wRDoi3m1LTJoziVAQkVhEYLqeL5GOiIu0WGzm6boHjUgQgnXA0mDXakfIFS1wr37kOjGxIGVikdJeHe9Sky7rzVL/fKa1+Xnzi6uCRFCAN3EwkCgPs2JXULNwFTIWhMD68kra08Io6TkbE0kC9gMLA9O0X6JTbNDSbOe0U4d/an3v4ckX7JHDzr1Wc10sUvPonablyuAzmKz2x1x5HUliLSEX+b6X2MtypYz39Iu4KjyRFFoCcdyeUQect1mx0A/fwu9UUmeJzPAVB34n63WepcVc1TH5LNusHtINiDmHxKmkwRKYYSrsGv5Mi6Vyfv2Z9HpLSIZjsL/+vdYL57efS2+3xGF4I/vbP2Rzox/SL+4AZpIES/wdi/zVncmWyqSlu0WoHcKItQg4AbNhZ4zp2Yedpyvxttcq9CWLgmM2/35pGZyZR/dN4EvmBEd59vUTyOK+/ivv+j41pfeUyO5pr93hS34lsATYSTs1TtNPWaHKOjzcrnSuvPd6u1FeM+IYSX3JsaBuwSPqJKaOlD+ycr5SRSODbLZJXfetL3kWVEpYMUft+ZpSKU+ZUq83w9N0/pmOAAibNadG3E0GXK2PejB6yJmHj7vCkxwOyje83s48Oum91nm28K635i6dfx/hkiNCcYk/VI26Kd6F9DuTFln5fTRLFooOWexBcNQOZvLquDIZNvij9/1pS34KRTmL8rYhkJW37d73Vy95LdQNefWoDR+i6M320/B6pR9g+LCIDdb8YlPtufNinuvN1jQbtPNFun/hyeddd6hkxVDZtIhv5+FvEl9FmP13dRUreTY6NLMrHOXvA+mrfHuPzLBsDou7I30T966piOIqRnJwqO7yYiip7pOnLGaWbufIYK5yJEsXWvIUktuLcpolh+pQLz2Sv0MZm8fTOSTxeJ4f4rw+01Y7Ht7xoYZu0dUuhvC6Duc1OlT2kiSZQNTuLZLapzUXSf3mL5CsIboGFlFt4+Mi6kbDajgv8kDyhehX8KI6pzbLotrF0p6IJGuIFgmvZvzyvCGienU66KlI8oe019kAOXl5cUPRLiHtZLkGpUDyf2gH8XqO2tmFn6/90172OZBcHVXWWDxH7TV9nqt5iYJ4mnczSPs5FW4co3YgeTZ0vlhFQcdnWhU1Vf3Lbdlni0leLLJVzUftKbMp+p1OHtRn6KlI8lfo81kYuczaBcpXH3Veoo7rOmGSX0JnkRdDLvBZLX2453GRLVfNUfXJQ1dZkjNCV5OXxfYZeFkfs80Wa36q7+80zvhdle71/0AyTWix8jrRbXTFt+9a7Zi64pPME9q7vCx0H11lPcHXVdkDn2Sq0Gu26HRffaJO16hfJ2neYpHD48Js0CkvNoCcFmP7UFRNuzvQULJeaMPzUiedaFfHWTepatG0HfoqFfuItkwxaZ/uZahTlaGHvITNL5wnWrJjuI7A0ztqb5sb1BRQCzNrVZTmcXiVZkVZnWRnWYGa/u54to829GnHLR1K5ow6Hewi7OR6J20fMpzXnbsOoWTQcBWDVQXK7VqBC7GK4xC14Ic0z12JSWYNd0Es2uS9QB3RnXN8n5rFQ2qa2wU03V416ipPMm+UIfhOOtc8PmzVl+V5jW5XmZKjox4WK5MKyYJBsMpsPF4vkJLDwxUdi0I5B9sUzgxuS6z6TbTk93BPiNdHtapvILgPLb0ISiYQ15UsCtsVv+ex2Eawo7D3apR8IfkXdjXS2XXPsu7y3hiVlveI0k1LhdqNw5Mclr7A7YsvyrulJ94pkohzHzKU7CAd21l5nTsQHy69WY4gQ6mrurdUJZPSe+VNt6V3heqC68aVPCCujPFayHTtUdm14IIKgVILVzGS0UtseaLTIreLudB67aijTqK8lcPdNh4KbQE7lKr0WzUL89ybaXOflq5qJLdGzXF2ueDG3MtqLhfoH2V/KZTh07XyrrSZqxxmxFWZ5M5wm49VFo3aMfXZfNWcKmUkaniR4kZ+T2KSQyMw/B2jdjay6eq7pCPx6pfthg81Ce1L6bxYosurjFpU0cd1siQThmueFijtoPgMyseseMy9qzwtXK9KRm27NWzf4VyjHPEBc53hxmGu7vB/Xox+xVbD5YZV8zP6t9VT0Pmky1LfN7+tFC5wGvoNc3inNaLO7hfcx6T/7rUqt2sP4RKRvL4VusaB3qQZNuEKz//SGMjP1tnxoPKduEFVUrnr8MS8pmug5vdFdVd298JZ9SYvzbNlcZuVq1o+Xk0XQYcP2nxGl1mVb/8HAAD//wMAUEsDBBQABgAIAAAAIQBlseGuhRkAAICfAAAYAAAAeGwvd29ya3NoZWV0cy9zaGVldDIueG1snFTbbtswDH0fsH8w9B7bcuzcELcYVnQr0Idi3eVZkelYqG15ktIkG/bvo+RLOhRIvAaJKdvk4SF5mPX1oSq9Z1BayDol1A+JBzWXmai3Kfn29XayIJ42rM5YKWtIyRE0ub56/269l+pJFwDGQ4Rap6QwplkFgeYFVEz7soEa3+RSVczgrdoGulHAMhdUlUEUhrOgYqImLcJKjcGQeS443Ei+q6A2LYiCkhnkrwvR6B6t4mPgKqaeds2Ey6pBiI0ohTk6UOJVfHW3raVimxLrPtCYce+g8Bvhb9qncc9fZaoEV1LL3PiIHLScX5e/DJYB4wPS6/pHwdA4UPAs7ABPUNHbKNFkwIpOYNM3gs0GMNsutdqJLCW/w+4zQUvtJZyE1F5efP6Qq3UmcMK2Kk9BnpIPdPWwSEhwtXYC+i5gr1+cPV3I/SclsntRA6oRdWzY5hFK4AYwLSWeVexGyicbeoePQkzSsBq842ODc0cfpGlkcw+5+QhliTljDGPciGd4QMeUbKQxsrIObisMPsqV/AW14+WSWcIW9V/nFqRDncbYXP2zLcveYFHBUNXLc1/hrduiB+VlkLNdab7I/WcQ28KSTrC3Vpyr7HgDmuNWYGl+5FrFZYkQePUqYdcbVc0ObTNEZgrrSONwhs4e32ks7Uf7mFpKQxiydWFo9+17/FM4449tdP5oO3/qR4uEJpcSxV0g2i5wFD9k7/KhHfKNKGvWhaEdsiXzcEovtGPexaHt0839OQ2X0/n5PmLXHE+0/1PesgtD2+eL/ThK5otLTCluQTtwPHSx0fnZ0UEjdmM6NYyaAu1lYg+9Tkby7BVjN7BvDfEKkWXQyvaM2mivGnvogpf+Ikni2eLCQOzutP05SWfpj9EA7cVjDyOGGbhN/AsAAP//AAAA//+0ne1yG7uRhm/FpQuQNfyUUo6rIpEEMBxJewsur2vP/tgkFTvZzd2HQ3RLjX7mtIaKNn9y6qm3Qcy8bKDRM6K//Pztx49fu2+/vn398re//O+nv/3xqrv69POv3/788/Rff+g2V59++3X6r+56s7769P3vP3/95X/yj//+rzO8+vR/3erb9z/85z93P35+//Hnk/DmerG++vrl+zjQn8aRTrE3V5+F3IM8gOxA9iCpksXy6tPpM3+ePvAfX7eLL5//8fXL5+/yWRlRBaQHOYIMIE/y6Sv76cv2059t1OfTnX25vYup27u4Pt3oC+/uOFB7d0EeQHYge5AEkkEKSA9yBBlAnipZNPdy5e6ljWru5cl/flVvrrcX38txoPZegjyA7ED2IE8gz5Y0V3O6B7ia7fXlaTeO014MyAPIDmRvSTPR05Qw0dsx8ed+hU/rgSw2p689hlovru8udfB+HOiPV4vTV+V1RVi336OHqjHr0Q5kD3IASSDZkuZWnb6K/IZed6u75n/vuHG308vI6fovW0bux4H8jdu4G1c15sbtJ6Ju2qADgpIlzV062f3/c5dOU54YeXF9+W06j+Tv09bdJxHZGzUV5+8UwxJRJipEfYOam9xNbeyL6xOd+Y15zdpuXJFRI7zjtv7pPJK7rd2tu6/3ojL39YFoR7QnOhAlokxUiPoGtTd7amt65832+8IbRVddthcnX19Xwtv2i3rfydq+eCnNHgS1cXdt3E7jli9xe6IDUSLKRIXT6qemdesS6Mi4QZG5C7ddezWPOvbLxTxNRbm68nlK46q//xDN+Ta13wu/d75h5ig/pcdpGXsxs7uFm1XVvbry0AHtiPZEB6JElIkKUU90JBqIHomeiJ4F2dLx9YvR3nVfZrxx12U7tyPfuj3xfjwajWXW2qSQoNP/vbjl17Kdxm1NCkncKzpQlYgyUeG0ekV2WsggXM0gYUHUk0hORc7r9friPRymdakplk5f4PMh8x3HznGckzPWvjt3wfediKx9guwV37k1Y6dx1j6Js/YBJQZmosJp9YpORdLLXYZ9uJpBwk637/einkRyKste7XM183M4TGtfU5L+G/ZJmdhMC0ueiKx9gux9usUGJiJrH9ChA0pEmagoep1WryjMPlzNIGFh9tWoJvtgX9VMD9Pa1xTh/4Z94zg++2CfiKx9gprsg30isvYBHTqgRJSJiiJrn4wVZh+uZpCRwuyrUXH2Vc30MG1bqTnpnALiLW6sKOCSW7rvVWRcUtS45L50OxUZl4gORIkoExVOq5+all8jGTYIipJMJGGShcO0LjVnsLddki6i/Y7c+UJkrNhdIaLIfmnv3KFqpyLrkgxldjKqElEmKpxWPzUtuISrGSQsyiWRhLkUDtO61Bxv378Ujt2o0ZnGPnecuFeRTTKJa+xzR4ydxln7JM7aB5QYmIkKp9UrinYyhg2CwiSrs4yTrGpm7GTjY4HX7sTbSVYbsu6M5Xae+/OgJy/NGYtoR7QnOhAlokxUiHqiI9FA9Ej0RPQsaMYZa2zhX3LXpQNhc6O78VX6edD2kKXIJkd348t0VdnskE+02QGUGJiJCufVT80Li5t83muuDxIWLm41Kl7cqmZOoTB2Bl56d29nxyh35Vx3g0VMVHYRE2QTtrvBKiYq6xPQYXy0ME7iVZWIMlFRZAo6ReEqhssZJCxcxWpUvIpVzZxVbDyRX+DTKHd7TXeDik5U1idBbT6hpBOV9QnosABKRJmoKLI+TcwL+YTLGWSkMJ9qVJxPVTMnnz6oa7GQI3yzIHZINLYtNLAxsEOioSOx10C7ILJvQVUmKoqsgRPtFBjIvoWMFCZajYoTrWrmJNp4RLaJ9s6200IO8Xav7G5QreOo/6CBdq7dDcp19CT2GmgNZOeCqkxUFFkDZazo6MuwQVCYgXXkOAOrZk4GjofkjzBQjvFtSeJbFwsc9h8UtUuo712oyi6haFQcqEpEmahwXr2iIJeODBsEhRlYJx5nYNXMyMCl7128MwPP4/hapfM1parMHqioycDO15SqMgYSHYgSUSYqnFevKMpAhg2CogwUSZiB4TDteziXtTWWcsZvVsrO1yqqsj5JYOuTr1U00PrExgZViSgTFc6rVxQlGsMGQVGiiSRMtHCY1iff2IibhEt5Oat5+ognKaKyJ2OiHdGe6ECUiDJRIeqJjkQD0SPRE9GzoBkn46XvR7x3eZM3x9q08fvT+dPaI7OiNm38/qQqmzbyiabAoCoRZaLCefWKwuVNpmCOzBIWLm81Kl7eqmZGgbH0rY33GjjV8+h8hXj+NGegBLYlvq8QNdAayJ4HVYkoExXOq1cUrnvseUhYuO7VqHjdq5o5BcZ46p5/ll7WQ3rTEVzcuG3mXlTNuid9g9cm4Y6qPdGBKBFlokLUEx2JBqJHoieiZ0Fz1r3xDH3BXa9H7uaxfbf2fdilqGxVIMh+ERYLfwDWQJsdEmiXN6DEwExUOK9eUbPs+vdIjgwcBIX5UefZ5Id/8yIcpq0LfA/jjbpgqlWxQJ3NVsVSULOO4cGUqqxT6EscqEpEmagoMifd6Xm5b9CRgYOgcCuqU4+3oqqZsxX5ZsUbTk31JBbuYHO/ZE9CUfPdvXO1xk5V1ik0IA5UJaJMVDivfnpebmk+MnAQFOZUnXq851TNnD3HdyXecGqq+bDw7b8lmw+K2pxCcYdOw14D7eoHVaIqExXOq5+el1ujjgwcBIU5VecZ51TVzMip1WWvTpzlvsvgt5t7VZl9SlGzT/lHXjtVmZwiOhAlokxUOK9+al7dnXeKgYOgKKdEEuZUOEyzT60u6zOc5f6ZyML3GVRlnZJ2gc2pBZ4xaqB1in0GqhJRJiqcV6+ozXU4xVcoJDDKKZGEORUO0zp1WadhJa8pNEfbha+4VWWdksA2p9yyudNA6xTflaAqEWWiwnn1itr9E07JJMzhVgLDnJrxtkQ4TOvUZW9LrOQ83jTJF/4MqyrrlAS2OeWrdA20TrEJQVUiykSF8+oVtTnlLujIwEFQmFMz2hDhMK1Tvg0RVxQrOXg3ObX0tZ+qrFMS2J6n3Hd3p4HWKXYbqEpEmahwXr2i9hvkKp0jAwdBYU7N6DeEw7ROXdZvWEnboHXK136qsk5JYOuUf26hgdYpCTS1H1WJKBMVzqtX1K7K7vRwZOAgKHSqTj2uKKpmRpW+Gs/R83sUZ7mvKJZuEbtXlXWqntfH14Jf3rVf+PJ+p4HWKQm0TgElBmaiwnn1it7IKflEu09VFK5+VRJXFNEwbU5d1qNYTfUolqj92KPQwNYp/4xJVdYp9iioSkSZqCgyPQpFb+QULmiQwNCpGT2KcJjWqct6FKupHsXS9/1UZXNKAps74h/37jTQOsUeBVWJKBMVzqtX9IZTaLoMEhiufjN6FOEwrVOX9ShW0h5o9qmV7/upyjolge0d8c8vNNA6hYbEgapElIkK59UraueF2k8mYVe/ikKnqiTep6JhGqfWl/UoznLfo1j52k9VxilFbU75ikJVximiA1EiykSF8+pH9Lpx3rjVYZCIyA+RhH6Ew7R+XNaJWE+98bDyu5GqrB8Tbzws/FuBOw20frATQVUiykSF8+oVtZnja3EGDoJCp+rUY6eqZnqY1qnLOhHrib/Z6Fa+E6Eq69TEH20s/MF4p4HWKXYiqEpEmahwXr2iuMJj4CAoqhtEElZ44TCtU5d1ItZTnYiV70Soyjo11YlY+N1IA61T7ERQlYgyUeG8ekVx3cDAQVDo1IxORDhM69RlnYi19AWantHK/8iHqqxTEtjW4q7g2GmgdYqdCKoSUSYqnFev6I3VTyZh6gYJDJ2qUXFOVc2MZxvryzoRZ7k/3678K0aqsk5JQ6FxqvNPoTTQOsVOBFWJKBMVzqtX9EZOySSsUxWFTlVJ7FQ0TJtT40l4fidiPcrhlD81qco6JYGtU/7JrgZapyTQdCKoSkSZqHBevaI3nJJJWKcqCp2qktipaJjWqcs6EWs5kjenpjX2KXYiNLC5I/jDDlVZp9iJoCoRZaKiyHQiJuflS/IjAwdBYe1Xpx7XflUzp/a7rBOxliN5s0+tsU/h4P6ggW1OoaJA22GvgTanoEpUZaKiyDolY7W1nz/fMnAQFOZUHTvOqaqZs09d1olYy5G8dQr7FA7uDxrYOuXuyE5VNqfYiaAqEWWiosg6JcO38/LPCxk4CAqdqmPHTlXNDKc2l3UiznL3C1aLzp+nRGXfpSTaEe2JDkSJKBMVop7oSDQQPRI9ET0LsjvD7/yC1eayfsNZ7vs/S9x1vCjwoIF2ce2WPj9UZfKD6ECUiDJRUWTyY2pe/o8JGTYIinYckYQ7TjhMUxtsLus2nOV4nuR3HFWZKk6RXS+6pa/iVGV9YreBqkSUiQrn1U/NCz7xrQcJi1YxkYSrWDhM69MH/U3GZqoJsfEtcVVZAyeaEN3GN1o10BrIJgRViSgTFc6rV2S/WDBQpmCKcAkLDZzRggiHaQ30LYh3/k3Gph6l3bv+vjMrqmZ/ktO9edefqj3RgSgRZaJC1BMdiQaiR6InomdBc/Yn32d4rx1yEm8LO9iB8/rD+PP043m4WRDX/rGtqmw+SaApwalKRJmoKLIb18S8kE+4nEFGCvOpRsULYtXMKet8++G9BsoBvT3tYkHEMf5hI6ipPNZYENGE2GugNRCqRFUmKoqsgRPzgoG4nEFGCiuPGhVXHlUz46y78V2J9xoozYM2A/3LSOdPa/9ITVGbgf4FP1XZDGS7gqpElIkK59VPzQsGovsySFiYgTUqzsCqmZOB42F5fgNwI2f7JtH8U4x7VdnKQwKbRFugdGSzQseyicZmBVWZqHBevaIgZY4MGwSFiVZnGSda1cxJtMtaFZupVsXCN2pVZX2aaAl0S//wQwNtPrFVQVUiykSF8+oVhRUiOi+DhIX5NKNREQ7TVIjbyxoVZzka6n7dU5XxSVGz7q38uqcq4xPRgSgRZaLCefVT8/LrHsMGQZFPIgnXvXCY1qfLWhvb2rRof67P/0zzvahswU60I9oTHYgSUSYqRD3RkWggeiR6InoWNKNg3/pGxTvLhfM4p/5eUy5sfMGuqrvXH0tXZL9o3cYX7KravP5aOtGBKBFloqLoNSt7QePPlv/uz22rxhyABUXbkEjCbSgcpk2bD+pgbOUw39QRG/94SlV23ZPApo7Y+IceGmjXPXYwqEpEmahwXr2iaH9i2CAoXPdmdDDCYVoDP6iDsZVGRGsgNi68jPCgga2B2Lgk0BoIdNCxXlWJKBMVRebENTUvbFy4nEHCwgysUXEGVs2MQnA7Hq7nF+xnuf+3PO7gk/QCzO/MSqDZy3ZEe6IDUSLKRIWoJzoSDUSPRE9Ez4LmbFzjifgDfu1tK2f2ZuPy/4jgvarsuieBTb23RdqIyqYN0EGHt2kDVaaqcF69onDdk8HtxlVRuO5VSVzvRcO0694HNSq2U42KjX8GrCproAQ2Bm78u0oaaA1ko4KqRJSJCufVKworDzYqJCxc92pUvO5VzZx1zzcq3ls6TnUwtjBQVNbAqQ7GFgayg7EFOhAlokxUFNmNS4YPMxCXM8hIYQbWqDgDq2ZGp2nrOxjvNXCqteH/ca7786e1rUJFTQb6f55rpyqbgWxtUJWIMlHhvHpFYQaytSFhYQbWqDgDq2ZGBt5+0A9mnsfxrwnc+pJEVSYDFdm5drd+D1SVMZDoQJSIMlHhvHpFUQYybBAUZaBIwgwMh2n2wFvf83hnBp7H8U2rW3/6VpU1cOIXLrpbf/rWQGsg/66EqkSUiQrn1SuKMpBhg6AoA0USZmA4TGvgB7VPbqd++GLrH5epyho48cMX3dY/LtNAayBfAKEqEWWiwnn1isIM5AsgEhZmYI2KM7BqZuyBtx/UPjmP4zNw69snqrIGTr0AsvXtEw20BrJ9QlUiykSF8+oVhRnIF0AkLMzAGhVnYNXM2QM/qH1yO9U+2WIJZftEA5s9cIsllO0TDTTP0YgSUSYqikwVqijMQLZPJCzMwBoVZ2DVzMlA3z4574Eb/49jX/LPE3/++duPH7923359+/ovAAAA//8AAAD//3zYX2/jVBAF8HckvsNVHniCNv7vmqTSxJRlZpYWUSGevcltapHGkeNSwafnJF26K3GWh6029xdfe3zPXCtePMVxG9u42x3DenjeT8tZOi9n14u38TDGh+XsNmnuktnlf8fT5i4j46uy+akk45LkzSrJibQQpWIQp7Kqm7Ymc93UzTs2vkrmTZvM2REQoyJJCklpLc0Nq+Rd0rzn369Qe0Vrr1A7E0sq1M5EkhqzsSpbiFIxiFORpGhuk4JWWeI8bC3bpMR5mBjEqUiaNKuUJamFKBWDOBVJU8zG7nULUSoGcSqSXKHSK7o+V6iUieEYpyLpHNfGstZClIpBnIqkWIWUrgJEqRjEqUiKJKY0iRClYhCnImnW3KZsF5AU3Z7SbocoFYM4FUkLzMYy2kKUikGcimRYn4yuD0SpGMSpSIZcZzTXEKViEKciKXo7pb0NUSoGcSqSItcpzTVEqRjEqUiGnSKjO0WGVGU0VRClYhCnIhnuQUbvAUSpGMSpSJbiqumunGU4D0tvC1EqBnEqkiHxGU08RKkYxKlIjlTlNFUQpWIQpyI5dsuc7pYQpWIQpyIZUpXRVEGUikGciuToxpx2I0SpGMS/ILijOVsFybHaOV1tiFIxiFORct7cluyqJcdeldO9CqJUDOJUJEeqaD0tRL9QKboxp92YoxupGMSpSIkkljSJEKViEKciOZ5mOX2aQZSKQZyK5NgpcrpTQJSKQZyKlOiSknYJRKkYxKlIgVwXNNcQpWI5uiRnnSWQFZUWovyYAvUUtB6IUjGIU5EK9VS0HohSMYhTkQKpKmiqIErFIP4FQUIK+qujQNcXtOshSsUgTkUK9HZBexuiVAziVKRAbxf0iQFRKgZxKlKgs+g9aCHK706ZYxeju2WJSktaKUSpGMSpSIlrK2nXQ5SKQZyKlFjTkq4pRKkYxKlIic4q6dMMolQM4lSkwN5b0L0XolQM4lSkxGwlnQ2iVAziVKTEblnS3RKiVAziVKTAbAWdDaJUDOJUpMAqFHQVIErFIE5FMuQto3mDKBWDOBWpsI9WdB+FKBWDOBWpkN6KpheiVAziVKRKmtuK7aNSITsVzQ5EqRjEqUiF1a7oakOUikGcilTY+Sq680GUikGcilT4XVLR3yUVclDRHECUikGcitR4ZtX0mQVRKgZxKlIjVTVNFUSpGMSpSIX+qWj/QJSKQZyK1HjW1/RZD1EqBnEqUiPxNU08RKkYxKlIjezUNDsQpWIQf5XLT689rxeHbht/7sZtvz+GXXzAK9D5BV6FhbHfPr59mIbDaTydhQ/DNA1Py1lyMZ/jORceY7eJ40d8GIbp3w94W3qa+j5Oz4cwjH3cT93UD/vl7DCM09j1Ew7G+N8DYPfDoV/Osvl8Fv6M49SvPx8Zm36znI26Ocfu9YQ/ns8Uul2/3f/eT48fK8B14O3tsNm8+vU33dPh+/fnv7P7uB1i+E2//TVun3fdODsP16vnv+IYmhC+/ur1e9+9fSGcB9r/PVxDt17HwxSmxxhQ/NMxDA/40B/D3eFUb7iPu7g+/+9lGP84PsY4XQQcth0jjhjCESWEbh/kKe43+IephvNsvzyP68fuGIOcvnoWTDeM4UN8GEYcizOudwO+gDPeHNfj8IKxbgov/W53enF9Ou/rdQ24xeHY7eIxHMZ+fTpicfnpNi0uP7+r14vN2L30+214u/PnFr18u/7rfwAAAP//AwBQSwMEFAAGAAgAAAAhAMKH2/J9BgAA1xsAABMAAAB4bC90aGVtZS90aGVtZTEueG1s7FlLbxs3EL4X6H8g9p7oYUm2jMiBJUtxmzgxbCVFjtSK2mXEXS5Iyo5uRXIsUKBoWvRSoLceirYBEqCX9Ne4TdGmQP5Ch+RKWlp0bCcG+rIOtsT9OO8ZznCvXX+YMHRAhKQ8bQWVq+UAkTTkQ5pGreBuv3dlLUBS4XSIGU9JK5gSGVzfeP+9a3hdxSQhCPanch23glipbL1UkiEsY3mVZySFZyMuEqzgp4hKQ4EPgW7CStVyuVFKME0DlOIEyN4ZjWhIUN+QhKer6AqqlivlYGPGqMuAW6qkXgiZ2NdsiLv7+L7huKLRcio7TKADzFoB8B/ywz55qALEsFTwoBWUzScobVwr4fV8E1Mn7C3s65lPvi/fMBxXDU8RDeZMK71ac3VrTt8AmFrGdbvdTrcyp2cAOAxBaytLkWatt1Zpz2gWQPbrMu1OuV6uufgC/ZUlmZvtdrvezGWxRA3Ifq0t4dfKjdpm1cEbkMXXl/C19man03DwBmTxjSV8b7XZqLl4A4oZTcdLaO3QXi+nPoeMONv2wtcAvlbO4QsURMM80jSLEU/VWeIuwQ+46AFYb2JY0RSpaUZGOIRI7+BkICjWzPA6wYUndimUS0uaL5KhoJlqBR9mGLJmQe/1i+9fv3iGXr94evTo+dGjn44ePz569KOl5WzcxmlU3Pjq28/+/Ppj9Mezb149+cKPl0X8rz988svPn/uBkE0LiV5++fS3509ffvXp79898cA3BR4U4X2aEIluk0O0xxPQzRjGlZwMxPl29GNMnR04Btoe0l0VO8DbU8x8uDZxjXdPQCHxAW9MHjiy7sdioqiH8804cYA7nLM2F14D3NS8ChbuT9LIz1xMirg9jA98vDs4dVzbnWRQTWdB6di+ExNHzF2GU4UjkhKF9DM+JsSj3X1KHbvu0FBwyUcK3aeojanXJH06cAJpsWmbJuCXqU9ncLVjm517qM2ZT+stcuAiISEw8wjfJ8wx4w08UTjxkezjhBUNfgur2Cfk/lSERVxXKvB0RBhH3SGR0rfnjgB9C06/iaF2ed2+w6aJixSKjn00b2HOi8gtPu7EOMm8MtM0LmI/kGMIUYx2ufLBd7ibIfo3+AGnJ7r7HiWOu08vBHdp5Ii0CBD9ZCI8vrxBuJuPUzbCxFQZKO9OpU5o+qayzSjU7cuyPTvHNuEQ8yXP9rFifRLuX1iit/Ak3SWQFctH1GWFvqzQwX++Qp+UyxdflxelGKr0ou82XXhypiZ8RBnbV1NGbknTh0s4jIY9WDTDgpke5wNaFsPXvP13cJHAZg8SXH1EVbwf4wx6+IoZSyOZk44kyriEOdIsmwGYHKNtxlgKbbyZQut6PrFVRGK1w4d2eaU4h87JmKk0MnPvjNGKJnBWZiur78asYqU60WyuahUjmimQjmpzlcGfy6rB4tya0OUg6I3Ayg0Y6LXsMPtgRoba7nZGn7lFs75QF8kYD0nuI633so8qxkmzWJmFkcdHeqY8xUcFbk1N9h24ncVJRXa1E9jNvPcuXpoN0gsv6Rw+lo4sLSYnS9FhK2jWq/UAhThrBSMYm+FrkoHXpW4sMYvgfipUwob9qclswnXhzaY/LCtwK2LtvqSwUwcyIdUWlrENDfMoDwGWmiHfyF+tg1kvSgEb6W8hxcoaBMPfJgXY0XUtGY1IqIrOLqyYOxADyEspnygi9uPhIRqwidjD4H4dqqDPkEq4/TAVQf+AazttbfPILc550hUvywzOrmOWxTgvtzpFZ5ls4SaP5zKYX1ZaIx7o5pXdKHd+VUzKX5AqxTD+n6mizxO4jlgZag+EcJssMNL52gq4UDGHKpTFNOwJuEQztQOiBa5+4TEEFdxpm/+CHOj/NucsDZPWMFWqPRohQeE8UrEgZBfKkom+U4hV8rPLkmQ5IRNRBXFlZsUekAPC+roGNvTZHqAYQt1Uk7wMGNzx+HN/5xk0iHST80/tfGwyn7c90N2BbbHs/jP2IrVC0S8cBU3v2Wd6qnk5eMPBfs6j1lasJY2r9TMftRlcKiH9B84/KkJGTBjrA7XP96C2InivYdsrBFF9xTYeSBdIWx4H0DjZRRtMmpRtWPLu9sLbKLjxzjvdOV/I0rfpdM9p7Hlz5rJzcvHN3ef5jJ1b2LF1sdP1mBqS9niK6vZoNtQYx5g3a8UXXnzwABy9Ba8QJkxJ++rgIVwhwpRhX0hA8lvnmq0bfwEAAP//AwBQSwMEFAAGAAgAAAAhAERr1YBHBgAAQyoAAA0AAAB4bC9zdHlsZXMueG1s5Fptb9s2EP4+YP9BUIthA+aIsizVSm0XiRIBBbpuQFJgwLoPskQ7RPXiSXJqd9h/3x1lWXJC2rJrpc4mf7BIincP7453x5fBm0UUKvc0zVgSD1X9jKgKjf0kYPF0qH64dTt9VclyLw68MInpUF3STH0z+v67QZYvQ3pzR2muAIk4G6p3eT4717TMv6ORl50lMxpDyyRJIy+HYjrVsllKvSDDTlGodQmxtMhjsVpQOI/8JkQiL/00n3X8JJp5ORuzkOVLTktVIv/87TROUm8cAtSF3vN8ZaFbaVdZpCUTXvuIT8T8NMmSSX4GdLVkMmE+fQzX1mzN8ytKQPkwSrqpke7G2BfpgZR6WkrvGapPHQ3ieeRGeab4yTzOQZ3rKqVoeRtApdVTlUIrThKAnP542dFJj9h//vDXPMlfvyz+Xvz84gU5I+T1xx+F9R9/UrXRQFtxHA0mSVwxBqPhcj7/FCefYxebCjT41WiQfVHuvRBqdKThJ2GSKul0PFRdl/AHq2MvosVnjheyccqwcuJFLFwW1V2s4Na2+i5ioHuOqmAjYtaMqlYnMEY2JWLSCPFFyrxQiHeD8nw3ZdfdlEVDyhuYe40w39BpQpUPb3fDLoXRPzLdOug2aeuPlejyZ1PUTQTC1ZmBXbIwXE87E6YdVowG4KFymsYuFJTV++1yBnMuBmdaWCr/bsfX09Rb6l2zeYcsCVmAKKbO5uS6uLrmBjWWNWg1yDC9C2A74Em4VTJ9wK1qOCY34sIPRfSQ27pByI0PETQ4TtIAwmDpOm2QXlE1GoR0kgPdlE3v8D9PZsglyXMIFaNBwLxpEnshesOyR70nhE+IlEM1v4NIJ/V2GjJZ8WjYg+PhcBp2AOAl7oY9ikHuHmMpneeLvNDryQjyUDgN7HHTkmsj9j9tMc+a7bRi8yci/5OcrHso9QkmoATNyveBJ/VpGN6gz/t9spGJLia1LBTWGZhjYUKKrxAFV6+F6ywK6FLr1AraNbIGAZOV0dWldJXFZMXNm83CJeanmJ4COxktS0ILeIhpKZzyJQ8qSLsoX4RsGke0zM0hry2Kyl2Ssi8AA7Ni7tdVXJTlzMcKmHuq8jn1Zrd0wYEquIyCFdqvGLJWyLXFZH9RwErgKPC3YEUdHgLN/PbQXlVK76pKZZhQ2CY1zPYqlTc2gWPqG4RXTimjjhxG9HyQg3FWMj9R5KvFdOHIalLfjv39PBrT1OU7I5WllG6ocBUHWlEbjkQ2yO2m9cwGWQtIMC5JQNo6e6TOvQXvCGj3jmHgtk59WDs86zF86aHxCIziW4fKxv7lKJ7kKfIP3CcUpmJ7pk9fMcOeVqh194wr/v9NmvefyEieIJdq10BkGS0sb1rIC9sdS9tLspbycYjc9SXu0TOKvdeGeBokXn4fhq2udR+WuhSO3k5Zli0vvWWO7zlOOdlYduRGR1jKHD9WysbSzuK+XVf4tDb2FBsVp7PFwjcgYcuxtq+5sau53p9U8Gh5qL7HVX1Yi6fjOQtzFgt2NIFmsKj2SPnhVY53F/ju6ZoLRIyATrx5mN+uG4dq9f4LDdg8stdf/cbuk5yTGKrV+zs8vdKt9ZEtMGdxQBc04EeEUIQT+NppYXEQTziohy3VAd7jFuyHTB5Tw8N9cQshxTG3iI8MgawP1oupITJ5iwxbeWK6hwzWB47tjqe/virxWNbYJpN1X9jSJ7I+WC/ug/XiFofgT4QAe4j72PCI9WPbhmFx0xVJ1HFEfBxHZgeWBRePJNRk2LCHjA9y2k/WOBP2tXi5Xcv1s91CZDqVzxLZSOWyxhax3FA7ti2Sm23L+GAPmRZktoP8xXzQpsRaMAwHHhk2mUdyHFmLbcta0BZFfCx4JNKxbPiJ7U02SwzDtsUWT4hhiBEY8IhbcDbKW8R8kJpMC9jGr7Y8iEcavxgGgQlOvd5lcDkC/pV5yobq39eXr2y4ydLt9Mllv9MzqNmxzcurjtlzLq+uXJt0ifNP7cbfV9z34xcU4WRN751nIdwKTFfBeRWSb6q6oVorFOGWDwtg17HbXYtcmDrpuAbROz3L63f6lmF2XFPvXlm9y2vTNWvYzQPvBRJN14sbhgjePM9ZREMWl7lFmVHUayGpgOKWQWilJrTq9ufoXwAAAP//AwBQSwMEFAAGAAgAAAAhAASbwrXECQAA/CYAABQAAAB4bC9zaGFyZWRTdHJpbmdzLnhtbLRa3XLiuBK+n6p5hy4uTu2pnQTbQEJmk2wRApOtSTZsYDNzq9gKuDAWK8sJ7AudBzkvtp9sIMESYJLZm/mRW61W//cnTn+dTSJ64jIJRXxWcQ+dCvHYF0EYD88qfw66B80KJYrFAYtEzM8qc55Ufj3/+OE0SRRhb5ycVUZKTT9Xq4k/4hOWHIopj/HlUcgJU/ivHFaTqeQsSEacq0lU9RznqDphYVwhX6SxOqvUjxsVSuPwr5S38xXPa1bOT5Pw/FRVz0+r+h/Zf847M8VlKCR12f//xwJO/xmqX2i1eiFDf3xaVfvsaYtIyGTjptupgnKS/KAutAPdlCP+kioIW5LzNZSc+GxamnuPQS5aSFcU6AuTbLhQzuLfl0LIn5L/lqdc8C6xYYMQbahNydTX+qveCTEhrCycbaHPPvcFnEvO6YKpkQQNRHxNVjy9BM9bNeKSiue9gdG3MA7E8zZpWtNpFLLY54vrXIbJ6JnB0U2rF0nvWDzkhm8Uqa6ECHYS3YS+FM/saTe7O/4owyGXTFk8vnj2t3IXuZTz7dc9oP6ESUVF/vmqXQ9t9hDGXC3U+m0kIk5XIk04Lb8Y9lzb8TVUSEfxklonCMkMRWbJhkslpkn1gvnjZBrpOy9OXfIYhDj8FSkhUuGuL+SmayGr7WTbF1EYUD+Vj8z/N/h/kSwO1Y/k3JMhDDmnf0vy1yng7WcM0odqfySekQOgXIl6EiSZyTqxH4kklUv7rh23vqFAXzTwm47I3GglUZFlL0oncPnhMqHn5Wbpgv0wHhveu31Ll6U+AqjcOUtVoKrusctM3rSHoC9pWqf8N2/cS+L1MwcCkV1WRQuX2us4+Am9cV/usvnmkkZc+YM92XUi7iu0Ryxa97HX67pyGr3Npn3LTuw2VTY1bjrvN50bdQe3575rlOJ7ESn0NZvar+qK93U4HC2rR2Fxv833YZJCY20xQUOraJ3Xll7NLsqqT83le5co67z2FqVwsR8p2evEml30vcJd8GDZGr6NX5uHkU6uXRYbwTRAVUOfIDG2KDmv9jCYqCz/d8MY7VyeiFd219RGOSjD4SZELTLbwlKnZzJV0Wg9syja7TS608/zxxWTwTOTyylJX5Cyrz+CCS25v4PZMoe8U6iuxFw2eu/VVkZ+pzRrfDZqaTFdDDAaqwl8b9nr6o6/2oqQJGNMeE+cvukVuoADm6PAzS11I5hbO3c2CWeOrOiA2qmiHupb0Tibd2Cg1IfyoPyWayGmO6mzxicbAqKIuhksUHbPbYAOOfybo6FjU049IX0eIUD32q+3Vq+ZxDy83+nlFdKJhxhXuORBZq2d4t2H8TyiXsRiA6zIZ2nqc112MTiDoRxn0InRyukJ3yXxSG7x03G1CZjFa3z84H5ueNS7KRJ8vcA4NeF0yZNwGFNfpQHAhANqpYkKY2xzmo5DPe6zmHpMjuF+TzAFxgnXdT5+yMk+0eA7HTePG1j5s98y0iKuMB0BNjLyA8AfI43l9y6SLrQR8MSXYQbEFCn6LEJDv4Xgj5TFKlTz4sbWRENNhtBCMUO23zA5pIEZGIOLy+J+z3GbTuOouAyD8zmSMbUl52PqdQZw5ghoGiJOB+tIhL6hJ83L9eqG4IBQ5tQOpY+5dMXloMdlhrkBjaBu+LCDr+cYMt6w2VMYaZ4R+5uty2i7pud6xeWLcEgY6JGK125o7sZe1/Datq7APIoYdYA5wtc6cZBiisWFrtDPwR0LN7TxPXGc4vIlRkDOCThYAEjghWknHmnmAV31XvRo4ek1jhvF5R6LJlAxYAF0hbvk3Gphz2kaPh1GsDH1NSSI8MvS8sEOjbpNzzkpMroWqAv5vfdh5Boq7AMwmj8IMaZ7tCB8XlYqbWfDS26YTEZgQ/2pLlwryco4jeG1aEIeMExcROnj41KqMoyOTYvGGXC4iNBc67s5nTiGH6Oy67C+AiL32t328WFDZ1eoeshzd2gI5JviwnMNH9b+FYFdluAHfKaAjQSkazq14kTQ73OA/vZ4MMzwlcfoHObL6OdoPhCtKGE/WwOuGM5wbluKOTkylIukeOI0ahaxnOOGkStRBJ1mzbA1ll3PszHxap5xN1Bj2cbEcZqGgPchXghQb+hoVjuiL8ilUOrGzkULCAmL1+kEQ/6Mvg9MvHopJm7NJrfj1ozsoo88cqwaPHIMJ8mpzWIhpPB1dwBA3pccyRovRVd8xoZoWcpc+sgxI5BjCFOpoOasueKVvc48CLjWNh2iTBohkxm5btMKqG1awbKRQb8hRrh8DoE8lzWFV6vZ/BDLNuVi2eZZXq1ucX34Yd3utXU774ahlX7EdfDlWa6si3o1M+JQCDB0lVaLjlrDFp3JQ8QndDzznKXTtPE6MQl9a8tgjUGEps2Y0KvNI7Bs9XzXNA7KFKSj24eEJ/p9dM0td7u4LsiGCa8AfWkEi/p/pXouzzvsY3KrXmWW/XF3be+WjDu2+JAj/m7ZmPB6iq4rwAPbNY+HamTP2YabtSTeSCTpl0c9Px7QQo5atVmZ2eRwm3XX4HKRRQij48qsjn3HEwMf0X1s3TObRTnX+UMKaBfHt2/vOor7dAIeUEbj0LNzapwYBrxmcwX7XLMxhxg0IwiypefyXMdsEjto51iEXlBEEZDGXAq7Fxo3ucPsdJk+6ZbmRB8P+e2tqSH5JQcaKwVym0adMtmP8AY/o6PDhu36HsLISC5XHM9rmCWDRfXNZMjZWK2hmRjp4maOyc9fdN6Jvj/lLJqb5DCieQCEVCQMTQqq10oTmy6zHKooxIyLfqEFICShnzoapPpEi5ePTzAqune9kr+6qZH5hL1CQDa8Q++JkGwg34gGbKC3YSPrpDtQg3XiLZBB6wnzNNO5Kow/k+t9dz26jSNz4jXpPpHb/O428Zf33TZpGowXlJ/Iq1s2tFnEfHTOmOAm0xD57UWYX4CxLj/2x/P8QJuY+mcln5MpHkXPKvjdSMLlE6+c3/CJCCUVwwo6AvQHyMIYntuH3cMNc3X2qRU8ARewPCZkX/VTJ8cjL6LK8mrMEgU0zjxSYGw13k/WzbgAwzSmdwAPGZNesNzqFaRnozBM7tUXpjRmSWRGToMRxwBX/GblYjWshbLI7I6PgVCal3npoIzjNcipf8Vi0bG23spE1JmGSkwABO64wRZftpohh79MlWUgBF5IFCt+a3cp943f+4VPdr9F06oe8dIvTNfFL6P4iKVF/7LzQfAM9dv7jZ5Li7zsW/oZZIYCX0rQe/xgAa33Nl2gpK6Sth2xMlqmXFzM58Cp8JhiQmiYEvOefydlS6I+pZFYqGALT1AmS01Zyar49dr5PwAAAP//AwBQSwMEFAAGAAgAAAAhADHgz/cTAgAAMwQAABgAAAB4bC9kcmF3aW5ncy9kcmF3aW5nMS54bWycU9tu2zAMfR+wfxD07viSNHWN2MXSxEOBYQuG7QNUWa4FWJIhKZeh6L+Pkuyk6fYwTA/SEUmRPCS1uj+JHh2YNlzJEqezBCMmqWq4fC7xzx91lGNkLJEN6ZVkJf7FDL6vPn5YnRpdHM1GI3AgTQHXEnfWDkUcG9oxQcxMDUyCtlVaEAtX/Rw3mhzBtejjLEmWsRk0I43pGLOboMGjP/If3gThElc+M3tUD6zvP0naKR1ErVYiIKr6KlnFjoGD/gGAb237RuxuXqPVcRI7OMneWIPYW3uPlzBWXcKlfw93k2W38+ysu4o5D+L3MfP8LhmTv4o7RRs4DWHlYcfpbiRPvx52GvGmxBlGkgjoJGjtXjOUQslIwU72i7EjQnvNS/xS19n6ZlsvohpQtEjWi2i9XdxFdTbPt9lt/ZDNl6/udbosKDTSwgw9NlMD0+UfLRScamVUa2dUiVi1LadsGgkYiHQR+xb6PF+ScUVw5m5LoiR1m1swPW694rhaxT776fQsQm8d57EFAF0xnLVr+1Vtnno+1LyHQSCFwyOBf5rnwGGj6F4wacNQa9b7UpiODwYjXTDxxKDy+rFJMaLwmyyUf9BcWpc+KYzVzNLOwRby+M6oDbTOCp/0JU9HwQyOHCkGbexnpgRyAILAY99QcoBKBDeTyUg+vPQuz8NCew75b4glU4ne/SBv7v579RsAAP//AwBQSwMECgAAAAAAAAAhAE81gobdJwAA3ScAABMAAAB4bC9tZWRpYS9pbWFnZTEucG5niVBORw0KGgoAAAANSUhEUgAAAj4AAAJBCAYAAABGRr+4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAACeHSURBVHhe7d0LtF11feDxjQwhJFEQg0AaJgQBIdiVioJ9UbBVLLCKUaClotApWlOhIhEzHYUhlGhpxEjXgjFtpYuHWFZ5NHUKjNha7BOhLIcpL5HXHVIeEtAghBgGGH7HfTGGhNxz7jln//f5fT5rse7eNyb35uYuz/f+///9/2/1wosqAIAEXlW/BQAYecIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkMZWL7yovmaI1t+6oL4CgKqaMn9lfcUgGfEBANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACCNrV54UX3NEK2/dUF9xbgvrny0uuOBdfVdOU75jZ2rObtOre/ol0XnjVVfvfmp+q4cVy6dW+07d1p9B8MzZf7K+opBEj4NET4v54UwF//e8JOEz3CY6gIA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIY6sXXlRfM0Trb11QXzHuhlvWVI88/mx9t2kPPfZsdeG1T9R3w3Hl0rnVvnOn1Xf0y9jD66q1656v7zbtun9Z49+bNKbMX1lfMUjCpyHCpzd33r+2Ovr0++u74fBC2JzLr19dnX3xo/XdcPj3pinCZzhMdQEAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpbPXCi+prhmj9rQvqK7px5/1rq6NPv7++G44rl86t9p07rb5jmC6/fnV19sWP1nfDMex/7/ieDvet+mH1g2ee61xvyfy9fvT5zdl122ra1K0717TflPkr6ysGSfg0RPj0RvjkMkrhs3bdc9Ud9z1T3bNqXXXTHU9Xt9y9tlq95vn6VyfnXQfMqObtPrXac7ep1dxZ274YRFPrX6FNhM9wCJ+GCJ/eCJ9c2h4+Yw+vq772zTXVv9z2dPXNO5+p3zt4M7d/VfXuX9ih2n+fadWB+80wKtQSwmc4hE9DhE9vhM/LLb/s4erCa5+o78pw4uE7VouO27W+610bw2f195+t/vamNdVffv171bcfXF+/t1nHHLJ9dcj+r64Oecv29XsokfAZDoubocW+uPLR4qLnbftuVy086vX1XR4R5RGhB590dyfWSomecMUNa6qTlq+qDv7InZ3vmYgzyEr4QEvdcMua6vNXrK7vyhDRc/5pc1JNrcR01qLzxjojkaVF6MZiTVF8z0ScRaQJIDISPtBCET3xE3xJskVPLFaOeDj8tHurr978VP3e9ohIE0BkJHygZURP8/7tjqeqwxbdXfwIz0SMB1Csp4qYg1EnfKBFYlqltOiJJ4iyRM/4KM8Jnx7r26PopYh1Se9fct9L+wrBqBI+0BIRPcefPdwn2rYkoueSM+amiJ74+p987thIjPJsTizIjrVKEXdGfxhVwgdaYDx6ShplGI+eDJvlxShIfP2HuRdPkyLuYvQnvu9g1AgfKFwsPBU9zYk1VTEKMmpTW1sSoz/xfRd/fxglwgcKFtMNi89/UPQ0pMSF5MMU33fx94+9f2BUCB8oVERPrCkpbXrlcyfvJnqSib1/Yt0PjALhAwUqNXouWDS7euu8GfXd6BI9LxfrfmKjRoueaTvhAwVadunDRUZPhrOe7lv1Q9GzGbFRYwS5+KHNhA8UJqYU4mylkmSJnrB4xUP1FZsSQb7iqu/Wd9A+wgcKEtFT2j4xyxbOcqo3PyG+R635oa2EDxSixJPWTzx8x+qIg15b38GPxfdqHHMBbSN8oACxmLa0k9YjehYdt2t9By8Xx1zEuWXQJsIHGlbiE0Sih4n6eOwz5XR3WkT4QINED20XmxzGJpvQFsIHGlLiSevvOmCG6KFr8aSX9T60hfCBBpR40vrb9t2uWrpwdn0H3Yn1Pg41pQ2EDwxZiSetR/Scf9qcatrUrev3QPfOutAeSJRP+MAQiR5GmSkv2kD4wJDENv/xE7Hoye2Nu03prKWKReRnnLDzy/475pDtO78ep+C30RdWPuZIC4q21Qsvqq8ZovW3Lqiv6Mad96+tjj59uGtjrlw6t9p37rT6rjclHjoaL6yXnDG36JPWY/Qg1o60WUTMgfOmV/P3mtb191F834w9/MPq1u+sra6/6cnizm/bHE8G9mbK/JX1FYNkxAcGTPTkEyNpcb7ZzRfuUy3/2Jzq2ENn9hTPMRIXvy9+/5+fvkf1jQv27hwhEqNGJYtdne3tQ6mEDwzY6StWiZ4kYnQnRggjUuJ8s35PIc7cYZvOESJXn7NX5+PExyvVJddY60OZhA8MUBzk+NWby9nSX/QMRozwRIjE6M5kp0UnKj5OfLz4uPHxS2PUh1IJHxiQEk9aFz39FSEZU08xwjOs4NlYfNz4+LEwujQrbyjr+x+C8IEBKDF6Ys2J6OmfGGWJkCzl9PpYB3TtuW8oav3Ppdc/4QkviiN8oM/i/K0SoyfWnNAf8ch5bANQWkjG5/OlJXsUM/UVWzfcdLvT2ymL8IE+KvHQUdHTX/Go9pIPzS5276P4vGLqKz7PElxy3eP1FZRB+ECfiJ7R16b9aeLzLCF+4olGZ3hREuEDfRAbK5YWPaceM1P09FE8Ot62Tfni8y1h2utr31xTX0HzhA9MUvw0u/CzY/VdGeIn/Q8uKO8pn7aKBcNtPbk+1iI1veD52hufrK+gecIHJqHEQ0fbNB3TFp8/ZbfWnmcWn3d8/k369oPrTXdRDOEDPRI9OcT+OG3fBiA+/9hvqEm33dOOc8YYfcIHehB7k5R20no8Yi16+iumiGJ/nFEQ+w01ecTF391iuosyCB/oUomHjsYC1sUfED399snjR+trespvNLfuq6SjW8hN+EAXSo2eWMDa1jUopYrRkbfOK/cQ0F7ElFeTj7jH04/QNOEDXRA9eRx50A711Wg5/ojmpu5u/Y7woXnCByYozt8SPTnE2p5R3QNp5g7bNDbqc9eYJ7tonvCBCSjt0NE4FVz0DM7hP/ua+mo0HfbzzUTd/7nXk100T/jAFnz2skeKi544FVz0DM473zbaO17vO3daI5saxn4+0DThA1tQ0vTWePS0fV+ZkkUQZPj6NjWqZYEzTRM+0BKiZzh+8adH60muzWlqVOvpZ8rZ+4qchA+0gOgZnv33mVZfjbb4Xorvq2G7Z5UFzjRL+EALnHXiLNEzJHNnbVtfjb63v/nV9dXwPLX2ufoKmiF8oHAXLJo9so9WlyhTYO4zZ/h/1zseMOJDs4QPFEz0DFfsjZTJnrONIpKP8IGC7bzjNvUVw7DDjFxbBOz02v9UX0EewgcKtvCzY9XYw6YGhmXe7rlGQJqY1nNYKU0TPlCw1Wuer8668KHO4agM3oxpNoWEUSd8oHCxgWIcjgrA5AkfaIGInzgvDPrtXQfk2LARxgkfaIk4L+yaf/xefQdAL4QPbEFJjzgvXvFQdcMta+o7mLxb7nZ2FrkIH9iCTxy3S1Hxc+aFD3nSi76JBfSQifCBCTj/tDmdU7tLEC9Ux599f7X6+8/W76FfHKcAo0/4wARMm7p19flTdmvkUMdNifhZfP6DHnPvs2zHKTQxcphtd2zKI3xggmKzt8+dvFt917x40mvZpZ70ondr1w1/mivb7tiUR/hAF946b0Z1xgk713fNu+KGNR5z76Nsuwrf+h0Lm8lH+ECXjj10ZnXi4TvWd82Lx9w96dU/mdZO3TU2/Kmu2TuVsVaOvIQP9GDhUa8vaq3CSctXVf92hzOQ+uG2e/OMgvz9t35QXw3PrJ0cvEuzhA/0IBY7Lzu5nMXO4ePnP+gx9z6458EcX8P4XmniUfZdXid8aJbwgR7N3GGb6pIz5tZ3zYsXsVP/2JNek3XtjU/WV6PtX/+9mRHCnXcUPjRL+MAkxJNeFyyaXd8179sPru8caCp+ehdfwwzrfP7y680cfzJn123rK2iG8IFJOuQt2xe12Dkec19x1XfrO3rxtzeN9mLxmOaKwBu2mBqOaWJokvCBPlh03K5FnXIdT3pdfv3q+o5uNTUaMixXNfT3e8ve0+oraI7wgT5ZunB2UU96nX3xox5z71GMhozqU3IxjRdh3IR5u0+tr6A5wgf6JIbwzzxxVlFPesVj7p706s2Xr3+8vhotl1zT3Ejgz+w9vb6C5ggf6KPSjrUIcaCp+Ole7OJ85/2jtadPk6M9YfdZFjbTPOEDfRbHWixbOKu+a1485n7WhQ950qsHn73skfpqNHzmoofqq+F7425TOltAQNOEDwzAEQe9trgnvU5fsaq+Y6Li63bNP47GQuf4ezR5Ftkv/nQ5i//JTfjAgJR2rEW86DnQtHvL/uKR1k8VxhRX/D2a9EtvfnV9Bc0SPjAgsdj5/NPmFLXYOdZ3jMoIxrC0faowPu/F5z/YyPEUG5q3Rzk/BJCb8IEBiviJYy1Kip/FKx5yoGmX2rwpZHze8fk36ZhDtrdxIcUQPjBg8aTXWSeWs9g5ONC0ezFa1rapwvh8m3yKa9wh+5vmohzCB4YgjrU49ZiZ9V3zYtojHnP3pFd32hQ/pURPjHYeuJ+FzZRD+MCQfHDBzp0h/1JE/DjQtHulx0/8e5YSPeHdv7CDaS6KInxgiBZ/YNeinvSKtR/LLvWkV7ciKn576X3FneIen0/EbCnREw77+XJiH4LwgSEq8ViLK25Y05rpm5JENB71yXuKWSgeT+vF59P0QuYNReTvO9fBpJRF+MCQxWLnFZ+YU9+VofTpm1LFdOEJnx6rFp031tjoTyxSj48fT+s1/cj6xo4/7HX1FZRD+EAD4qfgCxbNru/KEPETL6DW/HQvNoc8+KS7O/E4rACKjxMf7/DT7m10R+bNiSMqYlE/lEb4QEPiRaGkYy1CvIAetuju6oZb1tTvoRsRjxFAS/5s1UCmwCJK498mAjU+TklreTb20WNeX19BWbZ64UX1NUO0/tYF9RXdiNOyjz79/vpuOK5cOneg6xRikWxJ6zLGveuAGdWRB+3Q6E/tl1+/ujr74kfru/aJtVxvf/OrO/vYvOkN03o6pDOmsm6755nq5rue7qzHaoMY7bn6nL3qOyZqyvyV9RWDJHwaInx6M4rhEz/Fv3/JfdW3H1xfv6cs4y/e+8yZWs3fa2Jfh359vdoePpsSQTl7pynVrJ02H0F3ja2rnnz6uSKnsCYipnFNc3VP+AyH8GmI8OnNKIZPiJ/qY0PB0han9ur2y/arryZnFMNn1EXYLf9YWYv320L4DIc1PlCAEo+1gF6c8hs711dQJuEDhYipgTNO8KJBe8WxLBHxUDLhAwU59tCZRR1rARMVC5rf96vlnEcHmyN8oDClHWsBE/HpD/+UM7loBeEDhYkXj2Un71bUsRbwSmKKdtAPAEC/+H9WKFDs93LJGXPrOyhXPMUVU7TQFsIHChWLRJct9KQX5Yop2aULyzp6BbZE+EDBjjjotRY7D5G1VRMXU7FnnjjLuh5aR/hA4WKxczwxw+DFCzlbFtETU7EeXaeNhA8ULn6i/vwpFjsPQ7yQl3ZqfmlED23n/0mhBeJF5nMn71bfMUglnppfCtHDKBA+0BJvnTfDaMSQLDpuV2urNiJ6GBXCB1rEaMTw2Ejyx2KNmehhVAgfaJkYjRA/gxdrq84/bU76+Il9er60ZA/Rw8gQPtBC4mc4xuMn67RX7Mi8/GNzPLLOSBE+0FIRP3EaNoMVL/pLPjQ7VWjG1NaVS+fakZmRJHygxT64YGcLnockQjO+1qO+rUDEdExtOXuLUSV8oOViwfO1577BJodDEF/rqz6z50iu+4m1PDHKEzFtaotRJnxgBMTC0/gp3SPYgxcHyP756Xt0zlEbhdGfCOYYyYq1PEZ5yED4wIgYX4sSP7Ub/Rm8OEftuuV7t3btz3jwXH3OXp2RLMhC+MCIiZ/a48UsXtTsQzNYEZux9ucbF7QngGJUMOJY8JCV8IERFS9qMSUT63/iRdko0ODE9FcE0M0X7tOZAivtax0BHJ9XBFqMCprSIrOtXnhRfc0Qrb91QX0FwzP28Lrqtnueqb79f9dVqx5bX3315qfqX+lNvKDuMGPr6jXTt672mTO12nP21Gr3Wdt2QiC7+Fp/7Ztrqn+57enqm3c+U793OGLt0dvf/OrqgH2mV2/76Rn+PVpiyvyV9RWDJHwaInwoSbxIr133fH23eTu9dhsvoj1Y/f1nq9vuXVvd8+C66o4H1k06ODcWT2TN3mlK9cb/PLV6057b2WW5pYTPcAifhggfyC1i6LHvPVs9+sSz1SOPP9t530OPPdsZiduUA+dNr6+qzsja9O1eJURHjPAZDuHTEOEDwIaEz3BY3AwApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCksdULL6qvGaL1ty6or2B4Vn//2eqBh35Y3bNqXfXU2ueqOx5YV//Kj83bfWo1Y9rW1Z6zp1a7z9q2mrnDNvWvAIM0Zf7K+opBEj4NET69ufP+tdXRp99f303M7ZftV18Nxn7H3V5fTcyVS+dW+86dVt8N3r/d8VT1D9/6QfVP//5U9e0H19fvnbiZ27+qevcv7FDtv8+06sD9ZlTTpm5d/8rgXX796ursix+t77bsbftuV51/2pyhfo4bW7vuueqwRXdXq9c8X79ny7r9Hu3269KEdx0wo1r+sTn1HRMhfIbDVBeMoBjZ+eLKR6uDP3JndcKnx6oLr32ip+gJ8QIev/+k5as6L+jLL3u48+eX6Jt3PlN9+X+tru+acfqKVV1FDzBcwgdGSARJhMnBJ91dff6K1X1/AR6PoPjzF503VmQAxd87RgabcM0/fq/66s1P1XdAiYQPjIiY/jjqk/d0wmQY4gU+AihGlmJ6pySf+pP/GPrnNPbwumrxiofqO6BUwgdaLl5wf3vpfZ01H01MscQIy/uX3NfYKMumxLTesksfru8GLyLrrAtFD7SB8IEWu+GWNdXxZ9/fWdvSpAiNWHQeo06luOKGNZ2F3cMQ64qa/jcAJkb4QEtFZMSC45IW0saoU6wxKsXHz39w4FNeEVcx6gW0g/CBFoq4KPVx5lhjVEr8RBTGU1aDElEVcQW0h/CBlomoGNYC5l6VFD+xCDuethoEj65D+wgfaJFY01N69IwrKX6W/cUjfX/0PqYaPboO7SN8oCXi6a1Y09MmET8Ra02LUZnFfZySin+L0ndOBjbNkRUNcWRFb7IeWRFrSeKR8V53X95YHCdw4Lzp1S6v26baeccfn8X16BPPVo88/mx10x1P9200I468uOoze/Z05le/j2Y444Sdq2MPnVnf9abf/xZh0EdWjP97D1N8bx3ylu3rOybCkRXDIXwaInx6kzV8YpPAyT459MbdplQnHjGzevsBr5nQWVbxAn/T7U9Vl1z3+KQf1e713KZ+h0+49tw3VHN2nVrfdW8Qa6wGHT79CD4GT/gMh6kuKFzE3mSiJ0ZcLlg0u7r6nL2qIw567YQP8Iz/XfzE/uen71Fd/Kk5nXDqVYwelTDlFSaz0WA8ut6WNVbApgkfKNyf/fVj9VX3YqTluuV7T3rK4a3zZlRfWrJHdeLhO9bv6d6ZLwbHoPfUmYgYvYoRtG7F4miPrkP7CR8oWIz29LrWJiIlppcmOsKzJfHnLDpu12rZwln1e7oTC4y/8g+Deay8W70cZPqZix7y6DqMAOEDBet1tCeiJyJlEGK6LKbOevGXXy8jfEI3B5l6dB1Gh/CBQsXUSi8vtsccsv3AomdcTJ2dekz3i2XjSahhnZ+1JfG5rLjqu/Xd5sXIkEfXYXQIHyjUyhu6X0QbC5AXf2Cw0TPugwt2rt6273b13cT9zT9/v75qXixUfqUQixGhGBkCRofwgUJde+OT9dXEffL4Xfu2pmcizjyx+/U+cWp6CYucx73SQabLLn24r/v1AM0TPlCgmObq9gU3nuCKp6+GKfbD6eVJrzvum9y+QP0UC5YjcDYWj99HpAGjRfhAgW67t7snjsL7Dn1dfTVcxx/R/Vqf/3330/VVf/W611AEzoYHmUZ4xuP3vehl+g8YHjs3N8TOzb3pZefmGAkZpG4XIE9k5+Zud2qOTQq/8T/2re+Gb9F5Y119HSa6k3MvOxT3etzGhkdr/PbS+3rarTqi5yPvfX11wqfH6vdMzKB3bo4g3H2X3jeg3JwjD9rBsRR9ZOfm4RA+DRE+veklfEozkfDpNiQG+fj6RMRoyeIVEx8hmWio9RI+7zhw++qoT97T0547EWRxplWvT3HFcRhr1z0/8GNVuv26DIqjMPpL+AyHqS4o0C13dzfVtf8+3Z391W9v2rO76Z1BbgQYIzZn9bDoOkRs9hoUEQGTOQMMGA7hAwXqNgzmztq2vmpGLy/43e6c3I2Yfon9jIYlpriMfEA7CB8YASWMNEzmENNBiP2MYkpt0OJjLDt5t/oOKJ3wAfpiEItnJyP2M/rcEIJk8W/u0pleA9pB+AAjK/Y1msyJ8lsSi6Hj7DKgPYQP0BcPPFLmDscLj3r9QKbhYopr6cLeDmsFmiN8YASMPbyuvmpOqUc7xJTXpz/8U/Vd/8Q02jCPBwH6Q/hAgbpdlPvY9/5ffdWMXsJrS3sZ9VN8rF5Ok9+ceGJs2MeDAP0hfKBAb9m7uyj4h2/9oL5qxm33lHP21ub0epr8xoZ5Aj7Qf3Zuboidm3vjyIpNixfjq8/Zq74bviV/tqqrAz0HeWTFK+2nEyNTh592b33Xmy39+/XyPerICoKdm4dD+DRE+PRmGC8q3drvuNvrq4mZSPjEyeAnLV9V303MxZ+a08j0SxzoefBJd9d3ExPTTjECsyX9Dp8wmeMeJvJ5lxg+jpZoB+EzHKa6oEBvekP361++fP3j9dVwXXLNxEemxv3M3tPrq+GLAOhlFDCmyd73q+IB2k74QIFiQ7xuH8GOKbdBHgOxKTHac+G1T9R3Ezdvj8mvtZmMT/7WrK4XkJ954ixPccEIED5QqMN/9jX11cR96k/+o1q77rn6bvA+c9HET2QfF09ENR0QEZax4/JEOYAURofwgUItOKT7HYdjL50VV323vhusWGfS7cLucMj+r66vmhU7Lk9kyssBpDBahA8UKkYlelmLElNPyy97uL4bjFh83csC4ZheKukpoNh5+ZWmvOLXHEAKo0X4QME+9O6d6qvuDDJ+ennibNzvLujt7zMoWzrI1AGkMHqEDxQsHnvvdR+iiJ/YX6dfa37iz4n9hXqNnhg9OfKXyjvQM7YAiHVHG4v3OYAURo/wgcL1OuoTYlPBwxbd3RmlmYx4Wuz9S+7ralPFjcXoSalPRcVOzBs+RReRZndmGE3CBwoXoz6bGpGYqNVrnu+M0rz397/TCaBuRoDif7/ovLHOhnyTOYQ0FgiXPHoSQbbhQaYOIIXRZefmhti5uTdZdm7eWMRKjNxExPRDTJ8dOG96tefsqdX07X7y559bv7O2umtsXfX33/pB3z7etee+oafHwYe9Q3FM5T359PPVouN6H+0pcefmEw/fsTrs54e7qHza1FfZAqBLdm4eDuHTEOHTm6zhE3r5u5fggkWze36Sa9jhMz4aNpnRnhLDpwkR1xM5j40fEz7DYaoLWiJiadnCWfVdO8RIQ5sOsYzgMcUFo034QIvEOpmIiTaIdUmTmTICGAThAy0TMVF6/MRiZk9FASUSPtBCJcdPfF7nnzbHlBFQJOEDLRXxEwuHS3LqMTM7n5foAUolfKDFYuFwPCq+4eZ7TYgN/y7+1Jzqgwt2rt8DUCbhAy0Xe6V8ackenUe5mxBTW9ct37tz9ANA6YQPjICYWor9a75xwd5DW/sT+7TEnkSmtoA2ET4wQuIk8QiR8QCKKah+iz83gic2p+tlI0aAJgkfGEHjARRTULEAOvbU6TWC4vfF748/5+YL9+n8uYIHaCtHVjTEkRU0YezhddX9D/2weuTxZzvncT359MsPLH3N9K2rfeZMrXZ53TbV3FnbOm8JhsSRFcMhfBoifADYkPAZDlNdAEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABgBE0NjZW3X7H7Z3/4pof2eqFF9XXDNH6WxfUVwBQVVPmr6yverN27drqxpturG644e+ry6+4vH7vT/q5A3+uOuq9R1fv+JV3VNOmTavfm4vwaYjwAWBDkwmfr9/w9eqMMz9VPbZ6df2eV7bTzJnVSQt/r3rfb76vfk8ewqchwgeADfUSPjHKc86yP3xphCeC5j3vfm/1SwcdXB14wIGd942LKa9/+ud/qi750kUvBVKMAH3hghWpRn+ET0OEDwAb6jZ8Inp+96SF1b/e9K+d+2OPObb6/cX/bYsRE79v5V+vrJYsPbNzny1+LG4GgBaKkZ7x6FlxwZ9Uf7Dk7AnFS/xvYorrSxdd1hkhij8jAiqCKAPhAwAtE2t6xqe3zj3nc9UvH/LLnetTTv1otfd+e73svyPf82vVucs/25nuGhdTYX/6hS92riN+YhQoA+EDAC1z3h9/vvM2preO/LUjO9ev5K6776r+9MI/rd5zzIJONI3bb95+1ZLTz+pcx9TX6tWPda5HmfABgBaJcImQCR89+aOdt5sSQTP+3++c+Dv1e6vO018bTmstePeCap+99+lcX/VXV3fejjLhAwAtEvv0hIiZmTN36lxvSqzjGf/vtEWfqD7+sdM6748nuu5/4P7OdYg1P8f++m92rq+59m86b0eZ8AGAFhlf2xOPrHdj1112ra9e7tB3vrPzNkaSRn26S/gAQEtsGCVv2u9N9dWWxaLmPzr3D+u7qpoxfUZ99SMxchRPeIVHv/vdzttRJXwAoCU2jJItPbq+4VNdsah5fNPCWBA9Z86czvWG3rr/AZ239957b+ftqBI+AJBAjOjEOp/Y5PCVPPXUU/XVaBI+ANASG09RvZK/umLlSwuaQxxl8eEPfXizI0XjC57nz5/feTuqhA8AtMSGU1Qbbka4KbFHzweO+8BLj6rHPj6b+z3xePv4I/LdxFUbCR8AaJE4WyvEgaNbEqM7Hzvl1PquqpZ99o/qq5904003dt7GdNim1v+MEuEDAC1y1HuP7ryNU9Yncr5WHGcxHktxNMVX/udXOtcbuvjiizpvYzps1AkfAGiRd/zKOzojM/GU1kTP11r8if9aX1Wdx9o3fCw+doIeP+z0sF89vPN2lAkfAGiRmL46aeHvda7jfK0trfUJsd7nsEMP61xHMF10yY9GeMbGxjpHWIR4zD3+d6NuqxdeVF8zROtvXVBfAUBVTZnf3enoJ/yX4zsjNTH68+VLLu96bU5Ez39fcsZLf8bXrvu7Le4NNAqM+ABAC33hghUvTXm98/B3bHLtzubcdPNN1fuOP/YnwilD9AThAwAtFKHy11d95aWFy6f9/serI9/za501O5tb9BzBc8qpH63e/1vHdYKp19GiNjPV1RBTXQBsqNuprnEROZdedmn1ufPOrd/zI+NresZdd/119dWPxOnuH1l4UpqRnnHCBwBGQDypddVfXV1dc+3fvLQZ4cZihCceWT/mqF9PNcqzIeEDACMmIigONH366ac799OnT+/syJw1djYkfACANCxuBgDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJCG8AEA0hA+AEAawgcASEP4AABpCB8AIA3hAwCkIXwAgDSEDwCQhvABANIQPgBAGsIHAEhD+AAAaQgfACAN4QMApCF8AIA0hA8AkIbwAQDSED4AQBrCBwBIQ/gAAGkIHwAgDeEDAKQhfACANIQPAJBEVf1/HbAvfn1izHMAAAAASUVORK5CYIJQSwMEFAAGAAgAAAAhADttMkvBAAAAQgEAACMAAAB4bC93b3Jrc2hlZXRzL19yZWxzL3NoZWV0MS54bWwucmVsc4SPwYrCMBRF9wP+Q3h7k9aFDENTNyK4VecDYvraBtuXkPcU/XuzHGXA5eVwz+U2m/s8qRtmDpEs1LoCheRjF2iw8HvaLb9BsTjq3BQJLTyQYdMuvpoDTk5KiceQWBULsYVRJP0Yw37E2bGOCamQPubZSYl5MMn5ixvQrKpqbfJfB7QvTrXvLOR9V4M6PVJZ/uyOfR88bqO/zkjyz4RJOZBgPqJIOchF7fKAYkHrd/aea30OBKZtzMvz9gkAAP//AwBQSwMEFAAGAAgAAAAhABGYq8nbAAAA0AEAACMAAAB4bC93b3Jrc2hlZXRzL19yZWxzL3NoZWV0Mi54bWwucmVsc6yRzU7DMAyA70i8Q+Q7SdsDQmjpLmjSrjAeICRuG9E6UewBe3vCYRKdJnHh5h/582d5s/1aZvWBhWMiC61uQCH5FCKNFl4Pu7sHUCyOgpsToYUTMmz725vNM85O6hBPMbOqFGILk0h+NIb9hItjnTJS7QypLE5qWkaTnX93I5quae5N+c2AfsVU+2Ch7EMH6nDKdfPf7DQM0eNT8scFSa6sMKG4z3pZRboyoljQ+lzjc9Dqqgzmuk37nza5RBIsLyhSpXhlddEzF3mn3yL9SJrVH/pvAAAA//8DAFBLAwQUAAYACAAAACEALyzzyL4AAAAkAQAAIwAAAHhsL2RyYXdpbmdzL19yZWxzL2RyYXdpbmcxLnhtbC5yZWxzhI9BagMxDEX3hd7BaF9rpotQyniyKYFsS3IAYWs8pmPZ2E5Ibl9DNw0UutT//PfQtL/FTV251JDEwKgHUCw2uSDewPl0eHkDVRuJoy0JG7hzhf38/DR98katj+oaclWdItXA2lp+R6x25UhVp8zSmyWVSK2fxWMm+0We8XUYdlh+M2B+YKqjM1CObgR1uudu/p+dliVY/kj2ElnaHwoMsbs7kIrnZkBrjOwC/eSjzuIB5wkffpu/AQAA//8DAFBLAwQUAAYACAAAACEA1VR9bLECAADQIwAAJwAAAHhsL3ByaW50ZXJTZXR0aW5ncy9wcmludGVyU2V0dGluZ3MxLmJpbuxaS2/TQBD+1knVqkg8JCQep1AuCMqjNKBy4BBZIBBJG5EgcoiEXMVClkhcOYS2BwS/hyN/gP+B+AFtzxy4hZldbx5kHRk1VQ3ZtfzY9ef17Dez452Rm2jiPfbgoYcutnEPa3TmYxMlvEINz6h2H4CLp3iAJyhiA7fpuohH1CryED/wc+XcNzgCAkfL4VKLzotYFVxfFTlCbaBAPd6lfvbovEYtsyz0osRysALUquUGQ/ja3apUtjaH8KpbbpRTCMNjCZeOlm9BbYIr9FzxGvDrJuDLBtWq2wRatC1imnxjrxZUiFKB55165O0n86RgY2BWkbmQXqjPMfB6Ijg3CS4mgvOT4LJbT4AfkCH8IUbF6/S8dyZ8nhoH4BTqkWhJ3SmD9evZXrJRsiJHRuiwYlgGLANzwID1e7NUMn/puT/LqnUeloF5Z4BXtxxRqFUu+YSzozGOwUcYQqBpnoTv5UChpQRxMMCeJ35CNrbwEcjTJe9SlP4n4JDDF3nQ/sra6r/CgKBMQ98orNY863+4axtUlkFWwImGzBU2zhHrlWap7HjQrCCjg+Nn1PD0B5dqC/HY9LwZzL1jj7mECAFlgIyReKre+2bFzUAbjgzqKaPEyRQaOr9pGFszdZyFSVkmvZBw0HAaTjV3mTNZssSeQ2UglOrIydiFz8lPrdjoMziLrUiWAcvAaTLwxoEoRYE5WxwL5oa9KPCjwqa/axS1HrT9Lt8tvAzbXmcCU9tvb4dTPoKvg87bFu1dawqWgf+QgYUzly5eNY8r5dRLJMVOPTtjLANTGODo7pBCj+sUdwRU+UCBz5eTjWhlNMRr7hfQseV8q0hH1tZQLQN/ZwvyZ5DPx2etix3KwuwipP0h/WFzBz79MeOPdBxnOwZZD3ITePz1+/kr3oUbDPsNAAD//wMAUEsDBBQABgAIAAAAIQDVVH1ssQIAANAjAAAnAAAAeGwvcHJpbnRlclNldHRpbmdzL3ByaW50ZXJTZXR0aW5nczIuYmlu7FpLb9NAEP7WSdWqSDwkJB6nUC4IyqM0oHLgEFkgEEkbkSByiIRcxUKWSFw5hLYHBL+HI3+A/4H4AW3PHLiFmV1vHmQdGTVVDdm1/Nj15/XsN7PjnZGbaOI99uChhy62cQ9rdOZjEyW8Qg3PqHYfgIuneIAnKGIDt+m6iEfUKvIQP/Bz5dw3OAICR8vhUovOi1gVXF8VOUJtoEA93qV+9ui8Ri2zLPSixHKwAtSq5QZD+NrdqlS2NofwqltulFMIw2MJl46Wb0Ftgiv0XPEa8Osm4MsG1arbBFq0LWKafGOvFlSIUoHnnXrk7SfzpGBjYFaRuZBeqM8x8HoiODcJLiaC85PgsltPgB+QIfwhRsXr9Lx3JnyeGgfgFOqRaEndKYP169leslGyIkdG6LBiWAYsA3PAgPV7s1Qyf+m5P8uqdR6WgXlngFe3HFGoVS75hLOjMY7BRxhCoGmehO/lQKGlBHEwwJ4nfkI2tvARyNMl71KU/ifgkMMXedD+ytrqv8KAoExD3yis1jzrf7hrG1SWQVbAiYbMFTbOEeuVZqnseNCsIKOD42fU8PQHl2oL8dj0vBnMvWOPuYQIAWWAjJF4qt77ZsXNQBuODOopo8TJFBo6v2kYWzN1nIVJWSa9kHDQcBpONXeZM1myxJ5DZSCU6sjJ2IXPyU+t2OgzOIutSJYBy8BpMvDGgShFgTlbHAvmhr0o8KPCpr9rFLUetP0u3y28DNteZwJT229vh1M+gq+DztsW7V1rCpaB/5CBhTOXLl41jyvl1EskxU49O2MsA1MY4OjukEKP6xR3BFT5QIHPl5ONaGU0xGvuF9Cx5XyrSEfW1lAtA39nC/JnkM/HZ62LHcrC7CKk/SH9YXMHPv0x4490HGc7BlkPchN4/PX7+SvehRsM+w0AAP//AwBQSwMEFAAGAAgAAAAhADkwSodBAQAAbQIAABEACAFkb2NQcm9wcy9jb3JlLnhtbCCiBAEooAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJySX0vDMBTF3wW/Q8mzbdKO6QhtByp7EAXRieJbSO62YPOHJNrt25u2W53MJx+Tc+4v51xSzreqSb7AeWl0hfKMoAQ0N0LqdYVelot0hhIfmBasMRoqtAOP5vX5Wckt5cbBozMWXJDgk0jSnnJboU0IlmLs+QYU81l06CiujFMsxKNbY8v4B1sDLgi5xAoCEyww3AFTOxLRHin4iLSfrukBgmNoQIEOHudZjn+8AZzyfw70ypFTybCzsdM+7jFb8EEc3VsvR2Pbtlk76WPE/Dl+e7h/7qumUne74oDqUnDKHbBgXP0kOVwkd0azsGG6xEdSt8aG+fAQN76SIK53J+5TR2T3VYYHQCQxHB2qHJTXyc3tcoHqghTTlFylZLYsckpmdFq8dwF+zXdhhwu1j/Fv4gFQl/jkg9TfAAAA//8DAFBLAwQUAAYACAAAACEASHVQsgwCAACoBAAAEAAIAWRvY1Byb3BzL2FwcC54bWwgogQBKKAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACcVE1v2zAMvQ/Yf/B8b+20RTEEiosh3ZDD0gW12x4HTaJjobIkSGyQ7NePthLHaYsB2+3xw+TjI2V2s211sgEflDWzdHKepwkYYaUy61n6UH07+5wmAbmRXFsDs3QHIb0pPn5gK28deFQQEiphwixtEN00y4JooOXhnMKGIrX1LUcy/Tqzda0E3Frx0oLB7CLPrzPYIhgJ8swNBdNYcbrB/y0qrej4hcdq54hwwSqLXFeqhSJn2dFgK76G0PkiYE/Wy96OgM0b7rlA0qdLGlnsi3NaCY6kW7FUwttga0y+bgVolo2DjOYtQbx4hbuuyNhk35WJ/SMgPp6vPXfNntRgsVIrGVP3iN1ZjI4I2EJJCeaYd2Kz5XKulevLHiArBdcwJ6GKmusALDs62AJ4dwQrrmh2tsHpBgRanwT1m87gKk1+8QCdvLN0w73iBknmLi0aPdYuoC9IyufQAGBgGSVEZw/HuWOsroqLPoHAXxNjrTvegkzuuaFd/kOLyfstOo5xVup9qkKlUEP4UdOW8B1RLsei9NSiJJHl4eyTlrsxy0GSstMozr3X6FXo08orgz8jizeD9ushyq9I0mE9hwdX2VuOcNjzqXN05U8Km9JxEQ/reO8jPyvpTYCkcYarGRxsQQfhddeSvqV9yEPO20D3gh7jj6eYXJ/nlzk9jpGP3uTwRyj+AAAA//8DAFBLAwQUAAYACAAAACEAjUyrBNAAAABsAQAAEgAcAGRvY1Byb3BzL2NvcmUwLnhtbCCiGAAooBQAAAAAAAAAAAAAAAAAAAAAAAAAAABtkN1qwzAMRl/F6D5RssIYIUlfoIPCbnZrbDU1i3+w1KV9+7lhywbrpfiODtLX769+Vp+U2cUwQFs3oCiYaF2YBrjIqXoBxaKD1XMMNMCNGNR+7E3qTMx0zDFRFkesiihwZ9IAZ5HUIbI5k9dcFyKU8BSz11LGPGHS5kNPhE9N84yeRFstGu/CKm1G+FZasynTJc+rwBqkmTwFYWzrFn9Zoez54cKa/CG9k1uih+hPuNFXdhu4LEu97Fa03N/i++vhbX21cuFelSEYe/xX0PgFUEsBAi0AFAAGAAgAAAAhAKwBqN2VAQAAqQYAABMAAAAAAAAAAAAAAAAAAAAAAFtDb250ZW50X1R5cGVzXS54bWxQSwECLQAUAAYACAAAACEAscswDf8AAADfAgAACwAAAAAAAAAAAAAAAADOAwAAX3JlbHMvLnJlbHNQSwECLQAUAAYACAAAACEAOX0oVXwDAADECAAADwAAAAAAAAAAAAAAAAD+BgAAeGwvd29ya2Jvb2sueG1sUEsBAi0AFAAGAAgAAAAhAEqppmH6AAAARwMAABoAAAAAAAAAAAAAAAAApwoAAHhsL19yZWxzL3dvcmtib29rLnhtbC5yZWxzUEsBAi0AFAAGAAgAAAAhAMltWXXlIAAAIQkBABgAAAAAAAAAAAAAAAAA4QwAAHhsL3dvcmtzaGVldHMvc2hlZXQxLnhtbFBLAQItABQABgAIAAAAIQBlseGuhRkAAICfAAAYAAAAAAAAAAAAAAAAAPwtAAB4bC93b3Jrc2hlZXRzL3NoZWV0Mi54bWxQSwECLQAUAAYACAAAACEAwofb8n0GAADXGwAAEwAAAAAAAAAAAAAAAAC3RwAAeGwvdGhlbWUvdGhlbWUxLnhtbFBLAQItABQABgAIAAAAIQBEa9WARwYAAEMqAAANAAAAAAAAAAAAAAAAAGVOAAB4bC9zdHlsZXMueG1sUEsBAi0AFAAGAAgAAAAhAASbwrXECQAA/CYAABQAAAAAAAAAAAAAAAAA11QAAHhsL3NoYXJlZFN0cmluZ3MueG1sUEsBAi0AFAAGAAgAAAAhADHgz/cTAgAAMwQAABgAAAAAAAAAAAAAAAAAzV4AAHhsL2RyYXdpbmdzL2RyYXdpbmcxLnhtbFBLAQItAAoAAAAAAAAAIQBPNYKG3ScAAN0nAAATAAAAAAAAAAAAAAAAABZhAAB4bC9tZWRpYS9pbWFnZTEucG5nUEsBAi0AFAAGAAgAAAAhADttMkvBAAAAQgEAACMAAAAAAAAAAAAAAAAAJIkAAHhsL3dvcmtzaGVldHMvX3JlbHMvc2hlZXQxLnhtbC5yZWxzUEsBAi0AFAAGAAgAAAAhABGYq8nbAAAA0AEAACMAAAAAAAAAAAAAAAAAJooAAHhsL3dvcmtzaGVldHMvX3JlbHMvc2hlZXQyLnhtbC5yZWxzUEsBAi0AFAAGAAgAAAAhAC8s88i+AAAAJAEAACMAAAAAAAAAAAAAAAAAQosAAHhsL2RyYXdpbmdzL19yZWxzL2RyYXdpbmcxLnhtbC5yZWxzUEsBAi0AFAAGAAgAAAAhANVUfWyxAgAA0CMAACcAAAAAAAAAAAAAAAAAQYwAAHhsL3ByaW50ZXJTZXR0aW5ncy9wcmludGVyU2V0dGluZ3MxLmJpblBLAQItABQABgAIAAAAIQDVVH1ssQIAANAjAAAnAAAAAAAAAAAAAAAAADePAAB4bC9wcmludGVyU2V0dGluZ3MvcHJpbnRlclNldHRpbmdzMi5iaW5QSwECLQAUAAYACAAAACEAOTBKh0EBAABtAgAAEQAAAAAAAAAAAAAAAAAtkgAAZG9jUHJvcHMvY29yZS54bWxQSwECLQAUAAYACAAAACEASHVQsgwCAACoBAAAEAAAAAAAAAAAAAAAAACllAAAZG9jUHJvcHMvYXBwLnhtbFBLAQItABQABgAIAAAAIQCNTKsE0AAAAGwBAAASAAAAAAAAAAAAAAAAAOeXAABkb2NQcm9wcy9jb3JlMC54bWxQSwUGAAAAABMAEwAqBQAAA5kAAAAA`;
+  if (!base64) {
+    document.getElementById('lookbook-container').innerHTML = '<p>No workbook found. Please upload from the home page.</p>';
+  } else {
+    const workbook = XLSX.read(base64, { type: 'base64' });
+    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets['Sheet2'], { header: 1 });
+    const houseInfoText = sheet[11]?.[0] || '';
+    const infoParts = houseInfoText.split("  ").map(s => s.trim());
+    document.getElementById('house-info').innerHTML = infoParts.map(line => `<div>${line}</div>`).join('');
+
+    let currentCategory = '', currentSubcategory = '', grouped = {};
+    for (let i = 14; i < sheet.length; i++) {
+      const row = sheet[i];
+      const cellA = row[0];
+      const cellC = row[2];
+      if (!cellA) continue;
+
+      if (!cellC) {
+        const parts = cellA.split(' > ');
+        currentCategory = parts[0]?.trim();
+        currentSubcategory = parts[1]?.trim() || 'General';
+        if (!grouped[currentCategory]) grouped[currentCategory] = {};
+        if (!grouped[currentCategory][currentSubcategory]) grouped[currentCategory][currentSubcategory] = [];
+      } else {
+        const optionNumber = cellA;
+        const description = cellC;
+        const salesDesc = row[9];
+        const amount = row[13];
+        grouped[currentCategory][currentSubcategory].push({ optionNumber, description, salesDesc, amount });
+      }
+    }
+
+    const container = document.getElementById('lookbook-container');
+    container.innerHTML = '';
+    Object.keys(grouped).forEach(category => {
+      const catDetails = document.createElement('details');
+      const catSummary = document.createElement('summary');
+      catSummary.textContent = category;
+      catDetails.appendChild(catSummary);
+      const subcats = grouped[category];
+      Object.keys(subcats).forEach(sub => {
+        const subDetails = document.createElement('details');
+        subDetails.className = 'subcategory';
+        const subSummary = document.createElement('summary');
+        subSummary.textContent = sub;
+        subDetails.appendChild(subSummary);
+
+        const optionContainer = document.createElement('div');
+optionContainer.className = 'option-container';
+subcats[sub].forEach(opt => {
+          const optionDiv = document.createElement('div');
+          optionDiv.className = 'option';
+const controlRow = document.createElement('div');
+controlRow.className = 'option-controls';
+const checkboxLabel = document.createElement('label');
+checkboxLabel.innerHTML = `<input type='checkbox' class='option-checkbox' data-price='${parsePrice(opt.amount)}' /> Select Item`;
+const qtyLabel = document.createElement('label');
+qtyLabel.innerHTML = `Qty <input type='number' min='1' value='1' class='option-qty' />`;
+controlRow.appendChild(checkboxLabel);
+controlRow.appendChild(qtyLabel);
+
+          
+const imageWrapper = document.createElement('div');
+imageWrapper.style.display = 'flex';
+imageWrapper.style.flexWrap = 'wrap';
+imageWrapper.style.gap = '0.5rem';
+
+const optionNum = opt.optionNumber;
+const imageUrl = `/images/${optionNum}.jpg`;
+
+const img = new Image();
+img.src = imageUrl;
+img.alt = optionNum;
+img.style.width = '100%';
+img.style.height = 'auto'; img.style.maxHeight = '320px';
+img.style.objectFit = 'contain';
+img.style.backgroundColor = '#ffffff';
+img.style.borderRadius = '6px';
+img.addEventListener('click', () => openImageModal(img.src));
+
+img.onload = () => {
+  const box = document.createElement('div');
+  box.style.textAlign = 'center';
+  box.style.width = '100%';
+  box.appendChild(img);
+  imageWrapper.appendChild(box);
+};
+
+img.onerror = () => {
+  const placeholder = document.createElement('div');
+  placeholder.textContent = 'No image available';
+  placeholder.style.fontSize = '0.75rem';
+  placeholder.style.color = '#888';
+  placeholder.style.padding = '1rem';
+  imageWrapper.appendChild(placeholder);
+};
+
+
+
+          const details = document.createElement('div');
+          details.className = 'option-details';
+
+          const formattedPrice = formatPrice(opt.amount);
+          const rawPrice = parsePrice(opt.amount);
+
+const checkbox = document.createElement('input');
+checkbox.type = 'checkbox';
+checkbox.setAttribute('data-price', rawPrice);
+checkbox.className = 'option-checkbox';
+
+const qtyInput = document.createElement('input');
+qtyInput.type = 'number';
+qtyInput.min = '1';
+qtyInput.value = '1';
+qtyInput.className = 'option-qty';
+qtyInput.style.width = '50px';
+qtyInput.style.marginLeft = '0.5rem';
+
+checkbox.addEventListener('change', updateTotal);
+qtyInput.addEventListener('input', updateTotal);
+
+
+        const commentId = `comment-${opt.optionNumber}`;
+details.innerHTML = `
+  <strong>${opt.optionNumber} — ${opt.description}</strong>
+  <em>${opt.salesDesc || ''}</em>
+  <div class='bottom-section'>
+    <span><strong>Price:</strong> ${formattedPrice ?? (opt.amount || 'TBD')}</span>
+    <div style="margin-top: 0.5rem;">
+      <label for="${commentId}" style="display:block; font-size: 0.85rem; margin-bottom: 0.25rem;">Comment:</label>
+      <textarea id="${commentId}" data-option="${opt.optionNumber}" rows="2" style="width:100%; font-size: 0.85rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+  </div>
+`;
+
+
+          // checkbox already in label
+           // qtyInput already in label
+          optionDiv.appendChild(controlRow);
+optionDiv.appendChild(imageWrapper);
+          optionDiv.appendChild(details);
+          optionContainer.appendChild(optionDiv);
+        });
+subDetails.appendChild(optionContainer);
+
+        catDetails.appendChild(subDetails);
+      });
+      container.appendChild(catDetails);
+    });
+  }
+
+
+function updateTotal() {
+  let total = 0;
+  const optionCards = document.querySelectorAll('.option');
+
+  optionCards.forEach(card => {
+    const checkbox = card.querySelector('.option-checkbox');
+    const qtyInput = card.querySelector('.option-qty');
+
+    if (checkbox && checkbox.checked) {
+      const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+      const qty = parseInt(qtyInput?.value || 1);
+      total += price * qty;
+    }
+  });
+
+  const totalEl = document.getElementById('total-bar');
+  if (totalEl) {
+    totalEl.textContent = `Your Total: $${total.toFixed(2)}`;
+  }
+}
+
+// Ensure all inputs are wired to trigger updateTotal
+document.addEventListener('DOMContentLoaded', () => {
+  updateTotal();
+  document.querySelectorAll('.option-checkbox').forEach(cb => {
+    cb.addEventListener('change', updateTotal);
+  });
+  document.querySelectorAll('.option-qty').forEach(input => {
+    input.addEventListener('input', updateTotal);
+  });
+});
+</script>
+<div class="modal" id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+<span onclick="closeImageModal()" style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
+<img id="modal-image" style="max-width: 90%; max-height: 90%; cursor: pointer;">
+</div>
+<script>
+function openImageModal(src) {
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-image');
+  modalImg.src = src;
+  modal.style.display = 'flex';
+}
+function closeImageModal() {
+  document.getElementById('image-modal').style.display = 'none';
+}
+</script>
+<!-- Image Modal -->
+<div class="modal" id="imageModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.8);">
+<span class="close" style="position:absolute; top:20px; right:35px; color:#fff; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
+<img class="modal-content" id="modalImage" style="margin: auto; display: block; max-width: 90%; max-height: 90%; cursor: pointer;">
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const closeBtn = document.querySelector(".close");
+
+  document.querySelectorAll("img").forEach(img => {
+    img.style.cursor = "pointer";
+    img.addEventListener("click", function() {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+    });
+  });
+
+  closeBtn.onclick = function() {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+});
+
+<!-- ✅ Paste Search Script Below This -->
+</script>
+<script>
+function filterOptions() {
+  const query = document.getElementById('search-input').value.toLowerCase();
+  const allOptions = document.querySelectorAll('.option');
+  let anyVisible = false;
+
+  allOptions.forEach(opt => {
+    const text = opt.innerText.toLowerCase();
+    const matches = text.includes(query);
+
+    opt.style.display = matches ? 'flex' : 'none';
+
+    if (matches) anyVisible = true;
+  });
+
+  document.querySelectorAll('details.subcategory').forEach(sub => {
+    const hasVisibleChild = Array.from(sub.querySelectorAll('.option')).some(opt => opt.style.display !== 'none');
+    sub.style.display = hasVisibleChild ? '' : 'none';
+    sub.open = hasVisibleChild; // Auto-expand if it has matches
+  });
+
+  document.querySelectorAll('#lookbook-container > details').forEach(cat => {
+    const hasVisibleSub = Array.from(cat.querySelectorAll('details.subcategory')).some(sub => sub.style.display !== 'none');
+    cat.style.display = hasVisibleSub ? '' : 'none';
+    cat.open = hasVisibleSub;
+  });
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  filterOptions();
+}
+</script>
+<script>
+async function exportLookbook() {
+  const address = document.getElementById("address-input").value.trim();
+  if (!address) return alert("Please enter an address first.");
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) return alert("No workbook found. Please upload a file first.");
+
+  const html = document.documentElement.outerHTML;
+
+const base64 = localStorage.getItem("workbook");
+const response = await fetch('/.netlify/functions/generate-page', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ address, htmlTemplate: html, base64 })
+
+});
+
+
+  const result = await response.json();
+
+  if (response.ok) {
+    alert("Page created! Link copied to clipboard.");
+    navigator.clipboard.writeText(result.url);
+    window.open(result.url, "_blank");
+  } else {
+    alert("Failed to create page: " + result.body);
+  }
+}
+</script>
+<script>
+  function saveSelections() {
+    const selectedOptions = [];
+    document.querySelectorAll('.option').forEach(option => {
+      const checkbox = option.querySelector('input[type="checkbox"]');
+      const qtyInput = option.querySelector('input[type="number"]');
+      if (checkbox && checkbox.checked) {
+        const title = option.querySelector('.option-details strong')?.innerText;
+        const price = checkbox.getAttribute('data-price');
+        const qty = qtyInput?.value || 1;
+        selectedOptions.push({ title, price, qty });
+      }
+    });
+
+    if (selectedOptions.length === 0) {
+      alert("You haven’t selected anything yet.");
+      return;
+    }
+
+    const container = document.createElement("div");
+    container.innerHTML = `
+      <h2>My KB Home Selections</h2>
+      <ul>
+        ${selectedOptions.map(opt => `<li><strong>${opt.title}</strong> — $${opt.price} × ${opt.qty}</li>`).join("")}
+      </ul>
+    `;
+
+    html2pdf().from(container).outputPdf("blob").then(async (pdfBlob) => {
+      const formData = new FormData();
+      formData.append("file", pdfBlob, "my-selections.pdf");
+      formData.append("address", document.title);
+
+      const res = await fetch("/.netlify/functions/save-pdf", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert("Your selections have been saved and emailed!");
+      } else {
+        alert("There was a problem saving your selections.");
+      }
+    });
+  }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const isCustomerPage = window.location.pathname.includes("/customers/");
+  if (isCustomerPage) {
+    const exportSection = document.querySelector('#address-input')?.parentElement;
+    if (exportSection) exportSection.style.display = "none";
+
+    // Hide print buttons on customer pages
+    const printBtn = document.getElementById("print-selected-btn");
+    const noTotalBtn = document.getElementById("print-no-total-btn");
+    
+    
+
+    if (!document.getElementById("save-selections-btn")) {
+      // existing Save My Selections button logic
+    }
+  }
+});
+
+
+    if (document.getElementById("save-to-supabase-btn")) document.getElementById("save-to-supabase-btn").style.display = "inline-block";
+</script>
+<script>
+async function generatePage() {
+  const pathParts = window.location.pathname.split("/");
+  const currentSlug = pathParts[pathParts.length - 1].replace(".html", "").replace("/", "");
+  const address = `${currentSlug}-wishlist`;
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) return alert("Workbook not loaded. This page must be generated from the original file.");
+
+  const loading = document.createElement("div");
+  loading.textContent = "Generating wishlist page...";
+  loading.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;font-size:2rem;font-weight:bold;background:white;z-index:9999;";
+  document.body.appendChild(loading);
+
+  let total = 0;
+
+  let html = `
+  <!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>${address}</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; padding: 2rem; }
+    h2, h3 { color: #222; }
+    .option { margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .option img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; background: #eee; }
+    .option-details { flex: 1; }
+    .comment { margin-top: 0.5rem; font-style: italic; color: #555; }
+    strong { display: block; margin-bottom: 0.25rem; }
+    .total-line { font-weight: bold; font-size: 1.25rem; margin-top: 2rem; border-top: 2px solid #ccc; padding-top: 1rem; }
+  </style></head><body>
+  <h2>My Wishlist</h2>`;
+
+  html += document.getElementById("house-info")?.innerHTML || '';
+
+  const allCategories = document.querySelectorAll("details:not(.subcategory)");
+  allCategories.forEach(cat => {
+    const catTitle = cat.querySelector("summary")?.textContent || "";
+    let catHasSelections = false;
+    let catContent = `<h3>${catTitle}</h3>`;
+
+    const options = cat.querySelectorAll(".option");
+    options.forEach(opt => {
+      const checkbox = opt.querySelector("input[type='checkbox']");
+      if (checkbox && checkbox.checked) {
+        const img = opt.querySelector("img")?.outerHTML || "";
+        const details = opt.querySelector(".option-details")?.cloneNode(true);
+
+        const textarea = details.querySelector("textarea");
+        if (textarea) textarea.remove();
+
+        const commentText = opt.querySelector("textarea")?.value?.trim();
+        const commentHTML = commentText ? `<div class="comment">Comment: ${commentText}</div>` : '';
+
+        const qty = parseInt(opt.querySelector("input[type='number']")?.value || 1);
+        const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+        total += price * qty;
+
+        catContent += `<div class="option">${img}<div class="option-details">${details.innerHTML}<div><strong>Qty:</strong> ${qty}</div>${commentHTML}</div></div>`;
+        catHasSelections = true;
+      }
+    });
+
+    if (catHasSelections) html += catContent;
+  });
+
+  html += `<div class="total-line">Total: $${total.toLocaleString()}</div>`;
+  html += "</body></html>";
+
+  try {
+    const response = await fetch("/.netlify/functions/generate-page", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address, htmlTemplate: html, base64 })
+    });
+
+    const result = await response.json();
+    document.body.removeChild(loading);
+
+    if (response.ok) {
+      alert("Wishlist page created! Link copied to clipboard.");
+      navigator.clipboard.writeText(result.url);
+      window.open(result.url, "_blank");
+    } else {
+      alert("Error: " + result.body);
+    }
+  } catch (err) {
+    document.body.removeChild(loading);
+    alert("Unexpected error: " + err.message);
+  }
+}
+</script>
+<script>
+async function exportLookbook() {
+  const address = document.getElementById("address-input").value.trim();
+  if (!address) {
+    alert("Please enter an address.");
+    return;
+  }
+
+  const base64 = localStorage.getItem("workbook");
+  if (!base64) {
+    alert("No workbook found. Please upload a file first.");
+    return;
+  }
+
+  const html = document.documentElement.outerHTML;
+
+  try {
+    const response = await fetch('/.netlify/functions/generate-page', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address, htmlTemplate: html, base64 })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Page created! Link copied to clipboard.");
+      navigator.clipboard.writeText(result.url);
+      window.open(result.url, "_blank");
+    } else {
+      alert("Failed to create page: " + result.body);
+    }
+  } catch (error) {
+    alert("Unexpected error: " + error.message);
+  }
+}
+</script>
+<script>
+async function saveToSupabase() {
+  let address = document.getElementById("address-input")?.value?.trim();
+  if (!address) {
+    const pathParts = window.location.pathname.split("/");
+    address = pathParts[pathParts.length - 1]
+      .replace(".html", "")
+      .replace("/", "");
+  }
+
+  if (!address) {
+    alert("Address not found.");
+    return;
+  }
+
+  const selections = [];
+  document.querySelectorAll('.option').forEach(option => {
+    const checkbox = option.querySelector('input[type="checkbox"]');
+    if (checkbox?.checked) {
+      const qty = parseInt(option.querySelector('input[type="number"]')?.value || 1);
+      const comment = option.querySelector('textarea')?.value?.trim() || '';
+      const optionNumber = option.querySelector('.option-details strong')?.innerText?.split("—")[0]?.trim();
+
+      selections.push({
+        option: optionNumber,
+        qty,
+        comment
+      });
+    }
+  });
+
+  if (selections.length === 0) {
+    alert("No selections to save.");
+    return;
+  }
+
+  const response = await fetch('/.netlify/functions/save-selections', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address, selections })
+  });
+
+  if (response.ok) {
+    alert("Selections saved!");
+  } else {
+    const err = await response.text();
+    alert("Error saving selections: " + err);
+  }
+}
+</script>
+
+</body></html>
