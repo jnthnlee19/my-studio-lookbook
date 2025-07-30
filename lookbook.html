@@ -354,13 +354,12 @@ img.logo {
 <div class="right-panel">
 <div class="total-bar" id="total-bar">Your Total: $0</div>
 <div class="top-buttons">
-<button onclick="expandAll()">Expand All</button>
-<button onclick="collapseAll()">Collapse All</button>
+<button onclick="toggleAllSections()">Expand/Collapse All</button>
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/Flooring-Options.html', '_blank')">Flooring Options</button>
 <button onclick="window.open('https://myonlinelookbook.netlify.app/customers/backsplash.html', '_blank')">BackSplash</button>
 <button id="print-selected-btn" onclick="printSelected()">Print Selections Only</button>
 <button id="print-no-total-btn" onclick="printSelectedNoTotal()" style="display:none;">Print (No Total)</button>
-<button id="save-to-supabase-btn" style="display:none !important;" onclick="saveToSupabase()">Save My Selections</button></div>
+</div>
 </div>
 </div>
 </div> <!-- ✅ CLOSE sticky-header -->
@@ -429,7 +428,14 @@ function toggleAllSelections(masterCheckbox) {
     document.querySelectorAll("details").forEach(el => el.open = true);
   }
 
-  function collapseAll() {
+  
+function toggleAllSections() {
+  const allDetails = document.querySelectorAll("details");
+  const anyOpen = Array.from(allDetails).some(el => el.open);
+  allDetails.forEach(el => el.open = !anyOpen);
+}
+
+function collapseAll() {
     document.querySelectorAll("details").forEach(el => el.open = false);
   }
 
@@ -465,6 +471,14 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     win.document.write("<hr/>");
   });
 
+  win.document.write(`
+<button onclick="downloadPDF()" style="position:fixed; top:10px; right:10px; z-index:999; padding:10px; background:#FFC527; border:none; font-weight:bold; border-radius:5px;">Download PDF</button>
+<script>
+function downloadPDF() {
+  html2pdf().from(document.body).save('selections.pdf');
+}
+</script>
+`);
   win.document.write('</body></html>');
   win.document.close();
 }
@@ -536,6 +550,14 @@ function printSelected() {
   });
 
   win.document.write('<h3>Total: $' + total.toLocaleString() + '</h3>');
+  win.document.write(`
+<button onclick="downloadPDF()" style="position:fixed; top:10px; right:10px; z-index:999; padding:10px; background:#FFC527; border:none; font-weight:bold; border-radius:5px;">Download PDF</button>
+<script>
+function downloadPDF() {
+  html2pdf().from(document.body).save('selections.pdf');
+}
+</script>
+`);
   win.document.write('</body></html>');
   win.document.close();
 }
@@ -583,6 +605,14 @@ function printSelectedNoTotal() {
     }
   });
 
+  win.document.write(`
+<button onclick="downloadPDF()" style="position:fixed; top:10px; right:10px; z-index:999; padding:10px; background:#FFC527; border:none; font-weight:bold; border-radius:5px;">Download PDF</button>
+<script>
+function downloadPDF() {
+  html2pdf().from(document.body).save('selections.pdf');
+}
+</script>
+`);
   win.document.write('</body></html>');
   win.document.close();
 }
