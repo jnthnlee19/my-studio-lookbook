@@ -482,7 +482,7 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     }
   <\/script>`);
 
-  win.document.write('</body></html>');
+  win.document.write('<script src=\'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\'></script><script>function downloadPDF() {  html2pdf().from(document.body).save(\'selections.pdf\');}</script>');win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -564,7 +564,7 @@ function printSelected() {
     }
   <\/script>`);
 
-  win.document.write('</body></html>');
+  win.document.write('<script src=\'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\'></script><script>function downloadPDF() {  html2pdf().from(document.body).save(\'selections.pdf\');}</script>');win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -622,7 +622,7 @@ function printSelectedNoTotal() {
     }
   <\/script>`);
 
-  win.document.write('</body></html>');
+  win.document.write('<script src=\'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\'></script><script>function downloadPDF() {  html2pdf().from(document.body).save(\'selections.pdf\');}</script>');win.document.write('</body></html>');
   win.document.close();
 }
 
