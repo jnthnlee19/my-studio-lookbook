@@ -482,7 +482,7 @@ catContent += `<div class="option">${img}<div>${detailsClone.innerHTML}${comment
     }
   <\/script>`);
 
-  win.document.write('<script src=\'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\'></script><script>function downloadPDF() {  html2pdf().from(document.body).save(\'selections.pdf\');}</script>');win.document.write('</body></html>');
+  win.document.write('<button onclick="downloadPDF()" style="position:fixed; top:10px; right:10px; z-index:999; padding:10px; background:#FFC527; border:none; font-weight:bold; border-radius:5px;">Download PDF</button>');win.document.write('\n<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>\n<script>\n  function downloadPDF() {\n    html2pdf().from(document.body).save(\'selections.pdf\');\n  }\n</script>\n');win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -564,7 +564,7 @@ function printSelected() {
     }
   <\/script>`);
 
-  win.document.write('<script src=\'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\'></script><script>function downloadPDF() {  html2pdf().from(document.body).save(\'selections.pdf\');}</script>');win.document.write('</body></html>');
+  win.document.write('<button onclick="downloadPDF()" style="position:fixed; top:10px; right:10px; z-index:999; padding:10px; background:#FFC527; border:none; font-weight:bold; border-radius:5px;">Download PDF</button>');win.document.write('\n<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>\n<script>\n  function downloadPDF() {\n    html2pdf().from(document.body).save(\'selections.pdf\');\n  }\n</script>\n');win.document.write('</body></html>');
   win.document.close();
 }
 
@@ -622,7 +622,7 @@ function printSelectedNoTotal() {
     }
   <\/script>`);
 
-  win.document.write('<script src=\'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js\'></script><script>function downloadPDF() {  html2pdf().from(document.body).save(\'selections.pdf\');}</script>');win.document.write('</body></html>');
+  win.document.write('<button onclick="downloadPDF()" style="position:fixed; top:10px; right:10px; z-index:999; padding:10px; background:#FFC527; border:none; font-weight:bold; border-radius:5px;">Download PDF</button>');win.document.write('\n<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>\n<script>\n  function downloadPDF() {\n    html2pdf().from(document.body).save(\'selections.pdf\');\n  }\n</script>\n');win.document.write('</body></html>');
   win.document.close();
 }
 
