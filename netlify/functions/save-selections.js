@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+
 
 const SUPABASE_URL = 'https://zlzfuglgigbeypsljzyw.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsemZ1Z2xnaWdiZXlwc2xqenl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDc0NzQsImV4cCI6MjA2ODc4MzQ3NH0.2UFqQ1f6oUGKhHC_ieX3uyFRxkJC5FtUM7sWHPe6X-k';
